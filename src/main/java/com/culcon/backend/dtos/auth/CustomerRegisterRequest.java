@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotEmpty;
 public record CustomerRegisterRequest(
         @NotBlank(message = "username cannot be blank") String username,
 
-        @NotBlank(message = "email cannot be blank") @Email(message = "Invalid email format") String email,
+        @NotBlank(message = "email cannot be blank") @Email String email,
 
         @NotBlank(message = "phone cannot be blank") String phone,
 

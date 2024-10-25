@@ -1,25 +1,36 @@
 package com.culcon.backend.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import jakarta.annotation.Nonnull;
-import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.List;
-import lombok.*;
-import lombok.Builder.Default;
 
+import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import lombok.Builder;
+import lombok.Builder.Default;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Builder
 @Getter
 @Setter
+@Builder(toBuilder = true)
 @Table(name = "account")
 public class Account implements UserDetails {
 
@@ -30,6 +41,7 @@ public class Account implements UserDetails {
 
     @Column(name = "email", unique = true)
     @Nonnull
+    @Email
     private String email;
 
     @Column(name = "username", unique = true)
@@ -39,10 +51,12 @@ public class Account implements UserDetails {
     @JsonIgnore
     @Nonnull
     @Column(name = "password")
+    @Length(min = 6, max = 20)
     private String password;
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "role")
+    @Nonnull
     private Role role;
 
     @Enumerated(EnumType.ORDINAL)

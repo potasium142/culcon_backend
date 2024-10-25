@@ -1,8 +1,5 @@
 package com.culcon.backend.exceptions;
 
-import org.hibernate.mapping.Constraint;
-import org.springframework.core.annotation.Order;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -16,8 +13,6 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.culcon.backend.exceptions.messages.FieldErrorMessage;
-
-import jakarta.validation.ConstraintViolationException;
 
 import java.util.HashMap;
 
@@ -54,7 +49,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(TransactionSystemException.class)
     public ResponseEntity<?> transactionSystem(TransactionSystemException ex) {
         return new ResponseEntity<>(
-                ex                        .getMostSpecificCause()
+                ex.getMostSpecificCause()
                         .getMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
     }
