@@ -1,5 +1,6 @@
 package com.culcon.backend.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -31,6 +32,8 @@ public class Customer {
     private Account account;
 
     private String address;
+
+    @Column(name = "phone", unique = true)
     private String phone;
 
 }

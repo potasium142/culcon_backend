@@ -12,14 +12,15 @@ import lombok.*;
 @Setter
 @Table(name = "staff")
 public class Staff {
-  @Id private String id;
+    @Id
+    private String id;
 
-  @OneToOne
-  @MapsId
-  @JoinColumn(name = "id")
-  private Account account;
+    @OneToOne
+    @MapsId
+    @JoinColumn(name = "id")
+    private Account account;
 
-  private String address;
-  private String phone;
-  private String ssn;
+    private String address;
+    private String phone;
+    private String ssn;
 }

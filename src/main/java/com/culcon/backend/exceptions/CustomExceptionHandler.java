@@ -1,22 +1,40 @@
 package com.culcon.backend.exceptions;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.culcon.backend.exceptions.messages.FieldErrorMessage;
+
+import java.util.HashMap;
 
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
-  @ExceptionHandler(Exception.class)
-  public ResponseEntity<Object> handleSecurityException(Exception ex) {
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(
+            @NonNull MethodArgumentNotValidException ex,
+            @NonNull HttpHeaders headers,
+            @NonNull HttpStatusCode status,
+            @NonNull WebRequest request) {
 
-    Map<String, Object> response = new HashMap<>();
-    response.put("message", ex.getClass().getName());
-    response.put("data", ex.getMessage());
+        var body = new HashMap<String, Object>();
 
-    return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-  }
+        body.put("exception", ex.getClass().getSimpleName());
+
+        var errors = ex.getBindingResult()
+                .getAllErrors()
+                .stream()
+                .map(FieldErrorMessage::objectErrorCast)
+                .toArray();
+        body.put("errors", errors);
+
+        return new ResponseEntity<>(body, headers, status);
+    }
+
 }

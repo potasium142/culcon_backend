@@ -1,31 +1,17 @@
 package com.culcon.backend.dtos.auth;
 
-import com.culcon.backend.models.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 
-import jakarta.validation.constraints.*;
-import lombok.Data;
+public record CustomerRegisterRequest(
+        @NotBlank(message = "username cannot be blank") String username,
 
-@Data
-public class CustomerRegisterRequest {
-  @NotBlank(message = "FullName cannot be blank")
-  private String fullName;
+        @NotBlank(message = "email cannot be blank") @Email(message = "Invalid email format") String email,
 
-  @NotBlank(message = "Email cannot be blank")
-  @Email(message = "Invalid email format")
-  private String email;
+        @NotBlank(message = "phone cannot be blank") String phone,
 
-  @NotBlank(message = "Phone cannot be blank")
-  private String phone;
+        @NotEmpty(message = "password cannot be blank") String password,
 
-  @NotBlank(message = "Username cannot be blank")
-  private String username;
-
-  @NotEmpty(message = "Password cannot be blank")
-  private String password;
-
-  @NotBlank(message = "Phone cannot be blank")
-  private String address;
-
-  @JsonIgnore private Role role = Role.CUSTOMER;
+        @NotBlank(message = "address cannot be blank") String address) {
 }
