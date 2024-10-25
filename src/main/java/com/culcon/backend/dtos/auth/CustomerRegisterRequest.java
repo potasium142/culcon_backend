@@ -3,15 +3,16 @@ package com.culcon.backend.dtos.auth;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Pattern;
 
 public record CustomerRegisterRequest(
-        @NotBlank(message = "username cannot be blank") String username,
+        @NotBlank String username,
 
-        @NotBlank(message = "email cannot be blank") @Email String email,
+        @NotBlank @Email String email,
 
-        @NotBlank(message = "phone cannot be blank") String phone,
+        @NotBlank @Pattern(regexp = "(84|0)[1-9][0-9]{1,9}") String phone,
 
-        @NotEmpty(message = "password cannot be blank") String password,
+        @NotEmpty String password,
 
-        @NotBlank(message = "address cannot be blank") String address) {
+        @NotBlank String address) {
 }

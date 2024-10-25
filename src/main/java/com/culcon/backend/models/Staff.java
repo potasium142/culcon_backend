@@ -1,5 +1,6 @@
 package com.culcon.backend.models;
 
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -23,8 +24,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "customer")
-public class Customer {
+@Table(name = "staff")
+public class Staff {
     @Id
     private String id;
 
@@ -41,6 +42,10 @@ public class Customer {
     @Pattern(regexp = "(84|0)[1-9][0-9]{1,9}")
     @Default
     private String phone = "";
+
+    @Column(name = "ssn")
+    @Nonnull
+    private String ssn;
 
     @Column(name = "profile_pic_uri")
     @Default

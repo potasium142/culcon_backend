@@ -1,15 +1,14 @@
 package com.culcon.backend.models;
 
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import jakarta.validation.Valid;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 
-@Valid
 public class AccountTest {
     private final Account validAccount = Account.builder()
             .email("test@test.com")
@@ -17,40 +16,91 @@ public class AccountTest {
             .password("123456")
             .role(Role.CUSTOMER)
             .build();
-    private final Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+
+    private final Validator validator = Validation
+            .buildDefaultValidatorFactory()
+            .getValidator();
 
     @Test
-    void createAccountNullField() {
+    void accountCreation() {
+        assertAll(() -> {
+            assertTrue(validAccount
+                    .getEmail().equals("test@test.com"));
+            assertTrue(validAccount
+                    .getUsername().equals("test"));
+            assertTrue(validAccount
+                    .getPassword().equals("123456"));
+            assertTrue(validAccount
+                    .getRole() == Role.CUSTOMER);
+            assertTrue(validAccount.getStatus() == AccountStatus.NORMAL);
+            assertTrue(validAccount.isEnabled());
+            assertTrue(validAccount.isAccountNonLocked());
+        });
+    }
+
+    @Test
+    void accountAllFieldNull() {
         assertThrows(NullPointerException.class, () -> {
             Account.builder().build();
         });
     }
 
     @Test
-    void accountEmptyEmail() {
-        assertThrows(NullPointerException.class, () -> {
+    void accountMailEmpty() {
+        assertAll(() -> {
+            assertThrows(NullPointerException.class, () -> {
+                validAccount.toBuilder()
+                        .email(null).build();
+            });
 
-            validAccount.toBuilder()
-                    .email(null).build();
+            var violations = validator.validate(
+                    validAccount.toBuilder()
+                            .email(" ")
+                            .build());
+            assertTrue(!violations.isEmpty());
         });
     }
 
     @Test
-    void accountIncorrectMail() {
-        var violations = validator.validate(Account.builder()
-                .email("testcom")
-                .username("test")
-                .password("123456")
-                .role(Role.CUSTOMER)
-                .build());
+    void accountMailInvalid() {
+        var violations = validator.validate(
+                validAccount.toBuilder()
+                        .email("test")
+                        .build());
         assertTrue(!violations.isEmpty());
     }
 
     @Test
-    void accountEmptyUsername() {
-        assertThrows(NullPointerException.class, () -> {
-            validAccount.toBuilder()
-                    .username(null).build();
+    void accountUsernameEmpty() {
+        assertAll(() -> {
+            assertThrows(NullPointerException.class, () -> {
+                validAccount.toBuilder()
+                        .username(null)
+                        .build();
+            });
+
+            var violations = validator.validate(
+                    validAccount.toBuilder()
+                            .username(" ")
+                            .build());
+            assertTrue(!violations.isEmpty());
+        });
+    }
+
+    @Test
+    void accountPasswordEmpty() {
+        assertAll(() -> {
+            assertThrows(NullPointerException.class, () -> {
+                validAccount.toBuilder()
+                        .password(null)
+                        .build();
+            });
+
+            var violations = validator.validate(
+                    validAccount.toBuilder()
+                            .password(" ")
+                            .build());
+            assertTrue(!violations.isEmpty());
         });
     }
 }

@@ -3,7 +3,6 @@ package com.culcon.backend.models;
 import java.util.Collection;
 import java.util.List;
 
-import org.hibernate.validator.constraints.Length;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,16 +19,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder(toBuilder = true)
 @Table(name = "account")
 public class Account implements UserDetails {
@@ -42,16 +46,18 @@ public class Account implements UserDetails {
     @Column(name = "email", unique = true)
     @Nonnull
     @Email
+    @NotBlank
     private String email;
 
     @Column(name = "username", unique = true)
     @Nonnull
+    @NotBlank
     private String username;
 
     @JsonIgnore
     @Nonnull
+    @NotBlank
     @Column(name = "password")
-    @Length(min = 6, max = 20)
     private String password;
 
     @Enumerated(EnumType.ORDINAL)
