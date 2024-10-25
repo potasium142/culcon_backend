@@ -1,10 +1,14 @@
 package com.culcon.backend.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.List;
 import lombok.*;
+import lombok.Builder.Default;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,12 +29,15 @@ public class Account implements UserDetails {
     private String id;
 
     @Column(name = "email", unique = true)
+    @Nonnull
     private String email;
 
     @Column(name = "username", unique = true)
+    @Nonnull
     private String username;
 
     @JsonIgnore
+    @Nonnull
     @Column(name = "password")
     private String password;
 
@@ -40,7 +47,8 @@ public class Account implements UserDetails {
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "status")
-    private AccountStatus status;
+    @Default
+    private AccountStatus status = AccountStatus.NORMAL;
 
     @JsonIgnore
     private String token;
@@ -60,7 +68,7 @@ public class Account implements UserDetails {
     @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return this.status != AccountStatus.BANNED;
     }
 
     @JsonIgnore
@@ -72,6 +80,6 @@ public class Account implements UserDetails {
     @JsonIgnore
     @Override
     public boolean isEnabled() {
-        return true;
+        return this.status != AccountStatus.BANNED;
     }
 }
