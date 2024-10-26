@@ -1,37 +1,20 @@
 package com.culcon.backend.dtos.auth;
 
-import com.culcon.backend.models.Role;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Data;
+import jakarta.validation.constraints.Pattern;
 
-@Data
-public class StaffRegisterRequest {
-    @NotBlank(message = "FullName cannot be blank")
-    private String fullName;
+public record StaffRegisterRequest(
+        @NotBlank String username,
 
-    @NotBlank(message = "Email cannot be blank")
-    @Email(message = "Invalid email format")
-    private String email;
+        @NotBlank @Email String email,
 
-    @NotBlank(message = "Phone cannot be blank")
-    private String phone;
+        @NotBlank @Pattern(regexp = "(84|0)[1-9][0-9]{1,9}") String phone,
 
-    @NotBlank(message = "Username cannot be blank")
-    private String username;
+        @NotBlank String ssn,
 
-    @NotEmpty(message = "Password cannot be blank")
-    private String password;
+        @NotEmpty String password,
 
-    @NotBlank(message = "Phone cannot be blank")
-    private String address;
-
-    @NotBlank(message = "SSN cannot be blank")
-    private String ssn;
-
-    @JsonIgnore
-    private Role role = Role.STAFF;
+        @NotBlank String address) {
 }

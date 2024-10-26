@@ -7,20 +7,22 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Builder
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "customer")
 public class Customer {
     @Id
@@ -31,9 +33,16 @@ public class Customer {
     @JoinColumn(name = "id")
     private Account account;
 
-    private String address;
+    @Column(name = "address")
+    @Default
+    private String address = "";
 
-    @Column(name = "phone", unique = true)
-    private String phone;
+    @Column(name = "phone", unique = true, length = 12)
+    @Pattern(regexp = "(84|0)[1-9][0-9]{1,9}")
+    @Default
+    private String phone = "";
 
+    @Column(name = "profile_pic_uri")
+    @Default
+    private String profilePictureUri = "defaultProfile";
 }

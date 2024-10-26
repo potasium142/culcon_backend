@@ -20,9 +20,11 @@ import com.culcon.backend.services.AuthService;
 import com.culcon.backend.services.JwtService;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AuthImplement implements AuthService {
 

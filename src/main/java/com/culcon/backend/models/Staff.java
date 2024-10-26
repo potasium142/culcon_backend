@@ -1,15 +1,29 @@
 package com.culcon.backend.models;
 
-import jakarta.persistence.*;
-import lombok.*;
+import jakarta.annotation.Nonnull;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 @Builder
 @Getter
-@Entity
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "staff")
 public class Staff {
     @Id
@@ -20,7 +34,20 @@ public class Staff {
     @JoinColumn(name = "id")
     private Account account;
 
-    private String address;
-    private String phone;
+    @Column(name = "address")
+    @Default
+    private String address = "";
+
+    @Column(name = "phone", unique = true, length = 12)
+    @Pattern(regexp = "(84|0)[1-9][0-9]{1,9}")
+    @Default
+    private String phone = "";
+
+    @Column(name = "ssn")
+    @Nonnull
     private String ssn;
+
+    @Column(name = "profile_pic_uri")
+    @Default
+    private String profilePictureUri = "defaultProfile";
 }
