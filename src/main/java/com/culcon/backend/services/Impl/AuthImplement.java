@@ -13,11 +13,14 @@ import org.springframework.stereotype.Service;
 import com.culcon.backend.dtos.auth.AuthenticationRequest;
 import com.culcon.backend.dtos.auth.AuthenticationResponse;
 import com.culcon.backend.dtos.auth.CustomerRegisterRequest;
+import com.culcon.backend.dtos.auth.StaffRegisterRequest;
 import com.culcon.backend.models.Account;
 import com.culcon.backend.models.Customer;
 import com.culcon.backend.models.Role;
+import com.culcon.backend.models.Staff;
 import com.culcon.backend.repositories.AccountRepo;
 import com.culcon.backend.repositories.CustomerRepo;
+import com.culcon.backend.repositories.StaffRepo;
 import com.culcon.backend.services.AuthService;
 import com.culcon.backend.services.JwtService;
 
@@ -35,6 +38,7 @@ public class AuthImplement implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final PasswordEncoder passwordEncoder;
     private final CustomerRepo customerRepo;
+    private final StaffRepo staffRepo;
 
     private void saveUserToken(Account user, String jwtToken) {
         var currentUser = userRepo.findById(user.getId()).orElseThrow();
@@ -123,6 +127,30 @@ public class AuthImplement implements AuthService {
                 .build();
         var savedUser = userRepo.save(user);
         customerRepo.save(customerInfo);
+        var jwtToken = jwtService.generateToken(user);
+        saveUserToken(savedUser, jwtToken);
+
+        return AuthenticationResponse.builder().accessToken(jwtToken).build();
+    }
+
+    @Override
+    public AuthenticationResponse registerStaff(StaffRegisterRequest request) {
+        var user = Account.builder()
+                .email(request.email())
+                .username(request.username())
+                .password(passwordEncoder.encode(request.password()))
+                .role(Role.STAFF)
+                .build();
+        var staffInfo = Staff.builder()
+                .account(user)
+                .address(request.address())
+                .phone(request.phone())
+                .ssn(request.ssn())
+                .build();
+        var savedUser = userRepo.save(user);
+
+        staffRepo.save(staffInfo);
+
         var jwtToken = jwtService.generateToken(user);
         saveUserToken(savedUser, jwtToken);
 
