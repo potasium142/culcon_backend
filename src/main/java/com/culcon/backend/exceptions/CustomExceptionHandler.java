@@ -1,5 +1,9 @@
 package com.culcon.backend.exceptions;
 
+import java.util.HashMap;
+import java.util.NoSuchElementException;
+
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -12,9 +16,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.culcon.backend.exceptions.messages.ExceptionMessage;
 import com.culcon.backend.exceptions.messages.FieldErrorMessage;
-
-import java.util.HashMap;
 
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
@@ -39,23 +42,31 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(body, headers, status);
     }
 
-    // @ExceptionHandler(ConstraintViolationException.class)
-    // public ResponseEntity<Object> contraintViolation(ConstraintViolationException
-    // ex) {
-    // return new ResponseEntity<>(ex.getConstraintViolations(),
-    // HttpStatus.NOT_ACCEPTABLE);
-    // }
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<?> dataIntegerityViolation(DataIntegrityViolationException ex) {
+        return new ResponseEntity<>(
+                ExceptionMessage.map(ex),
+                HttpStatus.NOT_ACCEPTABLE);
+    }
 
     @ExceptionHandler(TransactionSystemException.class)
     public ResponseEntity<?> transactionSystem(TransactionSystemException ex) {
         return new ResponseEntity<>(
-                ex.getMostSpecificCause()
-                        .getMessage(),
+                ex.getCause(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<?> noSuchElement(NoSuchElementException ex) {
+        return new ResponseEntity<>(
+                ExceptionMessage.map(ex),
+                HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> genericException(Exception ex) {
-        return new ResponseEntity<>(ex.getStackTrace(), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(
+                ExceptionMessage.map(ex),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

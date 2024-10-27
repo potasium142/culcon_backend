@@ -1,5 +1,7 @@
 package com.culcon.backend.services.Impl;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,14 +44,15 @@ public class AuthImplement implements AuthService {
 
     @Override
     public AuthenticationResponse authenticate(AuthenticationRequest authenticate) {
+        var user = userRepo
+                .findByUsername(authenticate.username())
+                .orElseThrow(
+                        () -> new NoSuchElementException("No account with such username"));
+
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticate.username(),
                         authenticate.password()));
-
-        var user = userRepo
-                .findByUsername(authenticate.username())
-                .orElseThrow();
 
         var jwtToken = jwtService.generateToken(user);
 
