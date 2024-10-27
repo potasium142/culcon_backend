@@ -38,6 +38,7 @@ public class LogoutService implements LogoutHandler {
             }
             return;
         }
+
         final String jwtToken = authHeader.substring(7);
         var user = userRepository.findByToken(jwtToken).orElse(null);
         if (user != null) {
