@@ -28,13 +28,16 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
     private final AuthService authService;
-
     private final LogoutService logoutService;
 
-    @Operation(tags = { "Authentication" })
-    @PostMapping("/register/customer")
+    @Operation(
+            tags = { "Authentication", "Account" },
+            summary = "Customer register API")
+    @PostMapping("/register")
     public ResponseEntity<Object> registerCustomer(
-            @Valid @RequestBody CustomerRegisterRequest request) {
+            @Valid
+            @RequestBody
+            CustomerRegisterRequest request) {
         var registerLoginToken = authService.registerCustomer(request);
         return new ResponseEntity<>(
                 registerLoginToken,
@@ -43,7 +46,10 @@ public class AuthController {
 
     @Operation(tags = { "Authentication" })
     @PostMapping("/signin")
-    public ResponseEntity<Object> signIn(@RequestBody @Valid AuthenticationRequest authenticate) {
+    public ResponseEntity<Object> signIn(
+            @RequestBody
+            @Valid
+            AuthenticationRequest authenticate) {
         var authenStatus = authService.authenticate(authenticate);
         return new ResponseEntity<>(authenStatus, HttpStatus.OK);
     }
@@ -51,13 +57,18 @@ public class AuthController {
     @Operation(tags = { "Authentication" })
     @PostMapping("/logout")
     public void logout(
-            HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication) {
         logoutService.logout(request, response, authentication);
     }
 
-    @Operation(tags = { "Account" })
+    @Operation(
+            tags = { "Account" },
+            summary = "Get raw account information")
     @GetMapping("/account")
-    public ResponseEntity<Object> getCurrentLoginUser(HttpServletRequest request) {
+    public ResponseEntity<Object> getCurrentLoginUser(
+            HttpServletRequest request) {
         return authService.getUserInformation(request);
     }
 }

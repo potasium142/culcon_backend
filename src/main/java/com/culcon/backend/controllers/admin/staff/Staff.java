@@ -28,10 +28,14 @@ public class Staff {
         return "sucess";
     }
 
-    @Operation(tags = { "Authentication" })
+    @Operation(
+            tags = { "Admin" },
+            summary = "Register staff account to system")
     @PostMapping("/register")
-    public ResponseEntity<Object> registerCustomer(
-            @Valid @RequestBody StaffRegisterRequest request) {
+    public ResponseEntity<Object> registerStaff(
+            @Valid
+            @RequestBody
+            StaffRegisterRequest request) {
         var registerLoginToken = authService.registerStaff(request);
         return new ResponseEntity<>(
                 registerLoginToken,

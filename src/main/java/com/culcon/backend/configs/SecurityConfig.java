@@ -100,7 +100,8 @@ public class SecurityConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void addCorsMappings(@NonNull CorsRegistry registry) {
+    public void addCorsMappings(@NonNull
+    CorsRegistry registry) {
         registry
                 .addMapping("/**")
                 .allowedOrigins("*")
