@@ -20,6 +20,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Builder.Default;
@@ -70,6 +71,18 @@ public class Account implements UserDetails {
     @Default
     private AccountStatus status = AccountStatus.NORMAL;
 
+    @Column(name = "address")
+    @Default
+    private String address = "";
+
+    @Column(name = "phone", unique = true, length = 12)
+    @Pattern(regexp = "(84|0)[1-9][0-9]{1,9}")
+    @Default
+    private String phone = "";
+
+    @Column(name = "profile_pic_uri")
+    @Default
+    private String profilePictureUri = "defaultProfile";
     @JsonIgnore
     private String token;
 

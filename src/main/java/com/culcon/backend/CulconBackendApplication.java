@@ -26,11 +26,13 @@ public class CulconBackendApplication implements ApplicationRunner {
                 .email("example@admin")
                 // ADMIN
                 .password("$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq")
-                .role(Role.ADMIN)
+                .role(Role.CUSTOMER)
+                .phone("0123456789")
                 .username("admin")
                 .build();
 
         if (!userRepository.existsByUsername("admin"))
             userRepository.save(admin);
+
     }
 }

@@ -15,6 +15,8 @@ public class AccountTest {
             .username("test")
             .password("123456")
             .role(Role.CUSTOMER)
+            .address("Dong Lao City")
+            .phone("0123456789")
             .build();
 
     private final Validator validator = Validation
@@ -35,6 +37,12 @@ public class AccountTest {
             assertTrue(validAccount.getStatus() == AccountStatus.NORMAL);
             assertTrue(validAccount.isEnabled());
             assertTrue(validAccount.isAccountNonLocked());
+            assertTrue(validAccount
+                    .getAddress().equals("Dong Lao City"));
+            assertTrue(validAccount
+                    .getPhone().equals("0123456789"));
+            assertTrue(validAccount
+                    .getProfilePictureUri().equals("defaultProfile"));
         });
     }
 
@@ -103,4 +111,5 @@ public class AccountTest {
             assertTrue(!violations.isEmpty());
         });
     }
+
 }
