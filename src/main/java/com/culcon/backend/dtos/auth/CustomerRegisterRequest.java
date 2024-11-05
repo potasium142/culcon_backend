@@ -19,7 +19,7 @@ public record CustomerRegisterRequest(
         String email,
 
         @NotBlank
-        @Schema(example = "0123456789 or 84123456789",
+        @Schema(example = "0123456789",
                 requiredMode = RequiredMode.REQUIRED)
         @Pattern(regexp = "(84|0)[1-9][0-9]{1,9}")
         String phone,
