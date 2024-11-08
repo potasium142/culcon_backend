@@ -1,0 +1,6 @@
+.github
+.gradle
+.vscode
+.build
+eclipse-formatter.xml
+.env

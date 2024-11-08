@@ -1,0 +1,22 @@
+services:
+  culcon_db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: culcon
+      POSTGRES_PASSWORD: culcon
+      POSTGRES_DB: culcon_user
+
+  app:
+    build:
+      context: .
+      dockerfile: Containerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - culcon_db
+    environment:
+      DB_URL: jdbc:postgresql://culcon_db:5432/culcon_user
+      DB_USERNAME: culcon
+      DB_PASSWORD: culcon
