@@ -7,3 +7,9 @@
 ```cmd
 podman compose up
 ```
+
+## Dev guide
+1. Start postgresql container
+```cmd
+ podman run --name culcon_db_dev -p 5432:5432 -e POSTGRES_USER=culcon -e POSTGRES_DB=culcon_user -e POSTGRES_PASSWORD=culcon  docker.io/postgres
+```
