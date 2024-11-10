@@ -9,9 +9,10 @@ services:
       POSTGRES_DB: culcon_user
 
   app:
-    build:
-      context: .
-      dockerfile: Containerfile
+    image: docker.io/giangltce/culcon_user_backend
+    # build:
+    #   context: .
+    #   dockerfile: Containerfile
     ports:
       - "8080:8080"
     depends_on:
