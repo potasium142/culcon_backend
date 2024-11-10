@@ -7,30 +7,30 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public record CustomerRegisterRequest(
-        @NotBlank
-        @Schema(example = "sussywussy",
-                requiredMode = RequiredMode.REQUIRED)
-        String username,
+	@NotBlank
+	@Schema(example = "sussywussy",
+		requiredMode = RequiredMode.REQUIRED)
+	String username,
 
-        @NotBlank
-        @Email
-        @Schema(example = "example@email.com",
-                requiredMode = RequiredMode.REQUIRED)
-        String email,
+	@NotBlank
+	@Email
+	@Schema(example = "example@email.com",
+		requiredMode = RequiredMode.REQUIRED)
+	String email,
 
-        @NotBlank
-        @Schema(example = "0123456789",
-                requiredMode = RequiredMode.REQUIRED)
-        @Pattern(regexp = "(84|0)[1-9][0-9]{1,9}")
-        String phone,
+	@NotBlank
+	@Schema(example = "0123456789",
+		requiredMode = RequiredMode.REQUIRED)
+	@Pattern(regexp = "(84|0)[1-9][0-9]{1,9}")
+	String phone,
 
-        @NotBlank
-        @Schema(example = "sussywussy",
-                requiredMode = RequiredMode.REQUIRED)
-        String password,
+	@NotBlank
+	@Schema(example = "sussywussy",
+		requiredMode = RequiredMode.REQUIRED)
+	String password,
 
-        @NotBlank
-        @Schema(example = "69, Sussy town",
-                requiredMode = RequiredMode.AUTO)
-        String address) {
+	@NotBlank
+	@Schema(example = "69, Sussy town",
+		requiredMode = RequiredMode.AUTO)
+	String address) {
 }
