@@ -42,7 +42,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 	}
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
-	public ResponseEntity<?> dataIntegerityViolation(DataIntegrityViolationException ex) {
+	public ResponseEntity<?> dataIntegrityViolation(DataIntegrityViolationException ex) {
 		return new ResponseEntity<>(
 			ExceptionMessage.map(ex),
 			HttpStatus.NOT_ACCEPTABLE);

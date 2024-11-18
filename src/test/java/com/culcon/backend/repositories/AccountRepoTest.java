@@ -1,34 +1,35 @@
 package com.culcon.backend.repositories;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
+import com.culcon.backend.models.Account;
+import com.culcon.backend.models.Role;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import com.culcon.backend.models.Account;
-import com.culcon.backend.models.Role;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
-
+@Transactional
 public class AccountRepoTest {
-    @Autowired
-    private AccountRepo accountRepo;
+	@Autowired
+	private AccountRepo accountRepo;
 
-    @Test
-    void saveAccount() {
-        var admin = Account.builder()
-                .email("example@admin")
-                // ADMIN
-                .password("$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq")
-                .role(Role.CUSTOMER)
-                .phone("0123456789")
-                .username("admin")
-                .build();
+	@Test
+	@DisplayName("Insert account to repository")
+	void accountRepo_SaveAccount() {
+		var defaultAccount = Account.builder()
+			.email("example@admin")
+			.password("$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq")
+			.role(Role.CUSTOMER)
+			.phone("0123456789")
+			.username("admin")
+			.profileDescription("when the imposter is sus")
+			.build();
 
-        var account = accountRepo.save(admin);
+		var saveAccount = accountRepo.save(defaultAccount);
 
-        assertNotNull(account);
-    }
-
+		assertEquals(defaultAccount, saveAccount);
+	}
 }

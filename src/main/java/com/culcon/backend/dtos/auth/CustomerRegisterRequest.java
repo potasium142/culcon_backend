@@ -1,11 +1,14 @@
 package com.culcon.backend.dtos.auth;
 
+import com.culcon.backend.models.Account;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.Builder;
 
+@Builder
 public record CustomerRegisterRequest(
 	@NotBlank
 	@Schema(example = "sussywussy",
@@ -32,5 +35,23 @@ public record CustomerRegisterRequest(
 	@NotBlank
 	@Schema(example = "69, Sussy town",
 		requiredMode = RequiredMode.AUTO)
-	String address) {
+	String address,
+
+	@NotBlank
+	@Schema(example = "le sus",
+		requiredMode = RequiredMode.AUTO)
+	String description
+) {
+	public static Account mapToAccount(
+		CustomerRegisterRequest reqBody) {
+		return Account.builder()
+			.username(reqBody.username)
+			.password(reqBody.password)
+			.address(reqBody.address)
+			.phone(reqBody.phone)
+			.email(reqBody.email)
+			.profileDescription(reqBody.description)
+			.build();
+	}
+
 }

@@ -10,7 +10,7 @@ public record FieldErrorMessage(
 	String message) {
 
 	static public FieldErrorMessage objectErrorCast(ObjectError oe) {
-		var fe = FieldError.class.cast(oe);
+		var fe = (FieldError) oe;
 		return FieldErrorMessage.builder()
 			.fieldName(fe.getField())
 			.message(fe.getDefaultMessage())

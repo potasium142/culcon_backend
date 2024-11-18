@@ -1,7 +1,7 @@
 package com.culcon.backend.configs;
 
-import com.culcon.backend.services.JwtService;
 import com.culcon.backend.services.UserService;
+import com.culcon.backend.services.authenticate.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

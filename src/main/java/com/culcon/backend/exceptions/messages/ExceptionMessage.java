@@ -9,7 +9,11 @@ public record ExceptionMessage(
 
 	public static ExceptionMessage map(Exception ex) {
 		return ExceptionMessage.builder()
-			.cause(ex.getClass().getSimpleName())
-			.messages(ex.getMessage()).build();
+			.cause(
+				ex.getClass().getSimpleName()
+			)
+			.messages(
+				ex.getMessage()
+			).build();
 	}
 }
