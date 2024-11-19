@@ -18,5 +18,4 @@ class SmokeTest {
 	void contextLoads() {
 		Assertions.assertNotNull(authController);
 	}
-
 }

@@ -1,0 +1,30 @@
+{
+  "get_account_info": {
+    "input": {},
+    "output": {
+      "role": "CUSTOMER",
+      "address": "",
+      "profileDescription": "",
+      "phone": "0123456789",
+      "profilePictureUri": "defaultProfile",
+      "email": "example@admin",
+      "username": "admin",
+      "status": "NORMAL"
+    }
+  },
+  "register_success": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "example@email.com",
+      "phone": "0123456780"
+    },
+    "output": {}
+  },
+  "login_success": {
+    "input": {
+      "username": "user01",
+      "password": "user01"
+    }
+  }
+}

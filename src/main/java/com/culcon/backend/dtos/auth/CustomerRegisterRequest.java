@@ -32,12 +32,10 @@ public record CustomerRegisterRequest(
 		requiredMode = RequiredMode.REQUIRED)
 	String password,
 
-	@NotBlank
 	@Schema(example = "69, Sussy town",
 		requiredMode = RequiredMode.AUTO)
 	String address,
 
-	@NotBlank
 	@Schema(example = "le sus",
 		requiredMode = RequiredMode.AUTO)
 	String description
