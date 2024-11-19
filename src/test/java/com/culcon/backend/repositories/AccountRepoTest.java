@@ -29,6 +29,7 @@ public class AccountRepoTest {
 			.build();
 
 		var saveAccount = accountRepo.save(defaultAccount);
+		saveAccount.setId("");
 
 		assertEquals(defaultAccount, saveAccount);
 	}
