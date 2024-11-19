@@ -12,6 +12,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,7 +29,8 @@ public class Account implements UserDetails {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.UUID)
-	private String id;
+	@Default
+	private String id = "";
 
 	@Column(name = "email", unique = true)
 	@Nonnull
@@ -50,7 +52,8 @@ public class Account implements UserDetails {
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "role")
 	@Nonnull
-	private Role role;
+	@Default
+	private Role role = Role.CUSTOMER;
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "status")
@@ -70,13 +73,18 @@ public class Account implements UserDetails {
 	@Default
 	private String profilePictureUri = "defaultProfile";
 
+	@Column(name = "profile_description")
+	@Default
+	private String profileDescription = "";
+
 	@JsonIgnore
 	private String token;
 
 	@JsonIgnore
 	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable(name = "cart")
-	private List<CartItem> cart;
+	@Default
+	private List<CartItem> cart = new ArrayList<>();
 
 
 	@JsonIgnore

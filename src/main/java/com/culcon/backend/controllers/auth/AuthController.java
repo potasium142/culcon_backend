@@ -3,7 +3,7 @@ package com.culcon.backend.controllers.auth;
 import com.culcon.backend.configs.LogoutService;
 import com.culcon.backend.dtos.auth.AuthenticationRequest;
 import com.culcon.backend.dtos.auth.CustomerRegisterRequest;
-import com.culcon.backend.services.AuthService;
+import com.culcon.backend.services.authenticate.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
