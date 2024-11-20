@@ -1,1 +1,3 @@
-podman compose up --remove-orphans --pull
+podman machine start
+podman compose pull
+podman compose up
