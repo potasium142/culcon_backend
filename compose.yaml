@@ -1,5 +1,6 @@
 services:
   culcon_db:
+    container_name: culcon_user_db
     image: postgres
     ports:
       - "5432:5432"
@@ -10,9 +11,7 @@ services:
 
   app:
     image: docker.io/giangltce/culcon_user_backend:main
-    # build:
-    #   context: .
-    #   dockerfile: Containerfile
+    container_name: culcon_user_backend
     ports:
       - "8080:8080"
     depends_on:
