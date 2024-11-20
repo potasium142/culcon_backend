@@ -39,8 +39,8 @@ dependencies {
 
     compileOnly("org.projectlombok:lombok")
 
+    runtimeOnly("com.h2database:h2")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.18.1")
     annotationProcessor("org.projectlombok:lombok")
 
 //    ===============================

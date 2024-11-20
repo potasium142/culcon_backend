@@ -131,7 +131,6 @@ public class AuthAPITest {
 		var jsonResult = (ObjectNode) objectMapper.readTree(result);
 		jsonResult.remove("id");
 
-
 		assertEquals(
 			testJson.getTestCase("get_account_info").get("output"),
 			jsonResult);
