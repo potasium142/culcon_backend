@@ -99,9 +99,9 @@ public class SecurityConfig implements WebMvcConfigurer {
 	public void addCorsMappings(@NonNull
 	                            CorsRegistry registry) {
 		registry
-			.addMapping("/**")
+			.addMapping("/api/**")
 			.allowedOrigins("*")
-			.allowedMethods("GET, POST, PATCH, PUT, DELETE, OPTIONS, HEAD")
+			.allowedMethods("GET", "POST")
 			.allowedHeaders("*")
 			.exposedHeaders("X-Get-Header");
 	}
