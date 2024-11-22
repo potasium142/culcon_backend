@@ -4,7 +4,7 @@ WORKDIR /workdir
 
 COPY . .
 
-RUN ./gradlew clean build --no-daemon  --parallel
+RUN ./gradlew build --no-daemon  --parallel
 
 EXPOSE 8080
 

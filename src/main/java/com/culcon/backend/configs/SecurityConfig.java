@@ -101,7 +101,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 		registry
 			.addMapping("/api/**")
 			.allowedOrigins("*")
-			.allowedMethods("GET", "POST")
+			.allowedOrigins("http://localhost:8080")
+			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 			.allowedHeaders("*")
 			.exposedHeaders("X-Get-Header");
 	}

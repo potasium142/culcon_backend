@@ -11,6 +11,9 @@ services:
 
   app:
     image: docker.io/giangltce/culcon_user_backend:main
+    #    build:
+    #      context: .
+    #      dockerfile: Dockerfile
     container_name: culcon_user_backend
     ports:
       - "8080:8080"
