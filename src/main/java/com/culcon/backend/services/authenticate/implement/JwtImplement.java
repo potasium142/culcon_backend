@@ -1,4 +1,4 @@
-package com.culcon.backend.services.implement;
+package com.culcon.backend.services.authenticate.implement;
 
 import com.culcon.backend.services.authenticate.JwtService;
 import io.jsonwebtoken.Claims;

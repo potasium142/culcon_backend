@@ -1,9 +1,11 @@
 package com.culcon.backend.services;
 
+import com.culcon.backend.models.CartItem;
 import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.http.ResponseEntity;
+
+import java.util.List;
 
 public interface CartService {
 
-    ResponseEntity<Object> getUserCartItems(HttpServletRequest request);
+	List<CartItem> getUserCartItems(HttpServletRequest request);
 }

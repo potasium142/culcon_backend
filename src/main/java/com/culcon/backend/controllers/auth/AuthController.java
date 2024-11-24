@@ -2,8 +2,6 @@ package com.culcon.backend.controllers.auth;
 
 import com.culcon.backend.configs.LogoutService;
 import com.culcon.backend.dtos.auth.AuthenticationRequest;
-import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
-import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.dtos.auth.CustomerRegisterRequest;
 import com.culcon.backend.services.authenticate.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -65,35 +63,9 @@ public class AuthController {
 	@GetMapping("/account")
 	public ResponseEntity<Object> getCurrentLoginUser(
 		HttpServletRequest request) {
-		return authService.getUserInformation(request);
-	}
-
-	@Operation(
-			tags = {"Account"},
-			summary = "Edit account information")
-	@PostMapping("/account/edit")
-	public ResponseEntity<Object> editAccountInfo(
-			HttpServletRequest request, @Valid @RequestBody CustomerInfoUpdateRequest newUserData
-
-//			HttpServletResponse response, Authentication authentication
-			) {
-		ResponseEntity<Object> updateResponse = authService.updateCustomer(newUserData, request);
-		return updateResponse;
-//		logoutService.logout(request, response, authentication);
+		var user = authService.getUserInformation(request);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
 
-	@Operation(
-			tags = {"Account"},
-			summary = "Edit account password")
-	@PostMapping("/account/password/edit")
-	public ResponseEntity<Object> editAccountPasswordInfo(
-			HttpServletRequest request, @Valid @RequestBody CustomerPasswordRequest newUserData
-
-//			HttpServletResponse response, Authentication authentication
-	) {
-		ResponseEntity<Object> updateResponse = authService.updateCustomerPassword(newUserData, request);
-		return updateResponse;
-//		logoutService.logout(request, response, authentication);
-	}
 }

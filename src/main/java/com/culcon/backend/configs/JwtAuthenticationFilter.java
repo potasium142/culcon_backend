@@ -1,7 +1,7 @@
 package com.culcon.backend.configs;
 
-import com.culcon.backend.services.UserService;
 import com.culcon.backend.services.authenticate.JwtService;
+import com.culcon.backend.services.authenticate.UserAuthService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +21,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final JwtService jwtService;
-	private final UserService userService;
+	private final UserAuthService userService;
 
 	@Override
 	protected void doFilterInternal(
