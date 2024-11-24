@@ -1,8 +1,6 @@
 package com.culcon.backend.services.implement;
 
-import com.culcon.backend.dtos.auth.AuthenticationRequest;
-import com.culcon.backend.dtos.auth.AuthenticationResponse;
-import com.culcon.backend.dtos.auth.CustomerRegisterRequest;
+import com.culcon.backend.dtos.auth.*;
 import com.culcon.backend.models.Account;
 import com.culcon.backend.models.Role;
 import com.culcon.backend.repositories.AccountRepo;
@@ -121,4 +119,85 @@ public class AuthImplement implements AuthService {
 		return AuthenticationResponse.builder().accessToken(jwtToken).build();
 	}
 
+	@Override
+	public ResponseEntity<Object>  updateCustomer(CustomerInfoUpdateRequest newUserData, HttpServletRequest request) {
+		String token = extractTokenFromHeader(request);
+		if (token == null) {
+			return ResponseEntity
+					.status(HttpStatus.UNAUTHORIZED)
+					.body("No JWT token found in the request header");
+		}
+
+		var user = userRepo.findByToken(token).orElse(null);
+
+		if (user == null) {
+			return ResponseEntity
+					.status(HttpStatus.UNAUTHORIZED)
+					.body("JWT is not belong to any user");
+		}
+
+		if (!jwtService.isTokenValid(token, user)) {
+			return ResponseEntity
+					.status(HttpStatus.UNAUTHORIZED)
+					.body("JWT token has expired and revoked");
+		}
+
+
+		user.setEmail(newUserData.email());
+		user.setUsername(newUserData.username());
+//		user.setPassword(passwordEncoder.encode(newUserData.password()));
+		user.setRole(Role.CUSTOMER);
+		user.setAddress(newUserData.address());
+		user.setPhone(newUserData.phone());
+		user.setProfileDescription(newUserData.description());
+
+		var savedUser = userRepo.save(user);
+
+		return new ResponseEntity<>(
+				savedUser,
+				HttpStatus.OK);
+	}
+
+
+	@Override
+	public ResponseEntity<Object>  updateCustomerPassword(CustomerPasswordRequest newUserData, HttpServletRequest request) {
+		String token = extractTokenFromHeader(request);
+		if (token == null) {
+			return ResponseEntity
+					.status(HttpStatus.UNAUTHORIZED)
+					.body("No JWT token found in the request header");
+		}
+
+		var user = userRepo.findByToken(token).orElse(null);
+
+		if (user == null) {
+			return ResponseEntity
+					.status(HttpStatus.UNAUTHORIZED)
+					.body("JWT is not belong to any user");
+		}
+
+		if (!jwtService.isTokenValid(token, user)) {
+			return ResponseEntity
+					.status(HttpStatus.UNAUTHORIZED)
+					.body("JWT token has expired and revoked");
+		}
+
+		if (passwordEncoder.matches(newUserData.oldpassword(), user.getPassword())) {
+			if (newUserData.repassword().equals(newUserData.password())){
+				user.setPassword(passwordEncoder.encode(newUserData.password()));
+				var savedUser = userRepo.save(user);
+				return new ResponseEntity<>(
+						savedUser,
+						HttpStatus.OK);
+			}
+			return new ResponseEntity<>(
+					"RePassword do not match",
+					HttpStatus.BAD_REQUEST);
+		}
+
+
+		return new ResponseEntity<>(
+				"Passwords do not match",
+				HttpStatus.BAD_REQUEST);
+	}
 }

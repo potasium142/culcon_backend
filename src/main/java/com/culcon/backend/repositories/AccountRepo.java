@@ -12,4 +12,5 @@ public interface AccountRepo extends JpaRepository<Account, String> {
     Optional<Account> findByToken(String token);
 
     Boolean existsByUsername(String username);
+
 }

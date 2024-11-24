@@ -1,6 +1,7 @@
 package com.culcon.backend;
 
 import com.culcon.backend.models.Account;
+import com.culcon.backend.models.CartItem;
 import com.culcon.backend.models.Role;
 import com.culcon.backend.repositories.AccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +22,25 @@ public class CulconBackendApplication implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		var admin = Account.builder()
-			.id("53695356-91be-4772-a364-a6b32a51f8b5")
-			.email("example@admin")
-			// ADMIN
-			.password("$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq")
-			.role(Role.CUSTOMER)
-			.phone("0123456789")
-			.username("admin")
-			.build();
+//		var admin = Account.builder()
+//			.id("53695356-91be-4772-a364-a6b32a51f8b5")
+//			.email("example@admin0")
+//			// ADMIN
+//			.password("$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq")
+//			.role(Role.CUSTOMER)
+//			.phone("0123456799")
+//			.username("admin")
+//			.build();
+//
+//		if (!userRepository.existsByUsername("admin"))
+//			userRepository.save(admin);
 
-		if (!userRepository.existsByUsername("admin"))
-			userRepository.save(admin);
+//		var cart = CartItem.builder()
+//				.CartId("")
+//				.AccountId("53695356-91be-4772-a364-a6b32a51f8b5")
+//				.itemId()
+//				.quantity(10)
+//				.build();
 
 	}
 }
