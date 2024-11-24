@@ -23,7 +23,13 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table(name = "account")
+@Table(name = "account",
+	uniqueConstraints = {
+		@UniqueConstraint(name = "Username", columnNames = "username"),
+		@UniqueConstraint(name = "Phone", columnNames = "phone"),
+		@UniqueConstraint(name = "Email", columnNames = "email")
+	}
+)
 public class Account implements UserDetails {
 
 	@Id
@@ -65,7 +71,7 @@ public class Account implements UserDetails {
 	private String address = "";
 
 	@Column(name = "phone", unique = true, length = 12)
-	@Pattern(regexp = "(84|0)[1-9][0-9]{1,9}")
+	@Pattern(regexp = "0[1-9]{2}[0-9]{7}")
 	@Default
 	private String phone = "";
 

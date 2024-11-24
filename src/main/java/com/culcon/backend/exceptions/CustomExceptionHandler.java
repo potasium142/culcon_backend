@@ -2,6 +2,7 @@ package com.culcon.backend.exceptions;
 
 import com.culcon.backend.exceptions.messages.ExceptionMessage;
 import com.culcon.backend.exceptions.messages.FieldErrorMessage;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -43,8 +44,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<?> dataIntegrityViolation(DataIntegrityViolationException ex) {
+		var violation = (ConstraintViolationException) ex.getCause();
+		var error = FieldErrorMessage.builder()
+			.fieldName("Data integrity violation")
+			.message(violation.getSQLException().getLocalizedMessage())
+			.build();
 		return new ResponseEntity<>(
-			ExceptionMessage.map(ex),
+			error,
 			HttpStatus.NOT_ACCEPTABLE);
 	}
 
