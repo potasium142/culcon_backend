@@ -24,7 +24,7 @@ public record CustomerRegisterRequest(
 	@NotBlank
 	@Schema(example = "0123456789",
 		requiredMode = RequiredMode.REQUIRED)
-	@Pattern(regexp = "(84|0)[1-9][0-9]{1,9}")
+	@Pattern(regexp = "0[1-9]{2}[0-9]{7}")
 	String phone,
 
 	@NotBlank
