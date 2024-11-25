@@ -7,6 +7,7 @@ import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.repositories.AccountRepo;
 import com.culcon.backend.services.UserService;
 import com.culcon.backend.services.authenticate.AuthService;
+import com.culcon.backend.services.authenticate.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ public class UserImplement implements UserService {
 	private final AccountRepo userRepository;
 	private final AuthService authService;
 	private final PasswordEncoder passwordEncoder;
+	private final JwtService jwtService;
 
 
 	@Override
@@ -38,18 +40,16 @@ public class UserImplement implements UserService {
 		user.setPhone(newUserData.phone());
 		user.setProfileDescription(newUserData.description());
 
+		var jwtToken = jwtService.generateToken(user);
+
+		user.setToken(jwtToken);
+
 		var returnUser = userRepository.save(user);
 
 		var returnData = new HashMap<String, Object>();
-		var reauthenticateRequest = AuthenticationRequest.builder()
-			.password(returnUser.getPassword())
-			.username(returnUser.getUsername())
-			.build();
-
-		var token = authService.authenticate(reauthenticateRequest);
 
 		returnData.put("user_data", returnUser);
-		returnData.put("access_token", token);
+		returnData.put("access_token", jwtToken);
 
 		return returnData;
 	}
