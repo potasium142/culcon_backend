@@ -5,10 +5,10 @@
       "role": "CUSTOMER",
       "address": "",
       "profileDescription": "",
-      "phone": "0123456789",
+      "phone": "0969996669",
       "profilePictureUri": "defaultProfile",
-      "email": "example@admin",
-      "username": "admin",
+      "email": "example@test",
+      "username": "test_account",
       "status": "NORMAL"
     }
   },

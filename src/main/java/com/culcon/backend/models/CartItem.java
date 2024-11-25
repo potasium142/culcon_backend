@@ -12,6 +12,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Embeddable
 @Table(name = "cart_items") // Ensure table name matches your database schema
 public class CartItem {
 
