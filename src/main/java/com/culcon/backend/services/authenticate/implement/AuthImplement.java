@@ -1,4 +1,4 @@
-package com.culcon.backend.services.implement;
+package com.culcon.backend.services.authenticate.implement;
 
 import com.culcon.backend.dtos.auth.AuthenticationRequest;
 import com.culcon.backend.dtos.auth.AuthenticationResponse;
@@ -12,8 +12,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AccountExpiredException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,31 +67,21 @@ public class AuthImplement implements AuthService {
 	}
 
 	@Override
-	public ResponseEntity<Object> getUserInformation(HttpServletRequest request) {
+	public Account getUserInformation(HttpServletRequest request) {
 		String token = extractTokenFromHeader(request);
 		if (token == null) {
-			return ResponseEntity
-				.status(HttpStatus.UNAUTHORIZED)
-				.body("No JWT token found in the request header");
+			throw new AccountExpiredException("JWT token is not valid");
 		}
 
-		var user = userRepo.findByToken(token).orElse(null);
-
-		if (user == null) {
-			return ResponseEntity
-				.status(HttpStatus.UNAUTHORIZED)
-				.body("JWT is not belong to any user");
-		}
+		var user = userRepo
+			.findByToken(token)
+			.orElseThrow(() -> new AccountExpiredException("No account with such username"));
 
 		if (!jwtService.isTokenValid(token, user)) {
-			return ResponseEntity
-				.status(HttpStatus.UNAUTHORIZED)
-				.body("JWT token has expired and revoked");
+			throw new AccountExpiredException("Expired JWT token");
 		}
 
-		return new ResponseEntity<>(
-			user,
-			HttpStatus.OK);
+		return user;
 	}
 
 	public String extractTokenFromHeader(HttpServletRequest request) {
@@ -120,5 +109,4 @@ public class AuthImplement implements AuthService {
 
 		return AuthenticationResponse.builder().accessToken(jwtToken).build();
 	}
-
 }

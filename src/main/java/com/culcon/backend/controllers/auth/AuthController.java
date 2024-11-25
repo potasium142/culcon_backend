@@ -63,6 +63,9 @@ public class AuthController {
 	@GetMapping("/account")
 	public ResponseEntity<Object> getCurrentLoginUser(
 		HttpServletRequest request) {
-		return authService.getUserInformation(request);
+		var user = authService.getUserInformation(request);
+		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
+
+
 }

@@ -1,7 +1,15 @@
 package com.culcon.backend.services;
 
-import org.springframework.security.core.userdetails.UserDetailsService;
+import com.culcon.backend.dtos.auth.AuthenticationResponse;
+import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
+import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
+import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.Map;
 
 public interface UserService {
-	UserDetailsService userDetailsServices();
+
+	Map<String, Object> updateCustomer(CustomerInfoUpdateRequest newData, HttpServletRequest request);
+
+	AuthenticationResponse updateCustomerPassword(CustomerPasswordRequest newData, HttpServletRequest request);
 }

@@ -2,7 +2,7 @@ package com.culcon.backend.configs;
 
 import com.culcon.backend.exceptions.CustomAccessDeniedHandler;
 import com.culcon.backend.models.Role;
-import com.culcon.backend.services.UserService;
+import com.culcon.backend.services.authenticate.UserAuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,7 +39,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final CustomAccessDeniedHandler customAccessDeniedHandler;
-	private final UserService userServices;
+	private final UserAuthService userServices;
 
 	private final LogoutHandler logoutHandler;
 

@@ -5,7 +5,7 @@ import com.culcon.backend.dtos.auth.CustomerRegisterRequest;
 import com.culcon.backend.models.Account;
 import com.culcon.backend.repositories.AccountRepo;
 import com.culcon.backend.services.authenticate.JwtService;
-import com.culcon.backend.services.implement.AuthImplement;
+import com.culcon.backend.services.authenticate.implement.AuthImplement;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
