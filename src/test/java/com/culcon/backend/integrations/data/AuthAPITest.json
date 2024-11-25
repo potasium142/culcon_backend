@@ -26,5 +26,94 @@
       "username": "user01",
       "password": "user01"
     }
+  },
+  "login_fail": {
+    "input": {
+      "username": "wrongUser",
+      "password": "wrongPassword"
+    },
+    "output": {
+      "status": 404,
+      "message": "Invalid username or password!"
+    }
+  },
+  "register_InvalidEmail": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "invalid-email-format",
+      "phone": "0123456780"
+    },
+    "output": {}
+  },
+  "register_blank_username": {
+    "input": {
+      "username": "",
+      "password": "user01",
+      "email": "example@email.com",
+      "phone": "0123456780"
+    },
+    "output": {}
+  },
+  "register_blank_email": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "",
+      "phone": "0123456780"
+    },
+    "output": {}
+  },
+  "register_blank_phone": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "example@email.com",
+      "phone": ""
+    }
+  },
+  "register_blank_password": {
+    "input": {
+      "username": "user01",
+      "password": "",
+      "email": "example@email.com",
+      "phone": "0123456780"
+    }
+  },
+  "register_InvalidPhoneNumberMissNumber": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "example@email.com",
+      "phone": "012345678"
+    }
+  },
+  "register_InvalidPhoneNumberMoreNumber": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "example@email.com",
+      "phone": "0123456789101"
+    }
+  },
+  "register_InvalidPhoneNumberHaveText": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "example@email.com",
+      "phone": "Text"
+    }
+  },
+  "login_blankUserName": {
+    "input": {
+      "username": "",
+      "password": "user01"
+    }
+  },
+  "login_blankPassword": {
+    "input": {
+      "username": "user01",
+      "password": ""
+    }
   }
 }
