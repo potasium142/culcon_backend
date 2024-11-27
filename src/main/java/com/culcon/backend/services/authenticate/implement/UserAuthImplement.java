@@ -1,6 +1,6 @@
 package com.culcon.backend.services.authenticate.implement;
 
-import com.culcon.backend.repositories.AccountRepo;
+import com.culcon.backend.repositories.user.AccountRepo;
 import com.culcon.backend.services.authenticate.UserAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserAuthImplement implements UserAuthService {
 
-	private final AccountRepo userRepository;
+    private final AccountRepo userRepository;
 
-	@Override
-	public UserDetailsService userDetailsServices() {
-		return username -> userRepository
-			.findByUsername(username)
-			.orElseThrow(() -> new UsernameNotFoundException("User not found"));
-	}
+    @Override
+    public UserDetailsService userDetailsServices() {
+        return username -> userRepository
+                .findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
 }

@@ -1,10 +1,9 @@
-package com.culcon.backend.repositories;
+package com.culcon.backend.repositories.user;
 
-import java.util.Optional;
-
+import com.culcon.backend.models.user.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.culcon.backend.models.Account;
+import java.util.Optional;
 
 public interface AccountRepo extends JpaRepository<Account, String> {
     Optional<Account> findByUsername(String username);

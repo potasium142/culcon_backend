@@ -1,7 +1,6 @@
-package com.culcon.backend.repositories;
+package com.culcon.backend.repositories.user;
 
-import com.culcon.backend.models.Account;
-import com.culcon.backend.models.CartItem;
+import com.culcon.backend.models.user.CartItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

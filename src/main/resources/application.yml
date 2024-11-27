@@ -1,23 +1,24 @@
 spring:
-    config:
-        import: optional:file:.env[.properties]
-    datasource:
-        url: ${DB_URL}
-        username: ${DB_USERNAME}
-        password: ${DB_PASSWORD}
-    jpa:
-        hibernate:
-            ddl-auto: update
-    servlet:
-        multipart:
-            max-file-size: 10MB
-    sql:
-        init:
-            mode: always
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  #    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  sql:
+    init:
+      mode: always
 
 
 
 jwt:
-    secret-key: 482087CE4EEB98990B21E80477B6F8F7973770A5C836FF23BAA85ADCD786139B50C11D935B6C1512F36E8DA99A70788992E0EBD70F2BD5E7817CFA0D141C9270
-    expiration:
-        access-token: 1800000
+  secret-key: 482087CE4EEB98990B21E80477B6F8F7973770A5C836FF23BAA85ADCD786139B50C11D935B6C1512F36E8DA99A70788992E0EBD70F2BD5E7817CFA0D141C9270
+  expiration:
+    access-token: 1800000
