@@ -1,7 +1,8 @@
 package com.culcon.backend.models.user;
 
 public enum AccountStatus {
-    NORMAL,
-    BANNED,
-    DEACTIVATE
+	NON_ACTIVE,
+	NORMAL,
+	BANNED,
+	DEACTIVATE
 }
