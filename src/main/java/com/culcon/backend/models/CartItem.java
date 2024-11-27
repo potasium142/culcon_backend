@@ -23,7 +23,6 @@ public class CartItem {
 
 	@Column(name = "account_id")
 	@NotNull
-	@Email
 	@NotBlank
 	private String accountId;
 
