@@ -32,7 +32,8 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     implementation("io.swagger.core.v3:swagger-annotations:2.2.25")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-
+// https://mvnrepository.com/artifact/io.hypersistence/hypersistence-utils-hibernate-63
+    implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.8.3")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
     runtimeOnly("org.postgresql:postgresql")
@@ -44,9 +45,6 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
 
 //    ===============================
-    testCompileOnly("org.projectlombok:lombok")
-
-    testAnnotationProcessor("org.projectlombok:lombok")
 
     testImplementation("com.fasterxml.jackson.core:jackson-databind:2.18.1")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

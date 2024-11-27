@@ -3,7 +3,6 @@ package com.culcon.backend.configs.database;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -20,27 +19,25 @@ import java.util.Map;
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(
-        entityManagerFactoryRef = "userEntityManager",
-        transactionManagerRef = "userTransactionManager",
+        entityManagerFactoryRef = "recordEntityManager",
+        transactionManagerRef = "recordTransactionManager",
         basePackages = {
-                "com.culcon.backend.repositories.user"
+                "com.culcon.backend.repositories.record"
         }
 )
-public class UserDatabase {
-    @Primary
+public class RecordDatabase {
     @Bean
-    @ConfigurationProperties(prefix = "spring.datasource.user")
-    public DataSource userDataSource() {
+    @ConfigurationProperties(prefix = "spring.datasource.record")
+    public DataSource recordDataSource() {
         return new DriverManagerDataSource();
     }
 
-    @Primary
-    @Bean(name = "userEntityManager")
-    public LocalContainerEntityManagerFactoryBean userEntityManager() {
+    @Bean(name = "recordEntityManager")
+    public LocalContainerEntityManagerFactoryBean recordEntityManager() {
         LocalContainerEntityManagerFactoryBean bean = new LocalContainerEntityManagerFactoryBean();
 
-        bean.setDataSource(userDataSource());
-        bean.setPackagesToScan("com.culcon.backend.models.user");
+        bean.setDataSource(recordDataSource());
+        bean.setPackagesToScan("com.culcon.backend.models.record");
 
         JpaVendorAdapter adapter = new HibernateJpaVendorAdapter();
         bean.setJpaVendorAdapter(adapter);
@@ -52,11 +49,11 @@ public class UserDatabase {
         return bean;
     }
 
-    @Bean(name = "userTransactionManager")
-    @Primary
+
+    @Bean(name = "recordTransactionManager")
     public PlatformTransactionManager transactionManager() {
         JpaTransactionManager manager = new JpaTransactionManager();
-        manager.setEntityManagerFactory(userEntityManager().getObject());
+        manager.setEntityManagerFactory(recordEntityManager().getObject());
         return manager;
     }
 }

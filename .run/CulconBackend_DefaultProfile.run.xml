@@ -1,9 +1,10 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="CulconBackend_DefaultProfile" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <envs>
-      <env name="DB_USERNAME" value="culcon" />
-      <env name="DB_URL" value="jdbc:postgresql://localhost:5432/culcon_user" />
       <env name="DB_PASSWORD" value="culcon" />
+      <env name="DB_URL_USER" value="jdbc:postgresql://localhost:5432/culcon_user" />
+      <env name="DB_USERNAME" value="culcon" />
+      <env name="DB_URL_RECORD" value="jdbc:postgresql://localhost:5432/culcon_record" />
     </envs>
     <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
     <module name="backend.main" />

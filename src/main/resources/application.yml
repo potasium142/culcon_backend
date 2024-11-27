@@ -2,10 +2,14 @@ spring:
   config:
     import: optional:file:.env[.properties]
   datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-  #    driver-class-name: org.h2.Driver
+    user:
+      url: ${DB_URL_USER}
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
+    record:
+      url: ${DB_URL_RECORD}
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
