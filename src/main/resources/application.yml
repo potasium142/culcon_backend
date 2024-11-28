@@ -20,6 +20,22 @@ spring:
     init:
       mode: always
 
+  mail:
+    host: smtp.gmail.com
+    username: huynhhuyhuy12@gmail.com
+    password: ecfw rrhf xzrw xuer
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
+        debug: true
+
 
 
 jwt:

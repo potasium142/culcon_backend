@@ -32,8 +32,9 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     implementation("io.swagger.core.v3:swagger-annotations:2.2.25")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
-// https://mvnrepository.com/artifact/io.hypersistence/hypersistence-utils-hibernate-63
-    implementation("io.hypersistence:hypersistence-utils-hibernate-63:3.8.3")
+    implementation("org.springframework.boot:spring-boot-starter-mail")
+    implementation("org.modelmapper:modelmapper:3.2.0")
+
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
     runtimeOnly("org.postgresql:postgresql")
