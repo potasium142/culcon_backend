@@ -3,7 +3,6 @@ package com.culcon.backend.controllers.customer;
 
 import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
-import com.culcon.backend.services.CartService;
 import com.culcon.backend.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class CustomerController {
 
-	private final CartService cartService;
 	private final UserService userService;
 
 	@Operation(tags = "Permission Test", summary = "Test permission for guest")

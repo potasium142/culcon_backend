@@ -1,19 +1,30 @@
 package com.culcon.backend.controllers.auth;
 
 import com.culcon.backend.configs.LogoutService;
+import com.culcon.backend.dtos.OTPResetPassword;
+import com.culcon.backend.dtos.OTPResponse;
 import com.culcon.backend.dtos.auth.AuthenticationRequest;
 import com.culcon.backend.dtos.auth.CustomerRegisterRequest;
+import com.culcon.backend.models.user.Account;
+import com.culcon.backend.services.OTPService;
+import com.culcon.backend.services.UserService;
 import com.culcon.backend.services.authenticate.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.security.auth.login.AccountNotFoundException;
+import java.io.UnsupportedEncodingException;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -23,6 +34,9 @@ public class AuthController {
 
 	private final AuthService authService;
 	private final LogoutService logoutService;
+
+	private final UserService userService;
+	private final OTPService otpService;
 
 	@Operation(
 		tags = {"Authentication", "Account"},
@@ -56,6 +70,34 @@ public class AuthController {
 		Authentication authentication) {
 		logoutService.logout(request, response, authentication);
 	}
+
+
+	@Operation(tags = {"Authentication"})
+	@PostMapping("/forgot/otp/get")
+	public ResponseEntity<Object> forgotSendOTP(
+		@RequestParam("email")
+		@NotEmpty(message = "Email shouldn't be empty")
+		@Email
+		String email
+	) throws MessagingException, UnsupportedEncodingException, AccountNotFoundException {
+		Account account = userService.getAccountByEmail(email);
+
+		var otp = otpService.generateOTP(account, 14, 7);
+
+		otpService.sendOTPEmail(otp);
+
+		return new ResponseEntity<>(OTPResponse.of(otp), HttpStatus.OK);
+	}
+
+	@Operation(tags = {"Authentication"})
+	@PostMapping("/forgot/reset")
+	public ResponseEntity<Object> forgotResetPassword(
+		@Valid @RequestBody OTPResetPassword otpForm
+	) {
+		userService.updateCustomerPasswordOTP(otpForm.otp(), otpForm.id(), otpForm.password());
+		return new ResponseEntity<>("Password update successfully", HttpStatus.OK);
+	}
+
 
 	@Operation(
 		tags = {"Account"},

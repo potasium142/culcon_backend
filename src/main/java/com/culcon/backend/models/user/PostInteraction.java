@@ -1,4 +1,4 @@
-package com.culcon.backend.models;
+package com.culcon.backend.models.user;
 
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -14,10 +14,10 @@ import lombok.*;
 @Data
 @Table(name = "post_interaction")
 public class PostInteraction {
-	@EmbeddedId
-	private PostInteractionId id;
+    @EmbeddedId
+    private PostInteractionId id;
 
-	private Integer rated;
-	private Boolean bookmarked;
-	private String comment;
+    private Integer rated;
+    private Boolean bookmarked;
+    private String comment;
 }

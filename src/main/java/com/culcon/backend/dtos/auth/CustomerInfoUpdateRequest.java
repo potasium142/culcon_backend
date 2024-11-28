@@ -1,6 +1,6 @@
 package com.culcon.backend.dtos.auth;
 
-import com.culcon.backend.models.Account;
+import com.culcon.backend.models.user.Account;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Email;

@@ -1,4 +1,4 @@
-package com.culcon.backend.models;
+package com.culcon.backend.models.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nonnull;
@@ -12,9 +12,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Entity
@@ -57,7 +58,6 @@ public class Account implements UserDetails {
 
 	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "role")
-	@Nonnull
 	@Default
 	private Role role = Role.CUSTOMER;
 
@@ -90,7 +90,9 @@ public class Account implements UserDetails {
 	@ElementCollection(fetch = FetchType.LAZY)
 	@CollectionTable(name = "cart")
 	@Default
-	private List<CartItem> cart = new ArrayList<>();
+	@Column(name = "amount")
+	@MapKeyJoinColumn(name = "item_id")
+	private Map<Integer, Integer> cart = new HashMap<>();
 
 
 	@JsonIgnore

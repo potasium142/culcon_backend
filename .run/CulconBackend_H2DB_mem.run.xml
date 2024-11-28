@@ -1,9 +1,10 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="CulconBackend_H2DB" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+  <configuration default="false" name="CulconBackend_H2DB_mem" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ALTERNATIVE_JRE_PATH" value="17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <envs>
-      <env name="DB_URL" value="jdbc:h2:mem:testdb" />
+      <env name="DB_URL_RECORD" value="jdbc:h2:mem:culcon_record;DB_CLOSE_DELAY=-1" />
+      <env name="DB_URL_USER" value="jdbc:h2:mem:culcon_user;DB_CLOSE_DELAY=-1" />
     </envs>
     <module name="backend.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.culcon.backend.CulconBackendApplication" />

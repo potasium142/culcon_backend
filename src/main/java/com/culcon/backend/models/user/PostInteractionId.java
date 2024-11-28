@@ -1,4 +1,4 @@
-package com.culcon.backend.models;
+package com.culcon.backend.models.user;
 
 
 import jakarta.persistence.Embeddable;
@@ -13,9 +13,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostInteractionId {
-	private String postId;
+    private String postId;
 
-	@ManyToOne
-	@JoinColumn(name = "account_id")
-	private Account account;
+    @ManyToOne
+    @JoinColumn(name = "account_id")
+    private Account account;
 }

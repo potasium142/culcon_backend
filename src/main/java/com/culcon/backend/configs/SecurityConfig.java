@@ -1,7 +1,7 @@
 package com.culcon.backend.configs;
 
 import com.culcon.backend.exceptions.CustomAccessDeniedHandler;
-import com.culcon.backend.models.Role;
+import com.culcon.backend.models.user.Role;
 import com.culcon.backend.services.authenticate.UserAuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -53,12 +53,19 @@ public class SecurityConfig implements WebMvcConfigurer {
 		throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)
 			.cors(x -> x.configurationSource(corsConfigurationSource()))
+			.headers(header -> {
+				header.frameOptions(frame -> {
+					frame.disable();
+					frame.sameOrigin();
+				});
+			})
 			.authorizeHttpRequests(
 				request -> request
 					.requestMatchers(
 						"/api/auth/**",
 						"/swagger-ui/**",
 						"/api/public/**",
+						"/h2-console/**",
 						"/v3/api-docs/**")
 					.permitAll()
 					.requestMatchers("/api/customer/**")
