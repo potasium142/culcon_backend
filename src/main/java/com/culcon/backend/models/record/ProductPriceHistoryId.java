@@ -6,7 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -19,6 +19,6 @@ public class ProductPriceHistoryId {
 	private Product product;
 
 	@JdbcTypeCode(SqlTypes.LOCAL_DATE_TIME)
-	private LocalTime date;
+	private LocalDateTime date;
 
 }
