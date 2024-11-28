@@ -38,4 +38,4 @@ out/
 eclipse-formatter.xml
 
 ### H2 DB
-**.mv.db
+**.db

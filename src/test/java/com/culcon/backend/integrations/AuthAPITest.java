@@ -46,7 +46,6 @@ public class AuthAPITest {
 	void setUp() throws Exception {
 
 		var admin = Account.builder()
-			.id("53695356-91be-4772-a364-a6b32a51f8b5")
 			.email("example@test")
 			// ADMIN
 			.password("$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq")
@@ -55,8 +54,7 @@ public class AuthAPITest {
 			.username("test_account")
 			.build();
 
-		if (!userRepository.existsByUsername("admin"))
-			userRepository.save(admin);
+		userRepository.save(admin);
 
 		this.testJson =
 			new JsonReader(this.pwd + "AuthAPITest.json");
@@ -68,7 +66,7 @@ public class AuthAPITest {
 						  {
 							"username" : "test_account",
 							"password" : "admin"
-							}
+						  }
 						""")
 			).andExpect(
 				status().isOk()

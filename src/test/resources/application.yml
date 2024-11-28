@@ -3,15 +3,46 @@ spring:
     import: optional:file:.env[.properties]
   datasource:
     user:
-      url: jdbc:h2:mem:culcon_user
+      url: jdbc:h2:file:./culcon_user
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
     record:
-      url: jdbc:h2:mem:culcon_record
+      url: jdbc:h2:file:./culcon_record
+      username: ${DB_USERNAME}
+      password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
+    generate-ddl: true
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: default
+
   servlet:
     multipart:
       max-file-size: 10MB
+  sql:
+    init:
+      mode: always
+  h2:
+    console:
+      enabled: true
+
+  mail:
+    host: smtp.gmail.com
+    username: ${EMAIL_ADDRESS}
+    password: ${EMAIL_PASSWORD}
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        connectiontimeout: 5000
+        timeout: 3000
+
 
 
 junit:
