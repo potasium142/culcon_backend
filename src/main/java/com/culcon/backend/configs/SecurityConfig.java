@@ -53,6 +53,12 @@ public class SecurityConfig implements WebMvcConfigurer {
 		throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)
 			.cors(x -> x.configurationSource(corsConfigurationSource()))
+			.headers(header -> {
+				header.frameOptions(frame -> {
+					frame.disable();
+					frame.sameOrigin();
+				});
+			})
 			.authorizeHttpRequests(
 				request -> request
 					.requestMatchers(
