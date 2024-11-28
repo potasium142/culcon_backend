@@ -2,9 +2,7 @@ package com.culcon.backend.models.record;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import org.hibernate.type.SqlTypes;
 
 import java.util.ArrayList;
@@ -29,8 +27,8 @@ public class Product {
 	private String productName;
 
 	@Column(
-		name = "product_types",
-		columnDefinition = "int[]"
+		name = "product_types"
+//		columnDefinition = "int[]"
 	)
 	@JdbcTypeCode(SqlTypes.ARRAY)
 	@Enumerated(EnumType.ORDINAL)
@@ -41,7 +39,7 @@ public class Product {
 	private Integer availableQuantity;
 
 	@Column(name = "product_status")
-	@JdbcType(PostgreSQLEnumJdbcType.class)
+//	@JdbcType(PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.ORDINAL)
 	private ProductStatus productStatus;
 

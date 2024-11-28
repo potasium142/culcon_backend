@@ -2,9 +2,7 @@ package com.culcon.backend.models.record;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.JdbcType;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import org.hibernate.type.SqlTypes;
 
 import java.time.LocalTime;
@@ -34,7 +32,7 @@ public class OrderHistory {
 	private List<OrderHistoryItem> items;
 
 	@Column(name = "order_status")
-	@JdbcType(PostgreSQLEnumJdbcType.class)
+//	@JdbcType(PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.ORDINAL)
 	private OrderStatus orderStatus;
 

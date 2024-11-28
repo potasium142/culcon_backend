@@ -2,6 +2,7 @@ package com.culcon.backend.controllers.auth;
 
 import com.culcon.backend.configs.LogoutService;
 import com.culcon.backend.dtos.OTPResetPassword;
+import com.culcon.backend.dtos.OTPResponse;
 import com.culcon.backend.dtos.auth.AuthenticationRequest;
 import com.culcon.backend.dtos.auth.CustomerRegisterRequest;
 import com.culcon.backend.models.user.Account;
@@ -85,7 +86,7 @@ public class AuthController {
 
 		otpService.sendOTPEmail(otp);
 
-		return new ResponseEntity<>("Check your email for OTP code", HttpStatus.OK);
+		return new ResponseEntity<>(OTPResponse.of(otp), HttpStatus.OK);
 	}
 
 	@Operation(tags = {"Authentication"})

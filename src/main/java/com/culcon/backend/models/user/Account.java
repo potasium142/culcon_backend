@@ -8,8 +8,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.Builder.Default;
-import org.hibernate.annotations.JdbcType;
-import org.hibernate.dialect.PostgreSQLEnumJdbcType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -59,14 +57,11 @@ public class Account implements UserDetails {
 	private String password;
 
 	@Enumerated(EnumType.ORDINAL)
-	@JdbcType(PostgreSQLEnumJdbcType.class)
 	@Column(name = "role")
-	@Nonnull
 	@Default
 	private Role role = Role.CUSTOMER;
 
 	@Enumerated(EnumType.ORDINAL)
-	@JdbcType(PostgreSQLEnumJdbcType.class)
 	@Column(name = "status")
 	@Default
 	private AccountStatus status = AccountStatus.NORMAL;

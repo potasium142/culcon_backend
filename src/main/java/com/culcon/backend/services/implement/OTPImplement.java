@@ -34,13 +34,6 @@ public class OTPImplement implements OTPService {
 
 
 	@Override
-	public void generateOneTimePassword(Account account) throws MessagingException, UnsupportedEncodingException {
-		var accountOTP = generateOTP(account, 14, 5);
-
-		sendOTPEmail(accountOTP);
-	}
-
-	@Override
 	public AccountOTP generateOTP(Account account,
 	                              int otpLength,
 	                              int expireMinutes) {
