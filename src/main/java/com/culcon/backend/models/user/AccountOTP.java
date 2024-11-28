@@ -20,7 +20,7 @@ public class AccountOTP {
 	@MapsId
 	@OneToOne(cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "account_id")
-	private Account id;
+	private Account account;
 
 	@Column(name = "otp")
 	private String otp;

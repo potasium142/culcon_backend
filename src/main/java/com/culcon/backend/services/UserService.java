@@ -13,15 +13,10 @@ public interface UserService {
 
 	Account getAccountByEmail(String email) throws AccountNotFoundException;
 
-	Account getAccountById(String id) throws AccountNotFoundException;
-
 	Map<String, Object> updateCustomer(CustomerInfoUpdateRequest newData, HttpServletRequest request);
 
 	AuthenticationResponse updateCustomerPassword(CustomerPasswordRequest newData, HttpServletRequest request);
 
-	void updateCustomerPasswordOTP(String newPassword, Account account);
-
-	Boolean comparePasswords(String newpass, String oldpass);
-
+	void updateCustomerPasswordOTP(String otp, String id, String newPassword);
 
 }

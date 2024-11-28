@@ -9,14 +9,12 @@ import java.io.UnsupportedEncodingException;
 
 public interface OTPService {
 
-	void generateOneTimePassword(Account account) throws MessagingException, UnsupportedEncodingException, AccountNotFoundException;
+	void generateOneTimePassword(Account account) throws
+		MessagingException, UnsupportedEncodingException, AccountNotFoundException;
 
-	void sendOTPEmail(AccountOTP accountOTP) throws UnsupportedEncodingException, MessagingException, AccountNotFoundException;
+	AccountOTP generateOTP(Account account,
+	                       int otpLength,
+	                       int expireMinutes);
 
-	AccountOTP getAccountOTPById(String id) throws AccountNotFoundException;
-
-	Boolean compareOTPs(String inputOTP, String dbOTP);
-
-	void clearOTP(AccountOTP accountOTP);
-
+	void sendOTPEmail(AccountOTP accountOTP) throws UnsupportedEncodingException, MessagingException;
 }

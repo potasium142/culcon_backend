@@ -10,11 +10,12 @@ import jakarta.mail.internet.MimeMessage;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.internal.bytebuddy.utility.RandomString;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -24,6 +25,8 @@ import java.time.LocalDateTime;
 @Transactional
 public class OTPImplement implements OTPService {
 
+	@Value("${spring.mail.username}")
+	private String emailAddress;
 
 	private final AccountOTPRepo accountOTPRepo;
 
@@ -31,33 +34,41 @@ public class OTPImplement implements OTPService {
 
 
 	@Override
-	public void generateOneTimePassword(Account account) throws MessagingException, UnsupportedEncodingException, AccountNotFoundException {
+	public void generateOneTimePassword(Account account) throws MessagingException, UnsupportedEncodingException {
+		var accountOTP = generateOTP(account, 14, 5);
 
-		var accountOTP = AccountOTP.builder()
-			.id(account).build();
-
-		String OTP = RandomString.make(8);
-
-		accountOTP.setOtp(OTP);
-
-		// Get the current date
-		LocalDateTime currentDateTime = LocalDateTime.now();
-		// Convert to java.sql.Date
-		Timestamp sqlTimestamp = Timestamp.valueOf(currentDateTime);
-
-
-		accountOTP.setOtpExpiration(sqlTimestamp);
-
-		accountOTPRepo.save(accountOTP);
 		sendOTPEmail(accountOTP);
 	}
 
+	@Override
+	public AccountOTP generateOTP(Account account,
+	                              int otpLength,
+	                              int expireMinutes) {
+		String OTP = RandomString.make(otpLength);
+
+		var accountOTP = accountOTPRepo.findByAccount(account)
+			.orElse(AccountOTP.builder()
+				.account(account)
+				.build());
+
+		accountOTP.setOtp(OTP);
+
+		LocalDateTime currentDateTime = LocalDateTime.now().plusMinutes(expireMinutes);
+		Timestamp sqlTimestamp = Timestamp.valueOf(currentDateTime);
+
+		accountOTP.setOtpExpiration(sqlTimestamp);
+
+		return accountOTPRepo.save(accountOTP);
+	}
+
+	@Async
+	@Override
 	public void sendOTPEmail(AccountOTP accountOTP)
-		throws UnsupportedEncodingException, MessagingException, AccountNotFoundException {
+		throws UnsupportedEncodingException, MessagingException {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message);
-		helper.setFrom(new InternetAddress("huynhhuyhuy12@gmail.com", "Cucon.com"));
-		Account account = accountOTP.getId();
+		helper.setFrom(new InternetAddress(emailAddress, "Culinary Connect"));
+		Account account = accountOTP.getAccount();
 
 		helper.setTo(account.getEmail());
 
@@ -74,29 +85,5 @@ public class OTPImplement implements OTPService {
 
 		helper.setText(content, true);
 		mailSender.send(message);
-	}
-
-	@Override
-	public AccountOTP getAccountOTPById(String id) throws AccountNotFoundException {
-		return accountOTPRepo.findAccountOTPByAccountId(id)
-			.orElseThrow(() -> new AccountNotFoundException("AccountOTP not found"));
-	}
-
-	@Override
-	public Boolean compareOTPs(String inputOTP, String dbOTP) {
-//        if (passwordEncoder.matches(inputOTP, dbOTP)) {
-//            return true;
-//        }
-		if (inputOTP.equals(dbOTP)) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public void clearOTP(AccountOTP account) {
-		account.setOtp(null);
-		account.setOtpExpiration(null);
-		accountOTPRepo.save(account);
 	}
 }

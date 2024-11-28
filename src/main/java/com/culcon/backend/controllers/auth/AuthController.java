@@ -1,6 +1,7 @@
 package com.culcon.backend.controllers.auth;
 
 import com.culcon.backend.configs.LogoutService;
+import com.culcon.backend.dtos.OTPResetPassword;
 import com.culcon.backend.dtos.auth.AuthenticationRequest;
 import com.culcon.backend.dtos.auth.CustomerRegisterRequest;
 import com.culcon.backend.models.user.Account;
@@ -80,7 +81,9 @@ public class AuthController {
 	) throws MessagingException, UnsupportedEncodingException, AccountNotFoundException {
 		Account account = userService.getAccountByEmail(email);
 
-		otpService.generateOneTimePassword(account);
+		var otp = otpService.generateOTP(account, 14, 7);
+
+		otpService.sendOTPEmail(otp);
 
 		return new ResponseEntity<>("Check your email for OTP code", HttpStatus.OK);
 	}
@@ -88,28 +91,9 @@ public class AuthController {
 	@Operation(tags = {"Authentication"})
 	@PostMapping("/forgot/reset")
 	public ResponseEntity<Object> forgotResetPassword(
-		@RequestParam("email")
-		@NotEmpty(message = "Email shouldn't be empty")
-		@Email
-		String email,
-		@RequestParam("newpassword")
-		@NotEmpty(message = "New password shouldn't be empty")
-		String password,
-		@RequestParam("otp") String otp
-	) throws AccountNotFoundException {
-		Account account = userService.getAccountByEmail(email);
-
-		if (otpService.getAccountOTPById(account.getId()) != null) {
-
-			if (otpService.compareOTPs(otp, otpService.getAccountOTPById(account.getId()).getOtp())) {
-				userService.updateCustomerPasswordOTP(password, account);
-			} else {
-				return new ResponseEntity<>("OTP is invalid", HttpStatus.BAD_REQUEST);
-			}
-		} else {
-			return new ResponseEntity<>("Account have no OTP, please generate it first", HttpStatus.BAD_REQUEST);
-		}
-		otpService.clearOTP(otpService.getAccountOTPById(account.getId()));
+		@Valid @RequestBody OTPResetPassword otpForm
+	) {
+		userService.updateCustomerPasswordOTP(otpForm.otp(), otpForm.id(), otpForm.password());
 		return new ResponseEntity<>("Password update successfully", HttpStatus.OK);
 	}
 
