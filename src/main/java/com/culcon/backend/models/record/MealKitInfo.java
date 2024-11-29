@@ -24,4 +24,7 @@ public class MealKitInfo {
 	@Column(name = "ingredients")
 	@JdbcTypeCode(SqlTypes.ARRAY)
 	private List<Integer> ingredientsId;
+
+	@Column(name = "description")
+	private String description;
 }

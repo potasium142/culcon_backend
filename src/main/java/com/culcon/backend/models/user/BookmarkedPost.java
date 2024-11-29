@@ -12,12 +12,11 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Data
-@Table(name = "post_interaction")
-public class PostInteraction {
-    @EmbeddedId
-    private PostInteractionId id;
+@Table(name = "bookmarked_post")
+public class BookmarkedPost {
+	@EmbeddedId
+	private PostInteractionId id;
 
-    private Integer rated;
-    private Boolean bookmarked;
-    private String comment;
+	private Integer rated;
+	private Boolean bookmarked;
 }

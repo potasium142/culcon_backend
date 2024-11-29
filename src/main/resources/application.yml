@@ -17,6 +17,9 @@ spring:
       ddl-auto: update
     generate-ddl: true
   data:
+    mongodb:
+      uri: mongodb+srv://culcon:culcon@cluster0.7djog.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      database: Culcon
     jpa:
       repositories:
         bootstrap-mode: default
