@@ -30,6 +30,8 @@ spring:
   h2:
     console:
       enabled: true
+      settings:
+        web-allow-others: true
 
   mail:
     host: smtp.gmail.com
