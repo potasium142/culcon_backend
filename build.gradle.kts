@@ -30,7 +30,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-devtools")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     implementation("io.swagger.core.v3:swagger-annotations:2.2.25")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
