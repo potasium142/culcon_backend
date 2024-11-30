@@ -1,8 +1,10 @@
 package com.culcon.backend.controllers;
 
 
+import com.culcon.backend.models.docs.Blog;
 import com.culcon.backend.models.record.Coupon;
 import com.culcon.backend.models.record.Product;
+import com.culcon.backend.repositories.docs.BlogDocRepo;
 import com.culcon.backend.repositories.record.CouponRepo;
 import com.culcon.backend.repositories.record.ProductRepo;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ public class DebugController {
 
 	private final ProductRepo productRepo;
 	private final CouponRepo couponRepo;
+	private final BlogDocRepo blogRepo;
 
 	@GetMapping("/test_permission")
 	public String permissionTest() {
@@ -33,5 +36,12 @@ public class DebugController {
 		@RequestBody Coupon coupon
 	) {
 		return couponRepo.save(coupon);
+	}
+
+	@PostMapping("/record/blog/create")
+	public Blog createBlog(
+		@RequestBody Blog blog
+	) {
+		return blogRepo.save(blog);
 	}
 }

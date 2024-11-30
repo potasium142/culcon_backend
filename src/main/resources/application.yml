@@ -16,10 +16,10 @@ spring:
     hibernate:
       ddl-auto: update
     generate-ddl: true
-    #  data:
-    #    mongodb:
-    #      uri: ""
-    #      database: Culcon
+  data:
+    mongodb:
+      uri: ${MONGODB_URL}
+      database: ${MONGODB_NAME}
     jpa:
       repositories:
         bootstrap-mode: default

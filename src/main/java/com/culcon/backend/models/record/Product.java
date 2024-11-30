@@ -5,8 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 
 @Data
@@ -27,10 +26,8 @@ public class Product {
 	private String productName;
 
 	@Column(name = "product_types")
-	@JdbcTypeCode(SqlTypes.ARRAY)
 	@Enumerated(EnumType.ORDINAL)
-	@Builder.Default
-	private List<ProductType> productTypes = new ArrayList<>();
+	private ProductType productTypes;
 
 	@Column(name = "available_quantity")
 	private Integer availableQuantity;
@@ -40,10 +37,10 @@ public class Product {
 	@Enumerated(EnumType.ORDINAL)
 	private ProductStatus productStatus;
 
-	@Column(name = "usable_duration_days")
-	private Integer usableDurationDays;
+	@Column(name = "days_before_expiry")
+	private Integer daysBeforeExpiry;
 
 	@Column(name = "tags")
 	@JdbcTypeCode(SqlTypes.ARRAY)
-	private List<String> tags;
+	private HashSet<String> tags;
 }
