@@ -1,14 +1,17 @@
 package com.culcon.backend.services.authenticate.implement;
 
+import com.culcon.backend.repositories.user.AccountRepo;
 import com.culcon.backend.services.authenticate.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -17,6 +20,9 @@ import java.util.function.Function;
 
 @Service
 public class JwtImplement implements JwtService {
+	@Autowired
+	private AccountRepo accountRepo;
+
 	@Value("${jwt.secret-key}")
 	private String secretKey;
 
@@ -24,7 +30,7 @@ public class JwtImplement implements JwtService {
 	private long jwtExpiration;
 
 	@Override
-	public String extractUsername(String jwtToken) {
+	public String extractId(String jwtToken) {
 		return extractClaim(jwtToken, Claims::getSubject);
 	}
 
@@ -38,9 +44,12 @@ public class JwtImplement implements JwtService {
 
 	private String buildToken(
 		Map<String, Object> extraClaims, UserDetails userDetails, long jwtExpiration) {
+		var userId = accountRepo.findByUsername(userDetails.getUsername()).orElseThrow(
+			() -> new UsernameNotFoundException("Username not found")
+		).getId();
 		return Jwts.builder()
 			.claims(extraClaims)
-			.subject(userDetails.getUsername())
+			.subject(userId)
 			.claim("role", populateAuthorities(userDetails.getAuthorities()))
 			.issuedAt(new Date(System.currentTimeMillis()))
 			.expiration(new Date(System.currentTimeMillis() + jwtExpiration))
@@ -57,8 +66,8 @@ public class JwtImplement implements JwtService {
 	}
 
 	public boolean isTokenValid(String token, UserDetails userDetails) {
-		final String username = extractUsername(token);
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+		var isIdExist = accountRepo.existsById(extractId(token));
+		return isIdExist && !isTokenExpired(token);
 	}
 
 	private boolean isTokenExpired(String token) {

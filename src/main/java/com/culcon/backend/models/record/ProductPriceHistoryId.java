@@ -20,5 +20,4 @@ public class ProductPriceHistoryId {
 
 	@JdbcTypeCode(SqlTypes.LOCAL_DATE_TIME)
 	private LocalDateTime date;
-
 }

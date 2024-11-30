@@ -32,7 +32,6 @@ public class OrderHistory {
 	private List<OrderHistoryItem> items;
 
 	@Column(name = "order_status")
-//	@JdbcType(PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.ORDINAL)
 	private OrderStatus orderStatus;
 

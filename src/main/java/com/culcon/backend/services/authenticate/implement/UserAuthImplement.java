@@ -11,12 +11,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserAuthImplement implements UserAuthService {
 
-    private final AccountRepo userRepository;
+	private final AccountRepo userRepository;
 
-    @Override
-    public UserDetailsService userDetailsServices() {
-        return username -> userRepository
-                .findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
+	@Override
+	public UserDetailsService userDetailsServices() {
+		return username -> userRepository
+			.findByUsername(username)
+			.orElseThrow(() -> new UsernameNotFoundException("User not found"));
+	}
 }

@@ -26,10 +26,7 @@ public class Product {
 	@Column(name = "product_name")
 	private String productName;
 
-	@Column(
-		name = "product_types"
-//		columnDefinition = "int[]"
-	)
+	@Column(name = "product_types")
 	@JdbcTypeCode(SqlTypes.ARRAY)
 	@Enumerated(EnumType.ORDINAL)
 	@Builder.Default
@@ -45,4 +42,8 @@ public class Product {
 
 	@Column(name = "usable_duration_days")
 	private Integer usableDurationDays;
+
+	@Column(name = "tags")
+	@JdbcTypeCode(SqlTypes.ARRAY)
+	private List<String> tags;
 }

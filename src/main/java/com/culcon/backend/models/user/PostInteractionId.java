@@ -6,6 +6,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 
+import java.sql.Timestamp;
+
 @Getter
 @Setter
 @Builder
@@ -13,9 +15,11 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostInteractionId {
-    private String postId;
+	private String postId;
 
-    @ManyToOne
-    @JoinColumn(name = "account_id")
-    private Account account;
+	@ManyToOne
+	@JoinColumn(name = "account_id")
+	private Account account;
+
+	private Timestamp timestamp;
 }

@@ -1,7 +1,9 @@
 package com.culcon.backend.models.record;
 
-import com.culcon.backend.models.etc.CouponIdGenerator;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -15,7 +17,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class Coupon {
 	@Id
-	@GeneratedValue(generator = CouponIdGenerator.GENERATOR_NAME)
 	private String id;
 
 	@Column(name = "expire_time")
@@ -29,4 +30,8 @@ public class Coupon {
 	@Column(name = "usage_amount")
 	@Builder.Default
 	private Integer usageAmount = Integer.MAX_VALUE;
+
+	@Column(name = "usage_left")
+	@Builder.Default
+	private Integer usageLeft = Integer.MAX_VALUE;
 }
