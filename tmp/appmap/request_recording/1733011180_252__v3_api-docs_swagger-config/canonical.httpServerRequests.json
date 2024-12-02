@@ -1,7 +1,0 @@
-[
-  {
-    "route": "GET /v3/api-docs/swagger-config",
-    "parameters": "()",
-    "status": 200
-  }
-]

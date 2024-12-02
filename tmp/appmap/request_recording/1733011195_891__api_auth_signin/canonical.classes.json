@@ -1,7 +1,0 @@
-[
-  "com/culcon/backend/controllers/auth/AuthController",
-  "com/culcon/backend/exceptions/CustomExceptionHandler",
-  "com/culcon/backend/exceptions/messages/ExceptionMessage$ExceptionMessageBuilder",
-  "com/culcon/backend/repositories/user/AccountRepo",
-  "com/culcon/backend/services/authenticate/implement/AuthImplement"
-]

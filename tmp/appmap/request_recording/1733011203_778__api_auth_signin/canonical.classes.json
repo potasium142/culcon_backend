@@ -1,7 +1,0 @@
-[
-  "com/culcon/backend/controllers/auth/AuthController",
-  "com/culcon/backend/dtos/auth/AuthenticationResponse$AuthenticationResponseBuilder",
-  "com/culcon/backend/repositories/user/AccountRepo",
-  "com/culcon/backend/services/authenticate/implement/AuthImplement",
-  "com/culcon/backend/services/authenticate/implement/JwtImplement"
-]
