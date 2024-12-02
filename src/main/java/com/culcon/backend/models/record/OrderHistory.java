@@ -37,4 +37,8 @@ public class OrderHistory {
 
 	@Column(name = "total_price")
 	private Float totalPrice;
+
+	@JoinColumn(name = "coupon")
+	@ManyToOne(fetch = FetchType.LAZY)
+	private Coupon coupon;
 }

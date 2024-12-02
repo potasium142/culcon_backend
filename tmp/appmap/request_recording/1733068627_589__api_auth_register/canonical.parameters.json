@@ -1,0 +1,16 @@
+[
+  "accessToken",
+  "address",
+  "email",
+  "extraClaims",
+  "jwtToken",
+  "p0",
+  "password",
+  "phone",
+  "profileDescription",
+  "request",
+  "role",
+  "user",
+  "userDetails",
+  "username"
+]

@@ -1,0 +1,6 @@
+[
+  "com/culcon/backend/controllers/auth",
+  "com/culcon/backend/dtos/auth",
+  "com/culcon/backend/repositories/user",
+  "com/culcon/backend/services/authenticate/implement"
+]

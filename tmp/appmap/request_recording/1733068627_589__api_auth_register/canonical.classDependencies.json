@@ -1,0 +1,22 @@
+[
+  {
+    "caller": "POST /api/auth/register",
+    "callee": "com/culcon"
+  },
+  {
+    "caller": "com/culcon",
+    "callee": "POST /api/auth/register"
+  },
+  {
+    "caller": "com/culcon",
+    "callee": "insert into account (address,email,password,phone,profile_description,profile_pic_uri,role,status,token,username,id) values (?,?,?,?,?,?,?,?,?,?,?)"
+  },
+  {
+    "caller": "com/culcon",
+    "callee": "select a1_0.id,a1_0.address,a1_0.email,a1_0.password,a1_0.phone,a1_0.profile_description,a1_0.profile_pic_uri,a1_0.role,a1_0.status,a1_0.token,a1_0.username from account a1_0 where a1_0.username=?"
+  },
+  {
+    "caller": "com/culcon",
+    "callee": "update account set address=?,email=?,password=?,phone=?,profile_description=?,profile_pic_uri=?,role=?,status=?,token=?,username=? where id=?"
+  }
+]

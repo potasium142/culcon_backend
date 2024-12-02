@@ -1,0 +1,3 @@
+[
+  "select a1_0.id,a1_0.address,a1_0.email,a1_0.password,a1_0.phone,a1_0.profile_description,a1_0.profile_pic_uri,a1_0.role,a1_0.status,a1_0.token,a1_0.username from account a1_0 where a1_0.username=?"
+]

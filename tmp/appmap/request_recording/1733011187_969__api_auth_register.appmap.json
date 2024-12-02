@@ -1,0 +1,1041 @@
+{
+  "events": [
+    {
+      "defined_class": "com.culcon.backend.configs.JwtAuthenticationFilter",
+      "event": "call",
+      "id": 1,
+      "lineno": 35,
+      "method_id": "doFilterInternal",
+      "parameters": [
+        {
+          "class": "org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest",
+          "kind": "req",
+          "name": "request",
+          "object_id": 208134910,
+          "value": "org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterRequest@c67e2fe"
+        },
+        {
+          "class": "org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterResponse",
+          "kind": "req",
+          "name": "response",
+          "object_id": 140015530,
+          "value": "org.springframework.security.web.header.HeaderWriterFilter$HeaderWriterResponse@85877aa"
+        },
+        {
+          "class": "org.springframework.security.web.FilterChainProxy$VirtualFilterChain",
+          "kind": "req",
+          "name": "filterChain",
+          "object_id": 1297803461,
+          "value": "org.springframework.security.web.FilterChainProxy$VirtualFilterChain@4d5ae8c5"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/configs/JwtAuthenticationFilter.java",
+      "receiver": {
+        "class": "com.culcon.backend.configs.JwtAuthenticationFilter",
+        "object_id": 880743326,
+        "value": "com.culcon.backend.configs.JwtAuthenticationFilter@347f139e"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "event": "call",
+      "http_server_request": {
+        "headers": {
+          "sec-fetch-mode": "cors",
+          "content-length": "173",
+          "referer": "http://localhost:8080/swagger-ui/index.html",
+          "sec-fetch-site": "same-origin",
+          "accept-language": "en-US,en;q=0.9",
+          "cookie": "JSESSIONID=562D9019D7A84D2B4FCA47C27D62C06E; _streamlit_xsrf=2|40b8bdd2|c05d6c8895f7566790460a4a7add1a09|1730704659",
+          "origin": "http://localhost:8080",
+          "dnt": "1",
+          "accept": "*/*",
+          "sec-ch-ua": "\"Not/A)Brand\";v=\"8\", \"Chromium\";v=\"127\", \"Edge\";v=\"127\"",
+          "sec-ch-ua-mobile": "?0",
+          "sec-ch-ua-platform": "\"Linux\"",
+          "host": "localhost:8080",
+          "connection": "keep-alive",
+          "content-type": "application/json",
+          "accept-encoding": "gzip, deflate, br, zstd",
+          "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0",
+          "sec-fetch-dest": "empty"
+        },
+        "normalized_path_info": "/api/auth/register",
+        "path_info": "/api/auth/register",
+        "protocol": "HTTP/1.1",
+        "request_method": "POST"
+      },
+      "id": 2,
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.controllers.auth.AuthController",
+      "event": "call",
+      "id": 3,
+      "lineno": 49,
+      "method_id": "registerCustomer",
+      "parameters": [
+        {
+          "class": "com.culcon.backend.dtos.auth.CustomerRegisterRequest",
+          "kind": "req",
+          "name": "request",
+          "object_id": 1330556322,
+          "value": "CustomerRegisterRequest[username=sussywussy, email=example@email.com, phone=0123456789, password=sussywussy, address=69, Sussy town, description=le sus]"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/controllers/auth/AuthController.java",
+      "receiver": {
+        "class": "com.culcon.backend.controllers.auth.AuthController",
+        "object_id": 1282332374,
+        "value": "com.culcon.backend.controllers.auth.AuthController@4c6ed6d6"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.services.authenticate.implement.AuthImplement",
+      "event": "call",
+      "id": 4,
+      "lineno": 97,
+      "method_id": "registerCustomer",
+      "parameters": [
+        {
+          "class": "com.culcon.backend.dtos.auth.CustomerRegisterRequest",
+          "kind": "req",
+          "name": "request",
+          "object_id": 1330556322,
+          "value": "CustomerRegisterRequest[username=sussywussy, email=example@email.com, phone=0123456789, password=sussywussy, address=69, Sussy town, description=le sus]"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/services/authenticate/implement/AuthImplement.java",
+      "receiver": {
+        "class": "com.culcon.backend.services.authenticate.implement.AuthImplement",
+        "object_id": 1360616543,
+        "value": "com.culcon.backend.services.authenticate.implement.AuthImplement@51195c5f"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.models.user.Account",
+      "event": "call",
+      "id": 5,
+      "lineno": 26,
+      "method_id": "builder",
+      "path": "src/main/java/com/culcon/backend/models/user/Account.java",
+      "static": true,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.0000136891,
+      "event": "return",
+      "id": 6,
+      "parent_id": 5,
+      "return_value": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=null, username=null, password=null, role$value=null, status$value=null, address$value=null, phone$value=null, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.models.user.Account$AccountBuilder",
+      "event": "call",
+      "id": 7,
+      "lineno": 26,
+      "method_id": "email",
+      "parameters": [
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "email",
+          "object_id": 963685112,
+          "value": "example@email.com"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/models/user/Account.java",
+      "receiver": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=null, password=null, role$value=null, status$value=null, address$value=null, phone$value=null, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.0004248995,
+      "event": "return",
+      "id": 8,
+      "parent_id": 7,
+      "return_value": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=null, password=null, role$value=null, status$value=null, address$value=null, phone$value=null, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.models.user.Account$AccountBuilder",
+      "event": "call",
+      "id": 9,
+      "lineno": 26,
+      "method_id": "username",
+      "parameters": [
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "username",
+          "object_id": 735327497,
+          "value": "sussywussy"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/models/user/Account.java",
+      "receiver": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=null, role$value=null, status$value=null, address$value=null, phone$value=null, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.0000107001,
+      "event": "return",
+      "id": 10,
+      "parent_id": 9,
+      "return_value": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=null, role$value=null, status$value=null, address$value=null, phone$value=null, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.models.user.Account$AccountBuilder",
+      "event": "call",
+      "id": 11,
+      "lineno": 26,
+      "method_id": "password",
+      "parameters": [
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "password",
+          "object_id": 2098132438,
+          "value": "$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/models/user/Account.java",
+      "receiver": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role$value=null, status$value=null, address$value=null, phone$value=null, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.0000211572,
+      "event": "return",
+      "id": 12,
+      "parent_id": 11,
+      "return_value": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role$value=null, status$value=null, address$value=null, phone$value=null, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.models.user.Account$AccountBuilder",
+      "event": "call",
+      "id": 13,
+      "lineno": 26,
+      "method_id": "role",
+      "parameters": [
+        {
+          "class": "com.culcon.backend.models.user.Role",
+          "kind": "req",
+          "name": "role",
+          "object_id": 278879608,
+          "value": "CUSTOMER"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/models/user/Account.java",
+      "receiver": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role$value=CUSTOMER, status$value=null, address$value=null, phone$value=null, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.000008696,
+      "event": "return",
+      "id": 14,
+      "parent_id": 13,
+      "return_value": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role$value=CUSTOMER, status$value=null, address$value=null, phone$value=null, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.models.user.Account$AccountBuilder",
+      "event": "call",
+      "id": 15,
+      "lineno": 26,
+      "method_id": "address",
+      "parameters": [
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "address",
+          "object_id": 924448934,
+          "value": "69, Sussy town"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/models/user/Account.java",
+      "receiver": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role$value=CUSTOMER, status$value=null, address$value=69, Sussy town, phone$value=null, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.0000084811,
+      "event": "return",
+      "id": 16,
+      "parent_id": 15,
+      "return_value": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role$value=CUSTOMER, status$value=null, address$value=69, Sussy town, phone$value=null, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.models.user.Account$AccountBuilder",
+      "event": "call",
+      "id": 17,
+      "lineno": 26,
+      "method_id": "phone",
+      "parameters": [
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "phone",
+          "object_id": 1469103236,
+          "value": "0123456789"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/models/user/Account.java",
+      "receiver": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role$value=CUSTOMER, status$value=null, address$value=69, Sussy town, phone$value=0123456789, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.000009008,
+      "event": "return",
+      "id": 18,
+      "parent_id": 17,
+      "return_value": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role$value=CUSTOMER, status$value=null, address$value=69, Sussy town, phone$value=0123456789, profilePictureUri$value=null, profileDescription$value=null, token=null, cart$value=null)"
+      },
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.models.user.Account$AccountBuilder",
+      "event": "call",
+      "id": 19,
+      "lineno": 26,
+      "method_id": "profileDescription",
+      "parameters": [
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "profileDescription",
+          "object_id": 1737105081,
+          "value": "le sus"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/models/user/Account.java",
+      "receiver": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role$value=CUSTOMER, status$value=null, address$value=69, Sussy town, phone$value=0123456789, profilePictureUri$value=null, profileDescription$value=le sus, token=null, cart$value=null)"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.000007707,
+      "event": "return",
+      "id": 20,
+      "parent_id": 19,
+      "return_value": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role$value=CUSTOMER, status$value=null, address$value=69, Sussy town, phone$value=0123456789, profilePictureUri$value=null, profileDescription$value=le sus, token=null, cart$value=null)"
+      },
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.models.user.Account$AccountBuilder",
+      "event": "call",
+      "id": 21,
+      "lineno": 26,
+      "method_id": "build",
+      "path": "src/main/java/com/culcon/backend/models/user/Account.java",
+      "receiver": {
+        "class": "com.culcon.backend.models.user.Account$AccountBuilder",
+        "object_id": 1662883866,
+        "value": "Account.AccountBuilder(id$value=null, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role$value=CUSTOMER, status$value=null, address$value=69, Sussy town, phone$value=0123456789, profilePictureUri$value=null, profileDescription$value=le sus, token=null, cart$value=null)"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.000008079,
+      "event": "return",
+      "id": 22,
+      "parent_id": 21,
+      "return_value": {
+        "class": "com.culcon.backend.models.user.Account",
+        "object_id": 1839265755,
+        "value": "Account(id=, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role=CUSTOMER, status=NORMAL, address=69, Sussy town, phone=0123456789, profilePictureUri=defaultProfile, profileDescription=le sus, token=null, cart={})"
+      },
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.services.authenticate.implement.JwtImplement",
+      "event": "call",
+      "id": 23,
+      "lineno": 38,
+      "method_id": "generateToken",
+      "parameters": [
+        {
+          "class": "com.culcon.backend.models.user.Account",
+          "kind": "req",
+          "name": "userDetails",
+          "object_id": 1839265755,
+          "value": "Account(id=, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role=CUSTOMER, status=NORMAL, address=69, Sussy town, phone=0123456789, profilePictureUri=defaultProfile, profileDescription=le sus, token=null, cart={})"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/services/authenticate/implement/JwtImplement.java",
+      "receiver": {
+        "class": "com.culcon.backend.services.authenticate.implement.JwtImplement",
+        "object_id": 696029072,
+        "value": "com.culcon.backend.services.authenticate.implement.JwtImplement@297c8f90"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.services.authenticate.implement.JwtImplement",
+      "event": "call",
+      "id": 24,
+      "lineno": 42,
+      "method_id": "generateToken",
+      "parameters": [
+        {
+          "class": "java.util.HashMap",
+          "kind": "req",
+          "name": "extraClaims",
+          "object_id": 1886037282,
+          "value": "{}"
+        },
+        {
+          "class": "com.culcon.backend.models.user.Account",
+          "kind": "req",
+          "name": "userDetails",
+          "object_id": 1839265755,
+          "value": "Account(id=, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role=CUSTOMER, status=NORMAL, address=69, Sussy town, phone=0123456789, profilePictureUri=defaultProfile, profileDescription=le sus, token=null, cart={})"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/services/authenticate/implement/JwtImplement.java",
+      "receiver": {
+        "class": "com.culcon.backend.services.authenticate.implement.JwtImplement",
+        "object_id": 696029072,
+        "value": "com.culcon.backend.services.authenticate.implement.JwtImplement@297c8f90"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.repositories.user.AccountRepo",
+      "event": "call",
+      "id": 25,
+      "lineno": -1,
+      "method_id": "findByUsername",
+      "parameters": [
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "p0",
+          "object_id": 735327497,
+          "value": "sussywussy"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/repositories/user/AccountRepo.java",
+      "receiver": {
+        "class": "jdk.proxy3.$Proxy239",
+        "object_id": 835386604,
+        "value": "org.springframework.data.jpa.repository.support.SimpleJpaRepository@17d1e9f2"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "event": "call",
+      "id": 26,
+      "sql_query": {
+        "database_type": "H2",
+        "sql": "insert into account (address,email,password,phone,profile_description,profile_pic_uri,role,status,token,username,id) values (?,?,?,?,?,?,?,?,?,?,?)"
+      },
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.0000813735,
+      "event": "return",
+      "id": 27,
+      "parent_id": 26,
+      "thread_id": 55
+    },
+    {
+      "event": "call",
+      "id": 28,
+      "sql_query": {
+        "database_type": "H2",
+        "sql": "select a1_0.id,a1_0.address,a1_0.email,a1_0.password,a1_0.phone,a1_0.profile_description,a1_0.profile_pic_uri,a1_0.role,a1_0.status,a1_0.token,a1_0.username from account a1_0 where a1_0.username=?"
+      },
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.0000281822,
+      "event": "return",
+      "id": 29,
+      "parent_id": 28,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.0014501174,
+      "event": "return",
+      "id": 30,
+      "parent_id": 25,
+      "return_value": {
+        "class": "java.util.Optional",
+        "object_id": 1542958955,
+        "value": "Optional[Account(id=0a549ae5-53d7-4a19-b695-9b73448c8217, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role=CUSTOMER, status=NORMAL, address=69, Sussy town, phone=0123456789, profilePictureUri=defaultProfile, profileDescription=le sus, token=null, cart={})]"
+      },
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.0064568724,
+      "event": "return",
+      "id": 31,
+      "parent_id": 24,
+      "return_value": {
+        "class": "java.lang.String",
+        "object_id": 1570082593,
+        "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwYTU0OWFlNS01M2Q3LTRhMTktYjY5NS05YjczNDQ4YzgyMTciLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzMwMTExODgsImV4cCI6MTczMzAxMjk4OH0.h4MFHwTgRh5Xuwnk8mDl4Urg17IN87uDYE_n_JhFuN0"
+      },
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.006507712,
+      "event": "return",
+      "id": 32,
+      "parent_id": 23,
+      "return_value": {
+        "class": "java.lang.String",
+        "object_id": 1570082593,
+        "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwYTU0OWFlNS01M2Q3LTRhMTktYjY5NS05YjczNDQ4YzgyMTciLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzMwMTExODgsImV4cCI6MTczMzAxMjk4OH0.h4MFHwTgRh5Xuwnk8mDl4Urg17IN87uDYE_n_JhFuN0"
+      },
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.services.authenticate.implement.AuthImplement",
+      "event": "call",
+      "id": 33,
+      "lineno": 34,
+      "method_id": "saveUserToken",
+      "parameters": [
+        {
+          "class": "com.culcon.backend.models.user.Account",
+          "kind": "req",
+          "name": "user",
+          "object_id": 361037313,
+          "value": "Account(id=0a549ae5-53d7-4a19-b695-9b73448c8217, email=example@email.com, username=sussywussy, password=$2a$10$YQLNKnd5CL11glFdi3Bx5eMWPIpaQVAzeyHfI5gK9.rHHoaSSTSnK, role=CUSTOMER, status=NORMAL, address=69, Sussy town, phone=0123456789, profilePictureUri=defaultProfile, profileDescription=le sus, token=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwYTU0OWFlNS01M2Q3LTRhMTktYjY5NS05YjczNDQ4YzgyMTciLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzMwMTExODgsImV4cCI6MTczMzAxMjk4OH0.h4MFHwTgRh5Xuwnk8mDl4Urg17IN87uDYE_n_JhFuN0, cart={})"
+        },
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "jwtToken",
+          "object_id": 1570082593,
+          "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwYTU0OWFlNS01M2Q3LTRhMTktYjY5NS05YjczNDQ4YzgyMTciLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzMwMTExODgsImV4cCI6MTczMzAxMjk4OH0.h4MFHwTgRh5Xuwnk8mDl4Urg17IN87uDYE_n_JhFuN0"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/services/authenticate/implement/AuthImplement.java",
+      "receiver": {
+        "class": "com.culcon.backend.services.authenticate.implement.AuthImplement",
+        "object_id": 1360616543,
+        "value": "com.culcon.backend.services.authenticate.implement.AuthImplement@51195c5f"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.000344541,
+      "event": "return",
+      "id": 34,
+      "parent_id": 33,
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.dtos.auth.AuthenticationResponse$AuthenticationResponseBuilder",
+      "event": "call",
+      "id": 35,
+      "lineno": 6,
+      "method_id": "accessToken",
+      "parameters": [
+        {
+          "class": "java.lang.String",
+          "kind": "req",
+          "name": "accessToken",
+          "object_id": 1570082593,
+          "value": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwYTU0OWFlNS01M2Q3LTRhMTktYjY5NS05YjczNDQ4YzgyMTciLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzMwMTExODgsImV4cCI6MTczMzAxMjk4OH0.h4MFHwTgRh5Xuwnk8mDl4Urg17IN87uDYE_n_JhFuN0"
+        }
+      ],
+      "path": "src/main/java/com/culcon/backend/dtos/auth/AuthenticationResponse.java",
+      "receiver": {
+        "class": "com.culcon.backend.dtos.auth.AuthenticationResponse$AuthenticationResponseBuilder",
+        "object_id": 1127579134,
+        "value": "AuthenticationResponse.AuthenticationResponseBuilder(accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwYTU0OWFlNS01M2Q3LTRhMTktYjY5NS05YjczNDQ4YzgyMTciLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzMwMTExODgsImV4cCI6MTczMzAxMjk4OH0.h4MFHwTgRh5Xuwnk8mDl4Urg17IN87uDYE_n_JhFuN0)"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.000010123,
+      "event": "return",
+      "id": 36,
+      "parent_id": 35,
+      "return_value": {
+        "class": "com.culcon.backend.dtos.auth.AuthenticationResponse$AuthenticationResponseBuilder",
+        "object_id": 1127579134,
+        "value": "AuthenticationResponse.AuthenticationResponseBuilder(accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwYTU0OWFlNS01M2Q3LTRhMTktYjY5NS05YjczNDQ4YzgyMTciLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzMwMTExODgsImV4cCI6MTczMzAxMjk4OH0.h4MFHwTgRh5Xuwnk8mDl4Urg17IN87uDYE_n_JhFuN0)"
+      },
+      "thread_id": 55
+    },
+    {
+      "defined_class": "com.culcon.backend.dtos.auth.AuthenticationResponse$AuthenticationResponseBuilder",
+      "event": "call",
+      "id": 37,
+      "lineno": 6,
+      "method_id": "build",
+      "path": "src/main/java/com/culcon/backend/dtos/auth/AuthenticationResponse.java",
+      "receiver": {
+        "class": "com.culcon.backend.dtos.auth.AuthenticationResponse$AuthenticationResponseBuilder",
+        "object_id": 1127579134,
+        "value": "AuthenticationResponse.AuthenticationResponseBuilder(accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwYTU0OWFlNS01M2Q3LTRhMTktYjY5NS05YjczNDQ4YzgyMTciLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzMwMTExODgsImV4cCI6MTczMzAxMjk4OH0.h4MFHwTgRh5Xuwnk8mDl4Urg17IN87uDYE_n_JhFuN0)"
+      },
+      "static": false,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.0000085791,
+      "event": "return",
+      "id": 38,
+      "parent_id": 37,
+      "return_value": {
+        "class": "com.culcon.backend.dtos.auth.AuthenticationResponse",
+        "object_id": 1263067094,
+        "value": "AuthenticationResponse[accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwYTU0OWFlNS01M2Q3LTRhMTktYjY5NS05YjczNDQ4YzgyMTciLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzMwMTExODgsImV4cCI6MTczMzAxMjk4OH0.h4MFHwTgRh5Xuwnk8mDl4Urg17IN87uDYE_n_JhFuN0]"
+      },
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.015096159,
+      "event": "return",
+      "id": 39,
+      "parent_id": 4,
+      "return_value": {
+        "class": "com.culcon.backend.dtos.auth.AuthenticationResponse",
+        "object_id": 1263067094,
+        "value": "AuthenticationResponse[accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwYTU0OWFlNS01M2Q3LTRhMTktYjY5NS05YjczNDQ4YzgyMTciLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzMwMTExODgsImV4cCI6MTczMzAxMjk4OH0.h4MFHwTgRh5Xuwnk8mDl4Urg17IN87uDYE_n_JhFuN0]"
+      },
+      "thread_id": 55
+    },
+    {
+      "event": "call",
+      "id": 40,
+      "sql_query": {
+        "database_type": "H2",
+        "sql": "update account set address=?,email=?,password=?,phone=?,profile_description=?,profile_pic_uri=?,role=?,status=?,token=?,username=? where id=?"
+      },
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.0001579699,
+      "event": "return",
+      "id": 41,
+      "parent_id": 40,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.016250324,
+      "event": "return",
+      "id": 42,
+      "parent_id": 3,
+      "return_value": {
+        "class": "org.springframework.http.ResponseEntity",
+        "object_id": 116176982,
+        "value": "<200 OK OK,AuthenticationResponse[accessToken=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIwYTU0OWFlNS01M2Q3LTRhMTktYjY5NS05YjczNDQ4YzgyMTciLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzMwMTExODgsImV4cCI6MTczMzAxMjk4OH0.h4MFHwTgRh5Xuwnk8mDl4Urg17IN87uDYE_n_JhFuN0],[]>"
+      },
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.019937824,
+      "event": "return",
+      "http_server_response": {
+        "headers": {
+          "X-Frame-Options": "SAMEORIGIN",
+          "Transfer-Encoding": "chunked",
+          "Keep-Alive": "timeout=60",
+          "Cache-Control": "no-cache, no-store, max-age=0, must-revalidate",
+          "X-Content-Type-Options": "nosniff",
+          "Connection": "keep-alive",
+          "Vary": "Origin",
+          "Pragma": "no-cache",
+          "Expires": "0",
+          "X-XSS-Protection": "0",
+          "Date": "Sat, 30 Nov 2024 23:59:48 GMT",
+          "Content-Type": "application/json"
+        },
+        "status": 200
+      },
+      "id": 43,
+      "parent_id": 2,
+      "thread_id": 55
+    },
+    {
+      "elapsed": 0.020137522,
+      "event": "return",
+      "id": 44,
+      "parent_id": 1,
+      "thread_id": 55
+    }
+  ],
+  "version": "1.2",
+  "metadata": {
+    "name": "POST /api/auth/register (200) - 06:59:47.969",
+    "app": "culcon_backend",
+    "language": {
+      "name": "java",
+      "version": "17.0.13+11",
+      "engine": "OpenJDK 64-Bit Server VM"
+    },
+    "client": {
+      "name": "appmap-java",
+      "url": "https://github.com/appland/appmap-java"
+    },
+    "recorder": {
+      "name": "request_recording",
+      "type": "requests"
+    },
+    "recording": {},
+    "git": {
+      "repository": "git@github.com:potasium142/culcon_backend.git",
+      "branch": "feat/mongodb",
+      "commit": "0ecea8cf9c0fcd69318ee0ae309006b750ae9039"
+    }
+  },
+  "classMap": [
+    {
+      "children": [
+        {
+          "children": [
+            {
+              "children": [
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "findByUsername",
+                              "type": "function",
+                              "static": false,
+                              "location": "src/main/java/com/culcon/backend/repositories/user/AccountRepo.java:-1"
+                            }
+                          ],
+                          "name": "AccountRepo",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "user",
+                      "type": "package"
+                    }
+                  ],
+                  "name": "repositories",
+                  "type": "package"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "username",
+                              "type": "function",
+                              "static": false,
+                              "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                            },
+                            {
+                              "name": "email",
+                              "type": "function",
+                              "static": false,
+                              "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                            },
+                            {
+                              "name": "role",
+                              "type": "function",
+                              "static": false,
+                              "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                            },
+                            {
+                              "name": "address",
+                              "type": "function",
+                              "static": false,
+                              "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                            },
+                            {
+                              "name": "build",
+                              "type": "function",
+                              "static": false,
+                              "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                            },
+                            {
+                              "name": "profileDescription",
+                              "type": "function",
+                              "static": false,
+                              "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                            },
+                            {
+                              "name": "phone",
+                              "type": "function",
+                              "static": false,
+                              "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                            },
+                            {
+                              "name": "password",
+                              "type": "function",
+                              "static": false,
+                              "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                            }
+                          ],
+                          "name": "Account$AccountBuilder",
+                          "type": "class"
+                        },
+                        {
+                          "children": [
+                            {
+                              "name": "builder",
+                              "type": "function",
+                              "static": true,
+                              "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                            }
+                          ],
+                          "name": "Account",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "user",
+                      "type": "package"
+                    }
+                  ],
+                  "name": "models",
+                  "type": "package"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "children": [
+                                {
+                                  "name": "registerCustomer",
+                                  "type": "function",
+                                  "static": false,
+                                  "location": "src/main/java/com/culcon/backend/services/authenticate/implement/AuthImplement.java:97"
+                                },
+                                {
+                                  "name": "saveUserToken",
+                                  "type": "function",
+                                  "static": false,
+                                  "location": "src/main/java/com/culcon/backend/services/authenticate/implement/AuthImplement.java:34"
+                                }
+                              ],
+                              "name": "AuthImplement",
+                              "type": "class"
+                            },
+                            {
+                              "children": [
+                                {
+                                  "name": "generateToken",
+                                  "type": "function",
+                                  "static": false,
+                                  "location": "src/main/java/com/culcon/backend/services/authenticate/implement/JwtImplement.java:42"
+                                },
+                                {
+                                  "name": "generateToken",
+                                  "type": "function",
+                                  "static": false,
+                                  "location": "src/main/java/com/culcon/backend/services/authenticate/implement/JwtImplement.java:38"
+                                }
+                              ],
+                              "name": "JwtImplement",
+                              "type": "class"
+                            }
+                          ],
+                          "name": "implement",
+                          "type": "package"
+                        }
+                      ],
+                      "name": "authenticate",
+                      "type": "package"
+                    }
+                  ],
+                  "name": "services",
+                  "type": "package"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "name": "doFilterInternal",
+                          "type": "function",
+                          "static": false,
+                          "location": "src/main/java/com/culcon/backend/configs/JwtAuthenticationFilter.java:35"
+                        }
+                      ],
+                      "name": "JwtAuthenticationFilter",
+                      "type": "class"
+                    }
+                  ],
+                  "name": "configs",
+                  "type": "package"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "accessToken",
+                              "type": "function",
+                              "static": false,
+                              "location": "src/main/java/com/culcon/backend/dtos/auth/AuthenticationResponse.java:6"
+                            },
+                            {
+                              "name": "build",
+                              "type": "function",
+                              "static": false,
+                              "location": "src/main/java/com/culcon/backend/dtos/auth/AuthenticationResponse.java:6"
+                            }
+                          ],
+                          "name": "AuthenticationResponse$AuthenticationResponseBuilder",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "auth",
+                      "type": "package"
+                    }
+                  ],
+                  "name": "dtos",
+                  "type": "package"
+                },
+                {
+                  "children": [
+                    {
+                      "children": [
+                        {
+                          "children": [
+                            {
+                              "name": "registerCustomer",
+                              "type": "function",
+                              "static": false,
+                              "location": "src/main/java/com/culcon/backend/controllers/auth/AuthController.java:49"
+                            }
+                          ],
+                          "name": "AuthController",
+                          "type": "class"
+                        }
+                      ],
+                      "name": "auth",
+                      "type": "package"
+                    }
+                  ],
+                  "name": "controllers",
+                  "type": "package"
+                }
+              ],
+              "name": "backend",
+              "type": "package"
+            }
+          ],
+          "name": "culcon",
+          "type": "package"
+        }
+      ],
+      "name": "com",
+      "type": "package"
+    },
+    {
+      "type": "http",
+      "name": "HTTP server requests",
+      "children": [
+        {
+          "type": "route",
+          "name": "POST /api/auth/register"
+        }
+      ]
+    },
+    {
+      "type": "database",
+      "name": "Database",
+      "children": [
+        {
+          "type": "query",
+          "name": "insert into account (address,email,password,phone,profile_description,profile_pic_uri,role,status,token,username,id) values (?,?,?,?,?,?,?,?,?,?,?)"
+        },
+        {
+          "type": "query",
+          "name": "select a1_0.id,a1_0.address,a1_0.email,a1_0.password,a1_0.phone,a1_0.profile_description,a1_0.profile_pic_uri,a1_0.role,a1_0.status,a1_0.token,a1_0.username from account a1_0 where a1_0.username=?"
+        },
+        {
+          "type": "query",
+          "name": "update account set address=?,email=?,password=?,phone=?,profile_description=?,profile_pic_uri=?,role=?,status=?,token=?,username=? where id=?"
+        }
+      ]
+    }
+  ]
+}

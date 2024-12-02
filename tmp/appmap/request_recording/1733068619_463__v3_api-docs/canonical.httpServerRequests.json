@@ -1,0 +1,7 @@
+[
+  {
+    "route": "GET /v3/api-docs",
+    "parameters": "()",
+    "status": 200
+  }
+]

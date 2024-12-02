@@ -1,0 +1,276 @@
+[
+  {
+    "children": [
+      {
+        "children": [
+          {
+            "children": [
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "name": "findByUsername",
+                            "type": "function",
+                            "static": false,
+                            "location": "src/main/java/com/culcon/backend/repositories/user/AccountRepo.java:-1"
+                          }
+                        ],
+                        "name": "AccountRepo",
+                        "type": "class"
+                      }
+                    ],
+                    "name": "user",
+                    "type": "package"
+                  }
+                ],
+                "name": "repositories",
+                "type": "package"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "name": "username",
+                            "type": "function",
+                            "static": false,
+                            "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                          },
+                          {
+                            "name": "email",
+                            "type": "function",
+                            "static": false,
+                            "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                          },
+                          {
+                            "name": "role",
+                            "type": "function",
+                            "static": false,
+                            "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                          },
+                          {
+                            "name": "address",
+                            "type": "function",
+                            "static": false,
+                            "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                          },
+                          {
+                            "name": "build",
+                            "type": "function",
+                            "static": false,
+                            "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                          },
+                          {
+                            "name": "profileDescription",
+                            "type": "function",
+                            "static": false,
+                            "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                          },
+                          {
+                            "name": "phone",
+                            "type": "function",
+                            "static": false,
+                            "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                          },
+                          {
+                            "name": "password",
+                            "type": "function",
+                            "static": false,
+                            "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                          }
+                        ],
+                        "name": "Account$AccountBuilder",
+                        "type": "class"
+                      },
+                      {
+                        "children": [
+                          {
+                            "name": "builder",
+                            "type": "function",
+                            "static": true,
+                            "location": "src/main/java/com/culcon/backend/models/user/Account.java:26"
+                          }
+                        ],
+                        "name": "Account",
+                        "type": "class"
+                      }
+                    ],
+                    "name": "user",
+                    "type": "package"
+                  }
+                ],
+                "name": "models",
+                "type": "package"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "children": [
+                              {
+                                "name": "registerCustomer",
+                                "type": "function",
+                                "static": false,
+                                "location": "src/main/java/com/culcon/backend/services/authenticate/implement/AuthImplement.java:97"
+                              },
+                              {
+                                "name": "saveUserToken",
+                                "type": "function",
+                                "static": false,
+                                "location": "src/main/java/com/culcon/backend/services/authenticate/implement/AuthImplement.java:34"
+                              }
+                            ],
+                            "name": "AuthImplement",
+                            "type": "class"
+                          },
+                          {
+                            "children": [
+                              {
+                                "name": "generateToken",
+                                "type": "function",
+                                "static": false,
+                                "location": "src/main/java/com/culcon/backend/services/authenticate/implement/JwtImplement.java:42"
+                              },
+                              {
+                                "name": "generateToken",
+                                "type": "function",
+                                "static": false,
+                                "location": "src/main/java/com/culcon/backend/services/authenticate/implement/JwtImplement.java:38"
+                              }
+                            ],
+                            "name": "JwtImplement",
+                            "type": "class"
+                          }
+                        ],
+                        "name": "implement",
+                        "type": "package"
+                      }
+                    ],
+                    "name": "authenticate",
+                    "type": "package"
+                  }
+                ],
+                "name": "services",
+                "type": "package"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "name": "doFilterInternal",
+                        "type": "function",
+                        "static": false,
+                        "location": "src/main/java/com/culcon/backend/configs/JwtAuthenticationFilter.java:35"
+                      }
+                    ],
+                    "name": "JwtAuthenticationFilter",
+                    "type": "class"
+                  }
+                ],
+                "name": "configs",
+                "type": "package"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "name": "accessToken",
+                            "type": "function",
+                            "static": false,
+                            "location": "src/main/java/com/culcon/backend/dtos/auth/AuthenticationResponse.java:6"
+                          },
+                          {
+                            "name": "build",
+                            "type": "function",
+                            "static": false,
+                            "location": "src/main/java/com/culcon/backend/dtos/auth/AuthenticationResponse.java:6"
+                          }
+                        ],
+                        "name": "AuthenticationResponse$AuthenticationResponseBuilder",
+                        "type": "class"
+                      }
+                    ],
+                    "name": "auth",
+                    "type": "package"
+                  }
+                ],
+                "name": "dtos",
+                "type": "package"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "children": [
+                          {
+                            "name": "registerCustomer",
+                            "type": "function",
+                            "static": false,
+                            "location": "src/main/java/com/culcon/backend/controllers/auth/AuthController.java:49"
+                          }
+                        ],
+                        "name": "AuthController",
+                        "type": "class"
+                      }
+                    ],
+                    "name": "auth",
+                    "type": "package"
+                  }
+                ],
+                "name": "controllers",
+                "type": "package"
+              }
+            ],
+            "name": "backend",
+            "type": "package"
+          }
+        ],
+        "name": "culcon",
+        "type": "package"
+      }
+    ],
+    "name": "com",
+    "type": "package"
+  },
+  {
+    "type": "http",
+    "name": "HTTP server requests",
+    "children": [
+      {
+        "type": "route",
+        "name": "POST /api/auth/register"
+      }
+    ]
+  },
+  {
+    "type": "database",
+    "name": "Database",
+    "children": [
+      {
+        "type": "query",
+        "name": "insert into account (address,email,password,phone,profile_description,profile_pic_uri,role,status,token,username,id) values (?,?,?,?,?,?,?,?,?,?,?)"
+      },
+      {
+        "type": "query",
+        "name": "select a1_0.id,a1_0.address,a1_0.email,a1_0.password,a1_0.phone,a1_0.profile_description,a1_0.profile_pic_uri,a1_0.role,a1_0.status,a1_0.token,a1_0.username from account a1_0 where a1_0.username=?"
+      },
+      {
+        "type": "query",
+        "name": "update account set address=?,email=?,password=?,phone=?,profile_description=?,profile_pic_uri=?,role=?,status=?,token=?,username=? where id=?"
+      }
+    ]
+  }
+]

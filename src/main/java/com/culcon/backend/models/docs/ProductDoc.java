@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @Data
 public class ProductDoc {
-	private String id;
+	private Integer id;
 
 	private String description;
 
