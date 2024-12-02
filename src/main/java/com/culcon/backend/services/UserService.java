@@ -7,13 +7,12 @@ import com.culcon.backend.models.user.Account;
 import jakarta.servlet.http.HttpServletRequest;
 
 import javax.security.auth.login.AccountNotFoundException;
-import java.util.Map;
 
 public interface UserService {
 
 	Account getAccountByEmail(String email) throws AccountNotFoundException;
 
-	Map<String, Object> updateCustomer(CustomerInfoUpdateRequest newData, HttpServletRequest request);
+	Account updateCustomer(CustomerInfoUpdateRequest newData, HttpServletRequest request);
 
 	AuthenticationResponse updateCustomerPassword(CustomerPasswordRequest newData, HttpServletRequest request);
 

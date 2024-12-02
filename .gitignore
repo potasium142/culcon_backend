@@ -40,3 +40,7 @@ eclipse-formatter.xml
 ### H2 DB
 **.db
 /db
+
+
+#Appmap
+/tmp

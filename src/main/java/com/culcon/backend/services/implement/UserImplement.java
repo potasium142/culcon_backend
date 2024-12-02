@@ -20,8 +20,6 @@ import org.springframework.stereotype.Service;
 import javax.security.auth.login.AccountNotFoundException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -43,7 +41,7 @@ public class UserImplement implements UserService {
 
 
 	@Override
-	public Map<String, Object> updateCustomer(
+	public Account updateCustomer(
 		CustomerInfoUpdateRequest newUserData,
 		HttpServletRequest request) {
 		var user = authService.getUserInformation(request);
@@ -54,18 +52,7 @@ public class UserImplement implements UserService {
 		user.setPhone(newUserData.phone());
 		user.setProfileDescription(newUserData.description());
 
-		var jwtToken = jwtService.generateToken(user);
-
-		user.setToken(jwtToken);
-
-		var returnUser = userRepository.save(user);
-
-		var returnData = new HashMap<String, Object>();
-
-		returnData.put("user_data", returnUser);
-		returnData.put("access_token", jwtToken);
-
-		return returnData;
+		return userRepository.save(user);
 	}
 
 

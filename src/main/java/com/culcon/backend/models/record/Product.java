@@ -1,12 +1,24 @@
 package com.culcon.backend.models.record;
 
-import jakarta.persistence.*;
-import lombok.*;
+import java.util.HashSet;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 
 @Data
@@ -27,10 +39,8 @@ public class Product {
 	private String productName;
 
 	@Column(name = "product_types")
-	@JdbcTypeCode(SqlTypes.ARRAY)
 	@Enumerated(EnumType.ORDINAL)
-	@Builder.Default
-	private List<ProductType> productTypes = new ArrayList<>();
+	private ProductType productTypes;
 
 	@Column(name = "available_quantity")
 	private Integer availableQuantity;
@@ -40,10 +50,10 @@ public class Product {
 	@Enumerated(EnumType.ORDINAL)
 	private ProductStatus productStatus;
 
-	@Column(name = "usable_duration_days")
-	private Integer usableDurationDays;
+	@Column(name = "days_before_expiry")
+	private Integer daysBeforeExpiry;
 
 	@Column(name = "tags")
 	@JdbcTypeCode(SqlTypes.ARRAY)
-	private List<String> tags;
+	private HashSet<String> tags;
 }
