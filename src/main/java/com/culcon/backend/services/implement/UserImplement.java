@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 import javax.security.auth.login.AccountNotFoundException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
@@ -106,7 +108,8 @@ public class UserImplement implements UserService {
 		return productRepo.findAllById(cart.keySet()).stream()
 			.map(product -> CartItemDTO.builder()
 				.product(product)
-				.amount(cart.get(product.getId())).build())
+				.amount(cart.get(product.getId()))
+				.build())
 			.toList();
 	}
 
@@ -130,6 +133,26 @@ public class UserImplement implements UserService {
 		return CartItemDTO.builder()
 			.product(product)
 			.amount(itemAmount).build();
+	}
+
+	@Override
+	public Map<String, Object> setProductAmountInCart(String productId, Integer amount, HttpServletRequest request) {
+		var account = authService.getUserInformation(request);
+
+		if (amount <= 0) {
+			account.getCart().remove(productId);
+		} else {
+			account.getCart().put(productId, amount);
+		}
+
+		accountRepo.save(account);
+
+		var map = new HashMap<String, Object>();
+
+		map.put("productId", productId);
+		map.put("amount", amount);
+
+		return map;
 	}
 
 	@Override
