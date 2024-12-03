@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -23,6 +24,8 @@ public interface UserService {
 	List<CartItemDTO> fetchCustomerCart(HttpServletRequest request);
 
 	CartItemDTO addProductToCart(String productId, Integer amount, HttpServletRequest request);
+
+	Map<String, Object> setProductAmountInCart(String productId, Integer amount, HttpServletRequest request);
 
 	Boolean removeProductFromCart(String productId, HttpServletRequest request);
 }

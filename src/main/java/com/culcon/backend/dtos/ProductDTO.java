@@ -33,9 +33,16 @@ public record ProductDTO(
 
 	Integer daysBeforeExpiry,
 
-	String articleMD
+	String articleMD,
+
+	Float price,
+
+	Float salePercent
 ) {
-	public static ProductDTO from(Product product, ProductDoc productDoc) {
+	public static ProductDTO from(
+		Product product,
+		ProductDoc productDoc
+	) {
 		return ProductDTO.builder()
 			.id(product.getId())
 			.name(product.getProductName())
@@ -48,6 +55,8 @@ public record ProductDTO(
 			.imagesUrl(productDoc.getImagesUrl())
 			.daysBeforeExpiry(productDoc.getDaysBeforeExpiry())
 			.articleMD(productDoc.getArticleMD())
+			.price(product.getPrice())
+			.salePercent(product.getSalePercent())
 			.build();
 	}
 }

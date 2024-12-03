@@ -35,4 +35,10 @@ public class Product {
 
 	@Column(name = "image_url")
 	private String imageUrl;
+
+	@Column(name = "price")
+	private Float price;
+
+	@Column(name = "sale_percent")
+	private Float salePercent;
 }
