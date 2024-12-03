@@ -3,10 +3,10 @@ package com.culcon.backend.services.implement;
 import com.culcon.backend.dtos.ProductDTO;
 import com.culcon.backend.models.docs.ProductDoc;
 import com.culcon.backend.models.record.Product;
-import com.culcon.backend.models.record.ProductStatus;
 import com.culcon.backend.models.record.ProductType;
 import com.culcon.backend.repositories.docs.MealKitDocRepo;
 import com.culcon.backend.repositories.docs.ProductDocRepo;
+import com.culcon.backend.repositories.record.ProductPriceRepo;
 import com.culcon.backend.repositories.record.ProductRepo;
 import com.culcon.backend.services.PublicService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +22,7 @@ public class PublicImplement implements PublicService {
 	private final ProductDocRepo productDocRepo;
 	private final ProductRepo productRepo;
 	private final MealKitDocRepo mealKitDocRepo;
+	private final ProductPriceRepo productPriceRepo;
 
 	@Override
 	public ProductDTO fetchProduct(String id) {
@@ -35,16 +36,8 @@ public class PublicImplement implements PublicService {
 	}
 
 	@Override
-	public List<ProductDTO> fetchAllProducts() {
-
-		return productRepo.findAll()
-			.stream().map(product -> ProductDTO.from(product, getDocs(product))
-			).toList();
-	}
-
-	@Override
 	public List<Product> fetchListOfProducts() {
-		return productRepo.findAllByProductStatus(ProductStatus.IN_STOCK);
+		return productRepo.findAll();
 	}
 
 	private ProductDoc getDocs(Product product) {

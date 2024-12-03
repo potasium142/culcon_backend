@@ -20,18 +20,14 @@ public class Coupon {
 	private String id;
 
 	@Column(name = "expire_time")
-	@Builder.Default
-	private LocalDate expireTime = LocalDate.now().plusDays(7);
+	private LocalDate expireTime;
 
 	@Column(name = "sale_percent")
-	@Builder.Default
-	private Float salePercent = 0.0f;
+	private Float salePercent;
 
 	@Column(name = "usage_amount")
-	@Builder.Default
-	private Integer usageAmount = Integer.MAX_VALUE;
+	private Integer usageAmount;
 
 	@Column(name = "usage_left")
-	@Builder.Default
-	private Integer usageLeft = Integer.MAX_VALUE;
+	private Integer usageLeft;
 }

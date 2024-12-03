@@ -8,7 +8,5 @@ import java.util.List;
 public interface PublicService {
 	ProductDTO fetchProduct(String id);
 
-	List<ProductDTO> fetchAllProducts();
-
 	List<Product> fetchListOfProducts();
 }
