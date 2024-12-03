@@ -1,5 +1,6 @@
 package com.culcon.backend.models.docs;
 
+import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -12,6 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @Document(collection = "Blog")
 public class Blog {
+	@Id
 	String id;
 
 	String title;
