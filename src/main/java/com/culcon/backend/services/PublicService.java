@@ -1,11 +1,14 @@
 package com.culcon.backend.services;
 
-import java.util.HashMap;
+import com.culcon.backend.dtos.ProductDTO;
+import com.culcon.backend.models.record.Product;
+
 import java.util.List;
-import java.util.Map;
 
 public interface PublicService {
-	Map<String, Object> fetchProduct(String id);
+	ProductDTO fetchProduct(String id);
 
-	List<HashMap<String, Object>> fetchAllProducts();
+	List<ProductDTO> fetchAllProducts();
+
+	List<Product> fetchListOfProducts();
 }

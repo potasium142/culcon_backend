@@ -1,7 +1,9 @@
 package com.culcon.backend.services.implement;
 
+import com.culcon.backend.dtos.ProductDTO;
 import com.culcon.backend.models.docs.ProductDoc;
 import com.culcon.backend.models.record.Product;
+import com.culcon.backend.models.record.ProductStatus;
 import com.culcon.backend.models.record.ProductType;
 import com.culcon.backend.repositories.docs.MealKitDocRepo;
 import com.culcon.backend.repositories.docs.ProductDocRepo;
@@ -10,9 +12,7 @@ import com.culcon.backend.services.PublicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.NoSuchElementException;
 
 @Service
@@ -24,33 +24,27 @@ public class PublicImplement implements PublicService {
 	private final MealKitDocRepo mealKitDocRepo;
 
 	@Override
-	public Map<String, Object> fetchProduct(String id) {
+	public ProductDTO fetchProduct(String id) {
 		var productInfo = productRepo
 			.findById(id)
 			.orElseThrow(NoSuchElementException::new);
 
 		ProductDoc productDocs = getDocs(productInfo);
 
-		var map = new HashMap<String, Object>();
-
-		map.put("product", productInfo);
-		map.put("product_doc", productDocs);
-
-		return map;
+		return ProductDTO.from(productInfo, productDocs);
 	}
 
 	@Override
-	public List<HashMap<String, Object>> fetchAllProducts() {
+	public List<ProductDTO> fetchAllProducts() {
 
 		return productRepo.findAll()
-			.stream().map(product -> {
-				var info = new HashMap<String, Object>();
+			.stream().map(product -> ProductDTO.from(product, getDocs(product))
+			).toList();
+	}
 
-				info.put("product", product);
-				info.put("product_doc", getDocs(product));
-
-				return info;
-			}).toList();
+	@Override
+	public List<Product> fetchListOfProducts() {
+		return productRepo.findAllByProductStatus(ProductStatus.IN_STOCK);
 	}
 
 	private ProductDoc getDocs(Product product) {

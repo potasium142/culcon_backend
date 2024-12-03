@@ -5,6 +5,7 @@ import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.annotation.Nonnull;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,24 @@ public class CustomerController {
 	@Operation(tags = "Cart", summary = "Get customer cart")
 	@GetMapping("/cart")
 	public ResponseEntity<Object> getCustomerCart(HttpServletRequest request) {
-		return new ResponseEntity<>("Not yet implemented", HttpStatus.NOT_IMPLEMENTED);
+		return new ResponseEntity<>(userService.fetchCustomerCart(request), HttpStatus.OK);
+	}
+
+	@Operation(tags = "Cart", summary = "Remove product from cart")
+	@DeleteMapping("/cart/remove")
+	public ResponseEntity<Object> removeProductFromCart(HttpServletRequest request, String id) {
+		return new ResponseEntity<>(userService.removeProductFromCart(id, request), HttpStatus.OK);
+	}
+
+	@Operation(tags = "Cart", summary = "Put product to cart")
+	@PutMapping("/cart/add")
+	public ResponseEntity<Object> addProductToCart(
+		HttpServletRequest request,
+		@Nonnull
+		@RequestParam String id,
+		@Nonnull
+		@RequestParam Integer quantity) {
+		return new ResponseEntity<>(userService.addProductToCart(id, quantity, request), HttpStatus.OK);
 	}
 
 	@Operation(
