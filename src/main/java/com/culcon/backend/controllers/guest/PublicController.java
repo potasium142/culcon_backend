@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,6 +25,11 @@ public class PublicController {
 
 	@GetMapping("/fetch/product/all")
 	public ResponseEntity<?> fetchAllProducts() {
-		return new ResponseEntity<>(publicService.fetchAllProducts(), HttpStatus.OK);
+		return new ResponseEntity<>(publicService.fetchListOfProducts(), HttpStatus.OK);
+	}
+
+	@GetMapping("/fetch/product/{id}")
+	public ResponseEntity<?> fetchProduct(@PathVariable String id) {
+		return new ResponseEntity<>(publicService.fetchProduct(id), HttpStatus.OK);
 	}
 }

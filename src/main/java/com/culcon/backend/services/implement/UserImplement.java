@@ -1,16 +1,17 @@
 package com.culcon.backend.services.implement;
 
+import com.culcon.backend.dtos.CartItemDTO;
 import com.culcon.backend.dtos.auth.AuthenticationRequest;
 import com.culcon.backend.dtos.auth.AuthenticationResponse;
 import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.exceptions.custom.OTPException;
 import com.culcon.backend.models.user.Account;
+import com.culcon.backend.repositories.record.ProductRepo;
 import com.culcon.backend.repositories.user.AccountOTPRepo;
 import com.culcon.backend.repositories.user.AccountRepo;
 import com.culcon.backend.services.UserService;
 import com.culcon.backend.services.authenticate.AuthService;
-import com.culcon.backend.services.authenticate.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Service;
 import javax.security.auth.login.AccountNotFoundException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -29,9 +32,9 @@ public class UserImplement implements UserService {
 	private final AccountRepo userRepository;
 	private final AuthService authService;
 	private final PasswordEncoder passwordEncoder;
-	private final JwtService jwtService;
 	private final AccountOTPRepo accountOTPRepo;
 	private final AccountRepo accountRepo;
+	private final ProductRepo productRepo;
 
 	@Override
 	public Account getAccountByEmail(String email) throws AccountNotFoundException {
@@ -95,4 +98,48 @@ public class UserImplement implements UserService {
 		accountOTPRepo.delete(accountOTP);
 	}
 
+	@Override
+	public List<CartItemDTO> fetchCustomerCart(HttpServletRequest request) {
+		var cart = authService.getUserInformation(request)
+			.getCart();
+
+		return productRepo.findAllById(cart.keySet()).stream()
+			.map(product -> CartItemDTO.builder()
+				.product(product)
+				.amount(cart.get(product.getId())).build())
+			.toList();
+	}
+
+	@Override
+	public CartItemDTO addProductToCart(String productId, Integer amount, HttpServletRequest request) {
+		var product = productRepo.findById(productId)
+			.orElseThrow(() -> new NoSuchElementException("Product not found"));
+
+		var account = authService.getUserInformation(request);
+
+		var itemAmount = account.getCart().getOrDefault(productId, 0) + amount;
+
+		if (itemAmount <= 0) {
+			account.getCart().remove(productId);
+		} else {
+			account.getCart().put(productId, itemAmount);
+		}
+
+		accountRepo.save(account);
+
+		return CartItemDTO.builder()
+			.product(product)
+			.amount(itemAmount).build();
+	}
+
+	@Override
+	public Boolean removeProductFromCart(String productId, HttpServletRequest request) {
+		var account = authService.getUserInformation(request);
+
+		account.getCart().remove(productId);
+
+		account = accountRepo.save(account);
+
+		return !account.getCart().containsKey(productId);
+	}
 }

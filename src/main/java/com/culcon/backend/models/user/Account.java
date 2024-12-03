@@ -92,7 +92,7 @@ public class Account implements UserDetails {
 	@Default
 	@Column(name = "amount")
 	@MapKeyJoinColumn(name = "item_id")
-	private Map<Integer, Integer> cart = new HashMap<>();
+	private Map<String, Integer> cart = new HashMap<>();
 
 
 	@JsonIgnore
