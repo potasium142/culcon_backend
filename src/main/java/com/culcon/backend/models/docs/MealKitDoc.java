@@ -1,15 +1,13 @@
 package com.culcon.backend.models.docs;
 
+import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Document(collection = "MealKitInfo")
 @Builder
@@ -17,17 +15,33 @@ import java.util.Set;
 @Setter
 @Data
 public class MealKitDoc {
+	@Id
 	private String id;
 
-	private String description;
+	@Builder.Default
+	private String name = "";
 
-	private HashMap<String, String> infos;
+	@Builder.Default
+	private String description = "";
 
-	private ArrayList<String> instructions;
+	@Builder.Default
+	private HashMap<String, String> infos = new HashMap<>();
 
-	private Set<String> tags;
+	@Builder.Default
+	private List<String> instructions = new ArrayList<>();
 
-	private List<String> imagesUrl;
+	@Builder.Default
+	private List<String> ingredients = new ArrayList<>();
 
-	private Integer daysBeforeExpiry;
+	@Builder.Default
+	private Set<String> tags = new HashSet<>();
+
+	@Builder.Default
+	private List<String> imagesUrl = new ArrayList<>();
+
+	@Builder.Default
+	private Integer daysBeforeExpiry = 0;
+
+	@Builder.Default
+	private String article = "";
 }
