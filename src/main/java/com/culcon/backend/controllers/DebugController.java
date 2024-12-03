@@ -28,6 +28,7 @@ public class DebugController {
 	private final BlogDocRepo blogRepo;
 	private final ProductDocRepo productDocRepo;
 	private final MealKitDocRepo mealKitRepo;
+	private final MealKitDocRepo mealKitDocRepo;
 
 	@GetMapping("/test_permission")
 	public String permissionTest() {
@@ -84,12 +85,16 @@ public class DebugController {
 	public void mapMongoToLocal() {
 		productDocRepo.findAll().forEach(
 			proDoc -> {
+
+				var imageUrl = proDoc.getImagesUrl().isEmpty() ?
+					"" : proDoc.getImagesUrl().get(0);
 				var pro = Product.builder()
 					.id(proDoc.getId())
 					.availableQuantity(100)
 					.productName(proDoc.getName())
 					.productStatus(ProductStatus.IN_STOCK)
 					.productTypes(ProductType.MEAT)
+					.imageUrl(imageUrl)
 					.build();
 
 				productRepo.save(pro);
@@ -98,12 +103,16 @@ public class DebugController {
 
 		mealKitRepo.findAll().forEach(
 			mealKitDoc -> {
+
+				var imageUrl = mealKitDoc.getImagesUrl().isEmpty() ?
+					"" : mealKitDoc.getImagesUrl().get(0);
 				var pro = Product.builder()
 					.id(mealKitDoc.getId())
 					.availableQuantity(100)
 					.productName(mealKitDoc.getName())
 					.productStatus(ProductStatus.IN_STOCK)
 					.productTypes(ProductType.MEALKIT)
+					.imageUrl(imageUrl)
 					.build();
 				productRepo.save(pro);
 			}
