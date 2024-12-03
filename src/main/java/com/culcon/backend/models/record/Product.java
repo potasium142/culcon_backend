@@ -32,4 +32,7 @@ public class Product {
 //	@JdbcType(PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.ORDINAL)
 	private ProductStatus productStatus;
+
+	@Column(name = "image_url")
+	private String imageUrl;
 }
