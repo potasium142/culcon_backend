@@ -41,4 +41,7 @@ public class OrderHistory {
 	@JoinColumn(name = "coupon")
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Coupon coupon;
+
+	@Column(name = "delivery_address")
+	private String deliveryAddress;
 }

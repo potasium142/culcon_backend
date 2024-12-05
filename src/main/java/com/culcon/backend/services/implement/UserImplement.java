@@ -65,10 +65,12 @@ public class UserImplement implements UserService {
 	public AuthenticationResponse updateCustomerPassword(CustomerPasswordRequest newUserData, HttpServletRequest request) {
 		var user = authService.getUserInformation(request);
 
-		if (passwordEncoder.matches(newUserData.oldPassword(), user.getPassword())) {
-			user.setPassword(passwordEncoder.encode(newUserData.password()));
-			user = userRepository.save(user);
+		if (!passwordEncoder.matches(newUserData.oldPassword(), user.getPassword())) {
+			throw new NoSuchElementException("Old password does not match");
 		}
+
+		user.setPassword(passwordEncoder.encode(newUserData.password()));
+		user = userRepository.save(user);
 
 		var reauthenticateRequest = AuthenticationRequest.builder()
 			.password(newUserData.password())

@@ -41,6 +41,18 @@ public class CustomerController {
 		return new ResponseEntity<>(userService.removeProductFromCart(id, request), HttpStatus.OK);
 	}
 
+
+	@Operation(tags = "Cart", summary = "Set product amount in cart")
+	@PutMapping("/cart/set")
+	public ResponseEntity<Object> setProductAmountInCart(
+		HttpServletRequest request,
+		@Nonnull
+		@RequestParam String id,
+		@Nonnull
+		@RequestParam Integer quantity) {
+		return new ResponseEntity<>(userService.setProductAmountInCart(id, quantity, request), HttpStatus.OK);
+	}
+
 	@Operation(tags = "Cart", summary = "Put product to cart")
 	@PutMapping("/cart/add")
 	public ResponseEntity<Object> addProductToCart(
