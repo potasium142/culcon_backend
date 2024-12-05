@@ -15,7 +15,6 @@ import lombok.*;
 public class Product {
 	@Id
 	@Column(name = "id")
-//	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String id;
 
 	@Column(name = "product_name")
@@ -29,7 +28,6 @@ public class Product {
 	private Integer availableQuantity;
 
 	@Column(name = "product_status")
-//	@JdbcType(PostgreSQLEnumJdbcType.class)
 	@Enumerated(EnumType.ORDINAL)
 	private ProductStatus productStatus;
 

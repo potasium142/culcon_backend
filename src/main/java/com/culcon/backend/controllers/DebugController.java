@@ -121,15 +121,15 @@ public class DebugController {
 					.productStatus(ProductStatus.IN_STOCK)
 					.productTypes(ProductType.MEAT)
 					.imageUrl(imageUrl)
-					.price(6.9f)
-					.salePercent(9.6f)
+					.price(proDoc.getPrice())
+					.salePercent(proDoc.getSalePercent())
 					.build();
 
 				productRepo.save(pro);
 
 				var price = ProductPriceHistory.builder()
-					.price(6.9f)
-					.salePercent(9.6f)
+					.price(proDoc.getPrice())
+					.salePercent(proDoc.getSalePercent())
 					.id(ProductPriceHistoryId.builder()
 						.date(LocalDateTime.now())
 						.product(pro)
@@ -151,8 +151,22 @@ public class DebugController {
 					.productStatus(ProductStatus.IN_STOCK)
 					.productTypes(ProductType.MEALKIT)
 					.imageUrl(imageUrl)
+					.price(mealKitDoc.getPrice())
+					.salePercent(mealKitDoc.getSalePercent())
 					.build();
+
 				productRepo.save(pro);
+
+				var price = ProductPriceHistory.builder()
+					.price(mealKitDoc.getPrice())
+					.salePercent(mealKitDoc.getSalePercent())
+					.id(ProductPriceHistoryId.builder()
+						.date(LocalDateTime.now())
+						.product(pro)
+						.build())
+					.build();
+
+				productPriceRepo.save(price);
 			}
 		);
 

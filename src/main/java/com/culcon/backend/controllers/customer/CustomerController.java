@@ -30,7 +30,7 @@ public class CustomerController {
 
 
 	@Operation(tags = "Cart", summary = "Get customer cart")
-	@GetMapping("/cart")
+	@GetMapping("/cart/fetch")
 	public ResponseEntity<Object> getCustomerCart(HttpServletRequest request) {
 		return new ResponseEntity<>(userService.fetchCustomerCart(request), HttpStatus.OK);
 	}

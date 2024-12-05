@@ -159,6 +159,10 @@ public class UserImplement implements UserService {
 	public Boolean removeProductFromCart(String productId, HttpServletRequest request) {
 		var account = authService.getUserInformation(request);
 
+		if (!account.getCart().containsKey(productId)) {
+			throw new NoSuchElementException("Product not found");
+		}
+
 		account.getCart().remove(productId);
 
 		account = accountRepo.save(account);
