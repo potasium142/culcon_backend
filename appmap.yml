@@ -1,4 +1,0 @@
-name: "culcon_backend"
-packages:
-- path: "com.culcon.backend"
-appmap_dir: "tmp/appmap"
