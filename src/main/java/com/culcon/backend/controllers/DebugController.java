@@ -4,13 +4,13 @@ package com.culcon.backend.controllers;
 import com.culcon.backend.models.docs.Blog;
 import com.culcon.backend.models.docs.MealKitDoc;
 import com.culcon.backend.models.docs.ProductDoc;
-import com.culcon.backend.models.record.*;
+import com.culcon.backend.models.user.*;
 import com.culcon.backend.repositories.docs.BlogDocRepo;
 import com.culcon.backend.repositories.docs.MealKitDocRepo;
 import com.culcon.backend.repositories.docs.ProductDocRepo;
-import com.culcon.backend.repositories.record.CouponRepo;
-import com.culcon.backend.repositories.record.ProductPriceRepo;
-import com.culcon.backend.repositories.record.ProductRepo;
+import com.culcon.backend.repositories.user.CouponRepo;
+import com.culcon.backend.repositories.user.ProductPriceRepo;
+import com.culcon.backend.repositories.user.ProductRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

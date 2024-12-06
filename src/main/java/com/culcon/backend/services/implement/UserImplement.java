@@ -7,9 +7,9 @@ import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.exceptions.custom.OTPException;
 import com.culcon.backend.models.user.Account;
-import com.culcon.backend.repositories.record.ProductRepo;
 import com.culcon.backend.repositories.user.AccountOTPRepo;
 import com.culcon.backend.repositories.user.AccountRepo;
+import com.culcon.backend.repositories.user.ProductRepo;
 import com.culcon.backend.services.UserService;
 import com.culcon.backend.services.authenticate.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -104,30 +104,27 @@ public class UserImplement implements UserService {
 
 	@Override
 	public List<CartItemDTO> fetchCustomerCart(HttpServletRequest request) {
-		var cart = authService.getUserInformation(request)
-			.getCart();
-
-		return productRepo.findAllById(cart.keySet()).stream()
-			.map(product -> CartItemDTO.builder()
-				.product(product)
-				.amount(cart.get(product.getId()))
-				.build())
+		// stinky ass function
+		return authService.getUserInformation(request)
+			.getCart()
+			.entrySet().stream()
+			.map(CartItemDTO::of)
 			.toList();
 	}
 
 	@Override
 	public CartItemDTO addProductToCart(String productId, Integer amount, HttpServletRequest request) {
 		var product = productRepo.findById(productId)
-			.orElseThrow(() -> new NoSuchElementException("Product not found"));
+			.orElseThrow(() -> new NoSuchElementException("Product not found incart"));
 
 		var account = authService.getUserInformation(request);
 
-		var itemAmount = account.getCart().getOrDefault(productId, 0) + amount;
+		var itemAmount = account.getCart().getOrDefault(product, 0) + amount;
 
 		if (itemAmount <= 0) {
-			account.getCart().remove(productId);
+			account.getCart().remove(product);
 		} else {
-			account.getCart().put(productId, itemAmount);
+			account.getCart().put(product, itemAmount);
 		}
 
 		accountRepo.save(account);
@@ -141,10 +138,17 @@ public class UserImplement implements UserService {
 	public Map<String, Object> setProductAmountInCart(String productId, Integer amount, HttpServletRequest request) {
 		var account = authService.getUserInformation(request);
 
+		var product = account.getCart()
+			.keySet()
+			.stream()
+			.filter(prod -> prod.getId().equals(productId))
+			.findFirst()
+			.orElseThrow(() -> new NoSuchElementException("Product not found in cart"));
+
 		if (amount <= 0) {
-			account.getCart().remove(productId);
+			account.getCart().remove(product);
 		} else {
-			account.getCart().put(productId, amount);
+			account.getCart().put(product, amount);
 		}
 
 		accountRepo.save(account);
@@ -161,14 +165,17 @@ public class UserImplement implements UserService {
 	public Boolean removeProductFromCart(String productId, HttpServletRequest request) {
 		var account = authService.getUserInformation(request);
 
-		if (!account.getCart().containsKey(productId)) {
-			throw new NoSuchElementException("Product not found");
-		}
+		var product = account.getCart()
+			.keySet()
+			.stream()
+			.filter(prod -> prod.getId().equals(productId))
+			.findFirst()
+			.orElseThrow(() -> new NoSuchElementException("Product not found in cart"));
 
-		account.getCart().remove(productId);
+		account.getCart().remove(product);
 
 		account = accountRepo.save(account);
 
-		return !account.getCart().containsKey(productId);
+		return !account.getCart().containsKey(product);
 	}
 }

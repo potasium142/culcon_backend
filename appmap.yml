@@ -1,0 +1,5 @@
+language: "java"
+name: "backend"
+appmap_dir: "tmp/appmap"
+packages:
+- path: "com.culcon.backend"

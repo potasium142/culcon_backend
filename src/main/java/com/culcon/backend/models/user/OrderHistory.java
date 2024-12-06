@@ -1,4 +1,4 @@
-package com.culcon.backend.models.record;
+package com.culcon.backend.models.user;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,8 +20,8 @@ public class OrderHistory {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(name = "user_id")
-	private String userId;
+	@ManyToOne
+	private Account user;
 
 	@Column(name = "order_date")
 	@JdbcTypeCode(SqlTypes.LOCAL_DATE_TIME)

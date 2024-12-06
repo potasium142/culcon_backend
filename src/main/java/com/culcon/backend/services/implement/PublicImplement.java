@@ -2,12 +2,12 @@ package com.culcon.backend.services.implement;
 
 import com.culcon.backend.dtos.ProductDTO;
 import com.culcon.backend.models.docs.ProductDoc;
-import com.culcon.backend.models.record.Product;
-import com.culcon.backend.models.record.ProductType;
+import com.culcon.backend.models.user.Product;
+import com.culcon.backend.models.user.ProductType;
 import com.culcon.backend.repositories.docs.MealKitDocRepo;
 import com.culcon.backend.repositories.docs.ProductDocRepo;
-import com.culcon.backend.repositories.record.ProductPriceRepo;
-import com.culcon.backend.repositories.record.ProductRepo;
+import com.culcon.backend.repositories.user.ProductPriceRepo;
+import com.culcon.backend.repositories.user.ProductRepo;
 import com.culcon.backend.services.PublicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
