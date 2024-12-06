@@ -1,8 +1,10 @@
 package com.culcon.backend.controllers.customer;
 
 
+import com.culcon.backend.dtos.OrderCreation;
 import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
+import com.culcon.backend.services.OrderService;
 import com.culcon.backend.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nonnull;
@@ -25,6 +27,7 @@ import java.io.IOException;
 public class CustomerController {
 
 	private final UserService userService;
+	private final OrderService orderService;
 
 	@Operation(tags = "Permission Test", summary = "Test permission for guest")
 	@GetMapping("/test_permission")
@@ -101,5 +104,14 @@ public class CustomerController {
 		@Valid @RequestPart MultipartFile file
 	) throws IOException {
 		return ResponseEntity.ok(userService.updateUserProfilePicture(file, request));
+	}
+
+
+	@PostMapping("/order/create")
+	public ResponseEntity<Object> createOrder(
+		@RequestBody OrderCreation orderCreation,
+		HttpServletRequest request
+	) {
+		return new ResponseEntity<>(orderService.createOrder(orderCreation, request), HttpStatus.OK);
 	}
 }
