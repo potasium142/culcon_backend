@@ -3,6 +3,7 @@ package com.culcon.backend.configs;
 import com.culcon.backend.repositories.user.AccountRepo;
 import com.culcon.backend.services.authenticate.JwtService;
 import com.culcon.backend.services.authenticate.UserAuthService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +13,6 @@ import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,6 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	private final JwtService jwtService;
 	private final UserAuthService userService;
 	private final AccountRepo accountRepo;
+	private final ObjectMapper objectMapper;
 
 	@Override
 	protected void doFilterInternal(
@@ -43,10 +44,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		jwtToken = authHeader.substring(7);
 
-		username = accountRepo.findByToken(jwtToken).orElseThrow(
-			() -> new UsernameNotFoundException("User not found")
-		).getUsername();
+		var account = accountRepo.findByToken(jwtToken);
 
+		if (account.isEmpty()) {
+			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			response.getWriter().write(
+				"Authentication failed: invalid JWT token"
+			);
+			return;
+		}
+
+		username = account.get().getUsername();
 
 		if (SecurityContextHolder
 			.getContext()
