@@ -1,6 +1,7 @@
 package com.culcon.backend.services.implement;
 
 import com.culcon.backend.dtos.CartItemDTO;
+import com.culcon.backend.dtos.CloudinaryImageDTO;
 import com.culcon.backend.dtos.auth.AuthenticationRequest;
 import com.culcon.backend.dtos.auth.AuthenticationResponse;
 import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
@@ -10,6 +11,7 @@ import com.culcon.backend.models.user.Account;
 import com.culcon.backend.repositories.user.AccountOTPRepo;
 import com.culcon.backend.repositories.user.AccountRepo;
 import com.culcon.backend.repositories.user.ProductRepo;
+import com.culcon.backend.services.CloudinaryService;
 import com.culcon.backend.services.UserService;
 import com.culcon.backend.services.authenticate.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,8 +19,10 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.security.auth.login.AccountNotFoundException;
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -36,6 +40,7 @@ public class UserImplement implements UserService {
 	private final PasswordEncoder passwordEncoder;
 	private final AccountOTPRepo accountOTPRepo;
 	private final AccountRepo accountRepo;
+	private final CloudinaryService cloudinaryService;
 	private final ProductRepo productRepo;
 
 	@Override
@@ -177,5 +182,23 @@ public class UserImplement implements UserService {
 		account = accountRepo.save(account);
 
 		return !account.getCart().containsKey(product);
+	}
+
+	@Override
+	public CloudinaryImageDTO updateUserProfilePicture(MultipartFile file, HttpServletRequest request) throws IOException {
+		var account = authService.getUserInformation(request);
+
+		var info = Map.of(
+			"asset_folder", "user_pfp",
+			"overwritten", "true",
+			"display_name", "pfp_" + account.getId(),
+			"public_id", "pfp_" + account.getId()
+		);
+
+		var uploadInfo = cloudinaryService.uploadImage(file, info);
+
+		account.setProfilePictureUri((String) uploadInfo.get("url"));
+
+		return CloudinaryImageDTO.from(uploadInfo);
 	}
 }

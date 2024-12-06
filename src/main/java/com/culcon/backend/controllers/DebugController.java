@@ -1,6 +1,7 @@
 package com.culcon.backend.controllers;
 
 
+import com.cloudinary.Cloudinary;
 import com.culcon.backend.models.docs.Blog;
 import com.culcon.backend.models.docs.MealKitDoc;
 import com.culcon.backend.models.docs.ProductDoc;
@@ -12,16 +13,22 @@ import com.culcon.backend.repositories.user.CouponRepo;
 import com.culcon.backend.repositories.user.ProductPriceRepo;
 import com.culcon.backend.repositories.user.ProductRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/debug")
 @RequiredArgsConstructor
 public class DebugController {
 
+	private final Cloudinary cloudinary;
 	private final ProductRepo productRepo;
 	private final CouponRepo couponRepo;
 	private final BlogDocRepo blogRepo;
@@ -106,6 +113,27 @@ public class DebugController {
 		return mealKitRepo.findAll();
 	}
 
+	@GetMapping("/cloudinary/clear/user-pfp")
+	public void clearUserPfp() throws Exception {
+		cloudinary.api().deleteResourcesByPrefix("pfp", Map.of());
+	}
+
+	@PostMapping(value = "/cloudinary/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<?> uploadCloudinary(@RequestPart MultipartFile file) throws IOException {
+		var mapInfo = Map.of(
+			"asset_folder", "test_folder",
+			"display_name", file.getName(),
+			"public_id", file.getName(),
+			"tags", List.of("sussy wussy", "image?", "goddemn")
+		);
+		return ResponseEntity.ok(
+			cloudinary
+				.uploader()
+				.upload(file.getBytes(), mapInfo)
+
+
+		);
+	}
 
 	@GetMapping("/map")
 	public void mapMongoToLocal() {
