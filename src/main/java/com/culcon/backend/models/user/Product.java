@@ -1,4 +1,4 @@
-package com.culcon.backend.models.record;
+package com.culcon.backend.models.user;
 
 import jakarta.persistence.*;
 import lombok.*;

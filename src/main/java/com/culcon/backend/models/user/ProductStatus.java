@@ -1,4 +1,4 @@
-package com.culcon.backend.models.record;
+package com.culcon.backend.models.user;
 
 public enum ProductStatus {
 	IN_STOCK,

@@ -1,4 +1,4 @@
-package com.culcon.backend.models.record;
+package com.culcon.backend.models.user;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.ManyToOne;
