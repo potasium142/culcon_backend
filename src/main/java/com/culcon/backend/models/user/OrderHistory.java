@@ -50,4 +50,14 @@ public class OrderHistory {
 
 	@Column(name = "note")
 	private String note;
+
+	@Column(name = "payment_method")
+	@Enumerated(EnumType.ORDINAL)
+	@Builder.Default
+	private PaymentMethod paymentMethod = PaymentMethod.BANKING;
+
+	@Column(name = "payment_status")
+	@Enumerated(EnumType.ORDINAL)
+	@Builder.Default
+	private PaymentStatus paymentStatus = PaymentStatus.PENDING;
 }
