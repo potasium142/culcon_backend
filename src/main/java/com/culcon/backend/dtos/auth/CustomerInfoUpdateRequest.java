@@ -1,6 +1,5 @@
 package com.culcon.backend.dtos.auth;
 
-import com.culcon.backend.models.user.Account;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
 import jakarta.validation.constraints.Email;
@@ -36,15 +35,5 @@ public record CustomerInfoUpdateRequest(
 		requiredMode = RequiredMode.AUTO)
 	String description
 ) {
-	public static Account mapToAccount(
-		CustomerInfoUpdateRequest reqBody) {
-		return Account.builder()
-			.username(reqBody.username)
-			.address(reqBody.address)
-			.phone(reqBody.phone)
-			.email(reqBody.email)
-			.profileDescription(reqBody.description)
-			.build();
-	}
 
 }
