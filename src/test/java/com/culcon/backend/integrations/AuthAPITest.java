@@ -413,4 +413,232 @@ public class AuthAPITest {
 
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
+
+	@Test
+	@Order(2)
+	void AuthAPI_Register_EmailAlreadyExists() throws Exception {
+		// Tạo tài khoản có email đã tồn tại trong cơ sở dữ liệu
+		Account existingAccount = new Account();
+		existingAccount.setEmail("example@email.com");
+		existingAccount.setPassword("user01");
+		existingAccount.setUsername("user01");
+		existingAccount.setPhone("0123456780");
+		userRepository.save(existingAccount); // Lưu tài khoản mẫu vào cơ sở dữ liệu
+
+		// Gửi yêu cầu đăng ký với email đã tồn tại
+		var result = mockMvc
+			.perform(
+				post("/api/auth/register")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("register_exists_email").get("input").toString())
+			)
+			.andExpect(status().isNotAcceptable()) // Kiểm tra HTTP status 400
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+
+		// Kiểm tra nội dung phản hồi
+		var jsonResult = new JSONObject(result);
+		// Kiểm tra giá trị của các trường
+		assertEquals("Data integrity violation", jsonResult.getString("fieldName"), "Unique index or primary key violation");
+	}
+
+	@Test
+	@Order(2)
+	void AuthAPI_Register_UsernameAlreadyExists() throws Exception {
+		Account existingAccount = new Account();
+		existingAccount.setEmail("example@email.com");
+		existingAccount.setPassword("user01");
+		existingAccount.setUsername("user01");
+		existingAccount.setPhone("0123456780");
+		userRepository.save(existingAccount);
+
+		var result = mockMvc
+			.perform(
+				post("/api/auth/register")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("register_exists_username").get("input").toString())
+			)
+			.andExpect(status().isNotAcceptable())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("Data integrity violation", jsonResult.getString("fieldName"), "Unique index or primary key violation");
+	}
+
+	@Test
+	@Order(2)
+	void AuthAPI_Register_PhoneAlreadyExists() throws Exception {
+		Account existingAccount = new Account();
+		existingAccount.setEmail("example@email.com");
+		existingAccount.setPassword("user01");
+		existingAccount.setUsername("user01");
+		existingAccount.setPhone("0123456780");
+		userRepository.save(existingAccount);
+
+		var result = mockMvc
+			.perform(
+				post("/api/auth/register")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("register_exists_phone").get("input").toString())
+			)
+			.andExpect(status().isNotAcceptable())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("Data integrity violation", jsonResult.getString("fieldName"), "Unique index or primary key violation");
+	}
+
+	@Test
+	@Order(4)
+	void AuthAPI_EditProfile_Success() throws Exception {
+		var result = mockMvc
+			.perform(
+				post("/api/customer/edit/profile")
+					.header("Authorization", jwtToken) // Sử dụng token hợp lệ
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("edit_profile").get("input").toString())
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+
+		// Kiểm tra nội dung phản hồi
+		var jsonResult = (ObjectNode) objectMapper.readTree(result);
+		jsonResult.remove("id");
+		assertEquals(
+			testJson.getTestCase("edit_profile").get("output"),
+			jsonResult
+		);
+	}
+
+	@Test
+	@Order(4)
+	@Rollback(value = false)
+	void AuthAPI_EditProfile_InvalidLessPhoneNumber() throws Exception {
+		var result = mockMvc
+			.perform(
+				post("/api/customer/edit/profile")
+					.header("Authorization", jwtToken) // Sử dụng token hợp lệ
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("edit_profileInvalidLessPhoneNumber").get("input").toString())
+			)
+			.andExpect(status().isBadRequest())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+
+		// Kiểm tra nội dung phản hồi
+		var jsonResult = new JSONObject(result);
+		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
+	}
+
+	@Test
+	@Order(4)
+	@Rollback(value = false)
+	void AuthAPI_EditProfile_InvalidMorePhoneNumber() throws Exception {
+		var result = mockMvc
+			.perform(
+				post("/api/customer/edit/profile")
+					.header("Authorization", jwtToken) // Sử dụng token hợp lệ
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("edit_profileInvalidMorePhoneNumber").get("input").toString())
+			)
+			.andExpect(status().isBadRequest())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+
+		// Kiểm tra nội dung phản hồi
+		var jsonResult = new JSONObject(result);
+		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
+	}
+
+	@Test
+	@Order(4)
+	@Rollback(value = false)
+	void AuthAPI_EditProfile_InvalidEmail() throws Exception {
+		var result = mockMvc
+			.perform(
+				post("/api/customer/edit/profile")
+					.header("Authorization", jwtToken) // Sử dụng token hợp lệ
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("edit_profileInvalidEmail").get("input").toString())
+			)
+			.andExpect(status().isBadRequest())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+
+		// Kiểm tra nội dung phản hồi
+		var jsonResult = new JSONObject(result);
+		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
+	}
+
+	@Test
+	@Order(4)
+	@Rollback(value = false)
+	void AuthAPI_EditProfile_BlankUsername() throws Exception {
+		var result = mockMvc
+			.perform(
+				post("/api/customer/edit/profile")
+					.header("Authorization", jwtToken) // Sử dụng token hợp lệ
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("edit_profileBlankUsername").get("input").toString())
+			)
+			.andExpect(status().isBadRequest())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+
+		// Kiểm tra nội dung phản hồi
+		var jsonResult = new JSONObject(result);
+		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
+	}
+
+	@Test
+	@Order(4)
+	@Rollback(value = false)
+	void AuthAPI_EditProfile_BlankEmail() throws Exception {
+		var result = mockMvc
+			.perform(
+				post("/api/customer/edit/profile")
+					.header("Authorization", jwtToken) // Sử dụng token hợp lệ
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("edit_profileBlankEmail").get("input").toString())
+			)
+			.andExpect(status().isBadRequest())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+
+		// Kiểm tra nội dung phản hồi
+		var jsonResult = new JSONObject(result);
+		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
+	}
+
+	@Test
+	@Order(4)
+	@Rollback(value = false)
+	void AuthAPI_EditProfile_BlankPhone() throws Exception {
+
+		var result = mockMvc
+			.perform(
+				post("/api/customer/edit/profile")
+					.header("Authorization", jwtToken) // Sử dụng token hợp lệ
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("edit_profileBlankPhone").get("input").toString())
+			)
+			.andExpect(status().isBadRequest())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+		// Kiểm tra nội dung phản hồi
+		var jsonResult = new JSONObject(result);
+		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
+	}
+
 }

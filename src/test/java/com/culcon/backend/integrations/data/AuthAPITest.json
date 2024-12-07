@@ -114,5 +114,117 @@
       "username": "user01",
       "password": ""
     }
+  },
+  "edit_profile_success": {
+    "input": {
+      "username": "Trinh Quang Tung",
+      "email": "Tung@email.com",
+      "phone": "0123456789"
+    }
+  },
+  "register_exists_email": {
+    "input": {
+      "email": "example@email.com",
+      "password": "user02",
+      "username": "user02",
+      "phone": "0123456781"
+    }
+  },
+  "register_exists_username": {
+    "input": {
+      "email": "example1@email.com",
+      "password": "user01",
+      "username": "user01",
+      "phone": "0123456781"
+    }
+  },
+  "register_exists_phone": {
+    "input": {
+      "email": "example1@email.com",
+      "password": "user02",
+      "username": "user02",
+      "phone": "0123456780"
+    }
+  },
+  "edit_profile": {
+    "input": {
+      "email": "example@email.com",
+      "username": "user01",
+      "phone": "0123456780",
+      "address": "lavander town",
+      "description": "lavander sus"
+    },
+    "output": {
+      "email": "example@email.com",
+      "username": "user01",
+      "status": "NORMAL",
+      "address": "lavander town",
+      "phone": "0123456780",
+      "profilePictureUri": "defaultProfile",
+      "profileDescription": "lavander sus"
+    }
+  },
+  "edit_profileInvalidName": {
+    "input": {
+      "email": "example@email.com",
+      "username": "user01",
+      "phone": "0123456780",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileInvalidLessPhoneNumber": {
+    "input": {
+      "email": "example@email.com",
+      "username": "user01",
+      "phone": "0123",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileInvalidMorePhoneNumber": {
+    "input": {
+      "email": "example@email.com",
+      "username": "user01",
+      "phone": "01234567891010",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileInvalidEmail": {
+    "input": {
+      "email": "example",
+      "username": "user01",
+      "phone": "0123456780",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileBlankUsername": {
+    "input": {
+      "email": "example@email.com",
+      "username": "",
+      "phone": "0123456789",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileBlankPhone": {
+    "input": {
+      "email": "example@email.com",
+      "username": "user01",
+      "phone": "",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileBlankEmail": {
+    "input": {
+      "email": "",
+      "username": "user01",
+      "phone": "0123456789",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
   }
 }
