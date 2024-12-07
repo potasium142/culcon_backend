@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -39,25 +40,27 @@ public class AuthController {
 	private final OTPService otpService;
 
 	@Operation(
-		tags = {"Authentication", "Account"},
-		summary = "Customer register API")
+			tags = {"Authentication", "Account"},
+			summary = "Customer register API")
 	@PostMapping("/register")
 	public ResponseEntity<Object> registerCustomer(
-		@Valid
-		@RequestBody
-		CustomerRegisterRequest request) {
+			@Valid
+			@RequestBody
+			CustomerRegisterRequest request) {
 		var registerLoginToken = authService.registerCustomer(request);
 		return new ResponseEntity<>(
-			registerLoginToken,
-			HttpStatus.OK);
+				registerLoginToken,
+				HttpStatus.OK);
 	}
+
+
 
 	@Operation(tags = {"Authentication"})
 	@PostMapping("/signin")
 	public ResponseEntity<Object> signIn(
-		@RequestBody
-		@Valid
-		AuthenticationRequest authenticate) {
+			@RequestBody
+			@Valid
+			AuthenticationRequest authenticate) {
 		var authenStatus = authService.authenticate(authenticate);
 		return new ResponseEntity<>(authenStatus, HttpStatus.OK);
 	}
@@ -65,9 +68,9 @@ public class AuthController {
 	@Operation(tags = {"Authentication"})
 	@PostMapping("/logout")
 	public void logout(
-		HttpServletRequest request,
-		HttpServletResponse response,
-		Authentication authentication) {
+			HttpServletRequest request,
+			HttpServletResponse response,
+			Authentication authentication) {
 		logoutService.logout(request, response, authentication);
 	}
 
@@ -75,10 +78,10 @@ public class AuthController {
 	@Operation(tags = {"Authentication"})
 	@PostMapping("/forgot/otp/get")
 	public ResponseEntity<Object> forgotSendOTP(
-		@RequestParam("email")
-		@NotEmpty(message = "Email shouldn't be empty")
-		@Email
-		String email
+			@RequestParam("email")
+			@NotEmpty(message = "Email shouldn't be empty")
+			@Email
+			String email
 	) throws MessagingException, UnsupportedEncodingException, AccountNotFoundException {
 		Account account = userService.getAccountByEmail(email);
 
@@ -92,7 +95,7 @@ public class AuthController {
 	@Operation(tags = {"Authentication"})
 	@PostMapping("/forgot/reset")
 	public ResponseEntity<Object> forgotResetPassword(
-		@Valid @RequestBody OTPResetPassword otpForm
+			@Valid @RequestBody OTPResetPassword otpForm
 	) {
 		userService.updateCustomerPasswordOTP(otpForm.otp(), otpForm.id(), otpForm.password());
 		return new ResponseEntity<>("Password update successfully", HttpStatus.OK);
@@ -100,14 +103,30 @@ public class AuthController {
 
 
 	@Operation(
-		tags = {"Account"},
-		summary = "Get raw account information")
+			tags = {"Account"},
+			summary = "Get raw account information")
 	@GetMapping("/account")
 	public ResponseEntity<Object> getCurrentLoginUser(
-		HttpServletRequest request) {
+			HttpServletRequest request) {
 		var user = authService.getUserInformation(request);
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
+	@Operation(
+			tags = {"Authentication"},
+			summary = "Signin with google")
+	@GetMapping("/oauth2/signin/google/authenticate")
+	public RedirectView googleSignIn() {
+		return new RedirectView("/oauth2/authorization/google");
+	}
 
+
+	@Operation(
+			tags = {"Account"},
+			summary = "Get raw account information")
+	@GetMapping("/account/all/test")
+	public ResponseEntity<Object> getAllCustomer() {
+
+		return new ResponseEntity<>(userService.getAccounts(), HttpStatus.OK);
+	}
 }

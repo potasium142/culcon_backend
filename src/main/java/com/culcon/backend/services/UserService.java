@@ -18,6 +18,8 @@ import java.util.Map;
 
 public interface UserService {
 
+	List<Account> getAccounts();
+
 	Account getAccountByEmail(String email) throws AccountNotFoundException;
 
 	Account updateCustomer(CustomerInfoUpdateRequest newData, HttpServletRequest request);
