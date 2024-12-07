@@ -2,6 +2,9 @@ package com.culcon.backend.configs;
 
 import com.culcon.backend.exceptions.CustomAccessDeniedHandler;
 import com.culcon.backend.services.authenticate.UserAuthService;
+import com.culcon.backend.services.helper.UserHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +21,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -28,8 +34,11 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.security.auth.login.AccountNotFoundException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -38,9 +47,10 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final CustomAccessDeniedHandler customAccessDeniedHandler;
-	private final UserAuthService userServices;
-
+	private final UserAuthService userAuthService;
+	private final ObjectMapper objectMapper;
 	private final LogoutHandler logoutHandler;
+	private final UserHelper userHelper;
 
 	@Bean
 	public static PasswordEncoder passwordEncoder() {
@@ -66,7 +76,9 @@ public class SecurityConfig implements WebMvcConfigurer {
 						"/swagger-ui/**",
 						"/api/public/**",
 						"/h2-console/**",
-						"/v3/api-docs/**")
+						"/v3/api-docs/**",
+						"/oauth2/**"
+					)
 					.permitAll()
 					.requestMatchers("/api/customer/**")
 					.hasAnyAuthority("CUSTOMER")
@@ -81,6 +93,10 @@ public class SecurityConfig implements WebMvcConfigurer {
 					-> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authenticationProvider(authenticationProvider())
 			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+			.oauth2Login(oauth2 -> oauth2
+				.loginPage("/oauth2/authorization/google")
+				.successHandler(authenticationSuccessHandler())
+				.failureHandler(authenticationFailureHandler()))
 			.logout(
 				logout -> logout
 					.logoutUrl("/api/v1/auth/logout")
@@ -97,7 +113,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 	@Bean
 	public AuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(userServices.userDetailsServices());
+		authenticationProvider.setUserDetailsService(userAuthService.userDetailsServices());
 		authenticationProvider.setPasswordEncoder(passwordEncoder());
 		return authenticationProvider;
 	}
@@ -116,9 +132,11 @@ public class SecurityConfig implements WebMvcConfigurer {
 			.allowedOrigins("*")
 			.allowedOrigins("/**")
 			.allowedOrigins("**")
+			.allowedOrigins("/oauth2/**")
 			.allowedOrigins("http://localhost:8080")
 			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 			.allowedHeaders("*")
+			.allowedHeaders("/oauth2/**")
 			.allowedHeaders("/**")
 			.allowedHeaders("**")
 			.exposedHeaders("X-Get-Header");
@@ -139,6 +157,61 @@ public class SecurityConfig implements WebMvcConfigurer {
 		source.registerCorsConfiguration("/**", configuration);
 		source.registerCorsConfiguration("*", configuration);
 		source.registerCorsConfiguration("/api/**", configuration);
+		source.registerCorsConfiguration("/oauth2/**", configuration);
 		return source;
 	}
+
+
+	@Bean
+	public AuthenticationSuccessHandler authenticationSuccessHandler() {
+		return (request, response, authentication) -> {
+			if (authentication instanceof OAuth2AuthenticationToken oauth2Token) {
+				String email = oauth2Token.getPrincipal().getAttribute("email");
+
+				try {
+					var token = userHelper.loginByEmail(email.trim());
+
+					response.setCharacterEncoding("UTF-8");
+					response.setContentType("application/json");
+
+					PrintWriter out = response.getWriter();
+					out.print(objectMapper.writeValueAsString(
+						Map.of("token", token)
+					));
+
+					out.flush();
+
+				} catch (AccountNotFoundException e) {
+					response.setCharacterEncoding("UTF-8");
+
+					response.setContentType("application/json");
+
+					PrintWriter out = response.getWriter();
+					out.print("{\"message\": \"There's no account linked to the service, please create an account with the email\"," +
+						" \"email\": \"" + email + "\"" + "}");
+					out.flush();
+				}
+
+
+			}
+		};
+	}
+
+	@Bean
+	public AuthenticationFailureHandler authenticationFailureHandler() {
+		return (request, response, exception) -> {
+			// Set response content type as JSON
+			response.setContentType("application/json");
+			response.setCharacterEncoding("UTF-8");
+
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+			// Print the custom error message
+			try (PrintWriter out = response.getWriter()) {
+				out.print("{\"error\": \"Something went wrong, please log out and try again\"}");
+				out.flush();
+			}
+		};
+	}
+
 }

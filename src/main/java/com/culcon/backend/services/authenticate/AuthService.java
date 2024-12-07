@@ -12,4 +12,6 @@ public interface AuthService {
     Account getUserInformation(HttpServletRequest request);
 
     AuthenticationResponse registerCustomer(CustomerRegisterRequest request);
+
+
 }

@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -51,6 +52,7 @@ public class AuthController {
 			registerLoginToken,
 			HttpStatus.OK);
 	}
+
 
 	@Operation(tags = {"Authentication"})
 	@PostMapping("/signin")
@@ -109,5 +111,21 @@ public class AuthController {
 		return new ResponseEntity<>(user, HttpStatus.OK);
 	}
 
+	@Operation(
+		tags = {"Authentication"},
+		summary = "Signin with google")
+	@GetMapping("/signin/google")
+	public RedirectView googleSignIn() {
+		return new RedirectView("/oauth2/authorization/google");
+	}
 
+
+	@Operation(
+		tags = {"Account"},
+		summary = "Get raw account information")
+	@GetMapping("/account/all/test")
+	public ResponseEntity<Object> getAllCustomer() {
+
+		return new ResponseEntity<>(userService.getAccounts(), HttpStatus.OK);
+	}
 }

@@ -107,4 +107,5 @@ public class AuthImplement implements AuthService {
 
 		return AuthenticationResponse.builder().accessToken(jwtToken).build();
 	}
+
 }

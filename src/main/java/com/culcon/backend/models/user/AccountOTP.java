@@ -18,7 +18,7 @@ public class AccountOTP {
 	private String accountId;
 
 	@MapsId
-	@OneToOne(cascade = CascadeType.REFRESH)
+	@ManyToOne(cascade = CascadeType.REFRESH)
 	@JoinColumn(name = "account_id")
 	private Account account;
 

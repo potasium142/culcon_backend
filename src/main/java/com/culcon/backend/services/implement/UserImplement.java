@@ -53,6 +53,11 @@ public class UserImplement implements UserService {
 	private final BlogDocRepo blogDocRepo;
 
 	@Override
+	public List<Account> getAccounts() {
+		return accountRepo.findAll();
+	}
+
+	@Override
 	public Account getAccountByEmail(String email) throws AccountNotFoundException {
 		return userRepository.findAccountByEmail(email.trim())
 			.orElseThrow(() -> new AccountNotFoundException("Account not found"));
