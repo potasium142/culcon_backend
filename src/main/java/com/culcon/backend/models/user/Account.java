@@ -8,14 +8,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.Builder.Default;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @Entity
@@ -56,13 +55,8 @@ public class Account implements UserDetails {
 	@Column(name = "password")
 	private String password;
 
-	@Enumerated(EnumType.ORDINAL)
-	@Column(name = "role")
-	@Default
-	private Role role = Role.CUSTOMER;
-
-	@Enumerated(EnumType.ORDINAL)
 	@Column(name = "status")
+	@Enumerated(EnumType.ORDINAL)
 	@Default
 	private AccountStatus status = AccountStatus.NORMAL;
 
@@ -84,6 +78,12 @@ public class Account implements UserDetails {
 	private String profileDescription = "";
 
 	@JsonIgnore
+	@Column(name = "bookmarked_posts")
+	@Default
+	@JdbcTypeCode(SqlTypes.ARRAY)
+	private Set<String> bookmarkedPost = new HashSet<>();
+
+	@JsonIgnore
 	private String token;
 
 	@JsonIgnore
@@ -91,14 +91,23 @@ public class Account implements UserDetails {
 	@CollectionTable(name = "cart")
 	@Default
 	@Column(name = "amount")
-	@MapKeyJoinColumn(name = "item_id")
-	private Map<String, Integer> cart = new HashMap<>();
+	@MapKeyJoinColumn(name = "product_id")
+	private Map<Product, Integer> cart = new HashMap<>();
+
+
+	@JsonIgnore
+	@ElementCollection(fetch = FetchType.LAZY)
+	@CollectionTable(name = "rated_post")
+	@Default
+	@Column(name = "rating")
+	@MapKeyColumn(name = "post_id")
+	private Map<String, Integer> ratedPost = new HashMap<>();
 
 
 	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(role.name()));
+		return List.of(new SimpleGrantedAuthority("CUSTOMER"));
 	}
 
 	@JsonIgnore

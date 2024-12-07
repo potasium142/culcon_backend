@@ -1,8 +1,8 @@
-package com.culcon.backend.repositories.record;
+package com.culcon.backend.repositories.user;
 
-import com.culcon.backend.models.record.Product;
-import com.culcon.backend.models.record.ProductPriceHistory;
-import com.culcon.backend.models.record.ProductPriceHistoryId;
+import com.culcon.backend.models.user.Product;
+import com.culcon.backend.models.user.ProductPriceHistory;
+import com.culcon.backend.models.user.ProductPriceHistoryId;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

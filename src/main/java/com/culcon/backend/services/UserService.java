@@ -1,13 +1,16 @@
 package com.culcon.backend.services;
 
 import com.culcon.backend.dtos.CartItemDTO;
+import com.culcon.backend.dtos.CloudinaryImageDTO;
 import com.culcon.backend.dtos.auth.AuthenticationResponse;
 import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.models.user.Account;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.security.auth.login.AccountNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -28,4 +31,6 @@ public interface UserService {
 	Map<String, Object> setProductAmountInCart(String productId, Integer amount, HttpServletRequest request);
 
 	Boolean removeProductFromCart(String productId, HttpServletRequest request);
+
+	CloudinaryImageDTO updateUserProfilePicture(MultipartFile file, HttpServletRequest request) throws IOException;
 }

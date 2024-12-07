@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
 
 @Document(collection = "ProductInfo")
 @NoArgsConstructor
@@ -18,17 +20,21 @@ public class ProductDoc {
 	@Id
 	private String id;
 
-	private String name = "";
+	private String name;
 
-	private String description = "";
+	private String description;
 
-	private HashMap<String, String> infos = new HashMap<>();
+	private HashMap<String, String> infos;
 
-	private Set<String> tags = new HashSet<>();
+	private Set<String> tags;
 
-	private List<String> imagesUrl = new ArrayList<>();
+	private List<String> imagesUrl;
 
-	private Integer daysBeforeExpiry = 0;
+	private Float price;
 
-	private String articleMD = "";
+	private Float salePercent;
+
+	private Integer daysBeforeExpiry;
+
+	private String articleMD;
 }

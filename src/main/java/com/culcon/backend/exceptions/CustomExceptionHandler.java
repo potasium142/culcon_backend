@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -63,6 +64,13 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(NoSuchElementException.class)
 	public ResponseEntity<?> noSuchElement(NoSuchElementException ex) {
+		return new ResponseEntity<>(
+			ExceptionMessage.map(ex),
+			HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(UsernameNotFoundException.class)
+	public ResponseEntity<?> usernameNotFound(UsernameNotFoundException ex) {
 		return new ResponseEntity<>(
 			ExceptionMessage.map(ex),
 			HttpStatus.NOT_FOUND);

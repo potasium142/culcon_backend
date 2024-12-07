@@ -1,9 +1,5 @@
-# This is the AppMap configuration file.
-# For full documentation of this file for Java programs, see:
-# https://appmap.io/docs/reference/appmap-java.html#configuration
-name: culcon_backend
-
-# Your project contains the directory src/main/java. AppMap has
-# auto-detected the following Java packages in this directory:
+language: "java"
+name: "backend"
+appmap_dir: "tmp/appmap"
 packages:
-- path: com.culcon.backend
+- path: "com.culcon.backend"

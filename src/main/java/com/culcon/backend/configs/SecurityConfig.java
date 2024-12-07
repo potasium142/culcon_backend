@@ -1,7 +1,6 @@
 package com.culcon.backend.configs;
 
 import com.culcon.backend.exceptions.CustomAccessDeniedHandler;
-import com.culcon.backend.models.user.Role;
 import com.culcon.backend.services.authenticate.UserAuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -70,7 +69,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 						"/v3/api-docs/**")
 					.permitAll()
 					.requestMatchers("/api/customer/**")
-					.hasAnyAuthority(Role.CUSTOMER.name())
+					.hasAnyAuthority("CUSTOMER")
 					.anyRequest()
 					.authenticated())
 			.exceptionHandling(

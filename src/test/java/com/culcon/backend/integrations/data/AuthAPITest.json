@@ -2,7 +2,6 @@
   "get_account_info": {
     "input": {},
     "output": {
-      "role": "CUSTOMER",
       "address": "",
       "profileDescription": "",
       "phone": "0969996669",

@@ -10,9 +10,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/customer")
@@ -30,7 +34,7 @@ public class CustomerController {
 
 
 	@Operation(tags = "Cart", summary = "Get customer cart")
-	@GetMapping("/cart")
+	@GetMapping("/cart/fetch")
 	public ResponseEntity<Object> getCustomerCart(HttpServletRequest request) {
 		return new ResponseEntity<>(userService.fetchCustomerCart(request), HttpStatus.OK);
 	}
@@ -39,6 +43,18 @@ public class CustomerController {
 	@DeleteMapping("/cart/remove")
 	public ResponseEntity<Object> removeProductFromCart(HttpServletRequest request, String id) {
 		return new ResponseEntity<>(userService.removeProductFromCart(id, request), HttpStatus.OK);
+	}
+
+
+	@Operation(tags = "Cart", summary = "Set product amount in cart")
+	@PutMapping("/cart/set")
+	public ResponseEntity<Object> setProductAmountInCart(
+		HttpServletRequest request,
+		@Nonnull
+		@RequestParam String id,
+		@Nonnull
+		@RequestParam Integer quantity) {
+		return new ResponseEntity<>(userService.setProductAmountInCart(id, quantity, request), HttpStatus.OK);
 	}
 
 	@Operation(tags = "Cart", summary = "Put product to cart")
@@ -73,5 +89,17 @@ public class CustomerController {
 		@Valid @RequestBody CustomerPasswordRequest newUserData) {
 		var updateResponse = userService.updateCustomerPassword(newUserData, request);
 		return new ResponseEntity<>(updateResponse, HttpStatus.OK);
+	}
+
+
+	@Operation(
+		tags = {"Account"},
+		summary = "Edit account profile picture")
+	@PostMapping(value = "/edit/profile/picture", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Object> editUserProfilePicture(
+		HttpServletRequest request,
+		@Valid @RequestPart MultipartFile file
+	) throws IOException {
+		return ResponseEntity.ok(userService.updateUserProfilePicture(file, request));
 	}
 }
