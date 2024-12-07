@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 @Builder
 @Document(collection = "Blog")
-public class Blog {
+public class BlogDoc {
 	@Id
 	String id;
 

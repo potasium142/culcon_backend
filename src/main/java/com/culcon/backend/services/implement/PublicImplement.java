@@ -2,9 +2,10 @@ package com.culcon.backend.services.implement;
 
 import com.culcon.backend.dtos.ProductDTO;
 import com.culcon.backend.dtos.blog.BlogComment;
+import com.culcon.backend.dtos.blog.BlogDetail;
 import com.culcon.backend.dtos.blog.BlogItemInList;
-import com.culcon.backend.models.docs.Blog;
 import com.culcon.backend.models.docs.ProductDoc;
+import com.culcon.backend.models.user.Account;
 import com.culcon.backend.models.user.Product;
 import com.culcon.backend.models.user.ProductType;
 import com.culcon.backend.repositories.docs.BlogDocRepo;
@@ -13,6 +14,8 @@ import com.culcon.backend.repositories.docs.ProductDocRepo;
 import com.culcon.backend.repositories.user.PostCommentRepo;
 import com.culcon.backend.repositories.user.ProductRepo;
 import com.culcon.backend.services.PublicService;
+import com.culcon.backend.services.authenticate.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +32,7 @@ public class PublicImplement implements PublicService {
 	private final MealKitDocRepo mealKitDocRepo;
 	private final BlogDocRepo blogDocRepo;
 	private final PostCommentRepo postCommentRepo;
+	private final AuthService authService;
 
 	@Override
 	public ProductDTO fetchProduct(String id) {
@@ -80,10 +84,30 @@ public class PublicImplement implements PublicService {
 	}
 
 	@Override
-	public Blog fetchBlogDetail(String id) {
-		return blogDocRepo.findById(id).orElseThrow(
+	public BlogDetail fetchBlogDetail(String id, HttpServletRequest req) {
+		Account account = null;
+		try {
+			account = authService.getUserInformation(req);
+		} catch (RuntimeException ignored) {
+		}
+
+		var blog = blogDocRepo.findById(id).orElseThrow(
 			() -> new NoSuchElementException("Blog not found")
 		);
+
+		Boolean bookmark = false;
+
+		if (account == null)
+			bookmark = null;
+		else {
+			bookmark = account.getBookmarkedPost().contains(id);
+		}
+
+
+		return BlogDetail.builder()
+			.blog(blog)
+			.bookmark(bookmark)
+			.build();
 	}
 
 	private ProductDoc getDocs(Product product) {

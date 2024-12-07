@@ -6,6 +6,7 @@ import com.culcon.backend.dtos.auth.AuthenticationResponse;
 import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.dtos.blog.BlogComment;
+import com.culcon.backend.dtos.blog.BlogItemInList;
 import com.culcon.backend.models.user.Account;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,4 +37,8 @@ public interface UserService {
 	CloudinaryImageDTO updateUserProfilePicture(MultipartFile file, HttpServletRequest request) throws IOException;
 
 	BlogComment commentOnBlog(String blogId, String comment, HttpServletRequest request);
+
+	Boolean bookmarkBlog(String blogId, HttpServletRequest request, Boolean bookmark);
+
+	List<BlogItemInList> getBookmarkedBlog(HttpServletRequest request);
 }

@@ -96,15 +96,6 @@ public class Account implements UserDetails {
 
 
 	@JsonIgnore
-	@ElementCollection(fetch = FetchType.LAZY)
-	@CollectionTable(name = "rated_post")
-	@Default
-	@Column(name = "rating")
-	@MapKeyColumn(name = "post_id")
-	private Map<String, Integer> ratedPost = new HashMap<>();
-
-
-	@JsonIgnore
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority("CUSTOMER"));

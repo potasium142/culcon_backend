@@ -2,10 +2,11 @@ package com.culcon.backend.services;
 
 import com.culcon.backend.dtos.ProductDTO;
 import com.culcon.backend.dtos.blog.BlogComment;
+import com.culcon.backend.dtos.blog.BlogDetail;
 import com.culcon.backend.dtos.blog.BlogItemInList;
-import com.culcon.backend.models.docs.Blog;
 import com.culcon.backend.models.user.Product;
 import com.culcon.backend.models.user.ProductType;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.HashSet;
 import java.util.List;
@@ -23,5 +24,5 @@ public interface PublicService {
 
 	List<BlogComment> fetchBlogComment(String id);
 
-	Blog fetchBlogDetail(String id);
+	BlogDetail fetchBlogDetail(String id, HttpServletRequest req);
 }
