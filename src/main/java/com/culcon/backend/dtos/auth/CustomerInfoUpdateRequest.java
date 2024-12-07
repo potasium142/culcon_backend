@@ -10,41 +10,41 @@ import lombok.Builder;
 
 @Builder
 public record CustomerInfoUpdateRequest(
-        @NotBlank
-        @Schema(example = "sussywussy",
-                requiredMode = RequiredMode.REQUIRED)
-        String username,
+	@NotBlank
+	@Schema(example = "sussywussy",
+		requiredMode = RequiredMode.REQUIRED)
+	String username,
 
-        @NotBlank
-        @Email
-        @Schema(example = "example@email.com",
-                requiredMode = RequiredMode.REQUIRED)
-        String email,
+	@NotBlank
+	@Email
+	@Schema(example = "example@email.com",
+		requiredMode = RequiredMode.REQUIRED)
+	String email,
 
-        @NotBlank
-        @Schema(example = "0123456789",
-                requiredMode = RequiredMode.REQUIRED)
-        @Pattern(regexp = "(84|0)[1-9][0-9]{1,9}")
-        String phone,
+	@NotBlank
+	@Schema(example = "0123456789",
+		requiredMode = RequiredMode.REQUIRED)
+	@Pattern(regexp = "0[1-9]{2}[0-9]{7}")
+	String phone,
 
 
-        @Schema(example = "69, Sussy town",
-                requiredMode = RequiredMode.AUTO)
-        String address,
+	@Schema(example = "69, Sussy town",
+		requiredMode = RequiredMode.AUTO)
+	String address,
 
-        @Schema(example = "le sus",
-                requiredMode = RequiredMode.AUTO)
-        String description
+	@Schema(example = "le sus",
+		requiredMode = RequiredMode.AUTO)
+	String description
 ) {
-    public static Account mapToAccount(
-            CustomerInfoUpdateRequest reqBody) {
-        return Account.builder()
-                .username(reqBody.username)
-                .address(reqBody.address)
-                .phone(reqBody.phone)
-                .email(reqBody.email)
-                .profileDescription(reqBody.description)
-                .build();
-    }
+	public static Account mapToAccount(
+		CustomerInfoUpdateRequest reqBody) {
+		return Account.builder()
+			.username(reqBody.username)
+			.address(reqBody.address)
+			.phone(reqBody.phone)
+			.email(reqBody.email)
+			.profileDescription(reqBody.description)
+			.build();
+	}
 
 }
