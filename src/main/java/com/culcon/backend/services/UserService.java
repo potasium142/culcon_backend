@@ -5,6 +5,7 @@ import com.culcon.backend.dtos.CloudinaryImageDTO;
 import com.culcon.backend.dtos.auth.AuthenticationResponse;
 import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
+import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.models.user.Account;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,4 +34,6 @@ public interface UserService {
 	Boolean removeProductFromCart(String productId, HttpServletRequest request);
 
 	CloudinaryImageDTO updateUserProfilePicture(MultipartFile file, HttpServletRequest request) throws IOException;
+
+	BlogComment commentOnBlog(String blogId, String comment, HttpServletRequest request);
 }

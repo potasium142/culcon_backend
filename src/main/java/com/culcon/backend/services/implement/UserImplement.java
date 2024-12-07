@@ -6,10 +6,14 @@ import com.culcon.backend.dtos.auth.AuthenticationRequest;
 import com.culcon.backend.dtos.auth.AuthenticationResponse;
 import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
+import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.exceptions.custom.OTPException;
 import com.culcon.backend.models.user.Account;
+import com.culcon.backend.models.user.PostComment;
+import com.culcon.backend.models.user.PostInteractionId;
 import com.culcon.backend.repositories.user.AccountOTPRepo;
 import com.culcon.backend.repositories.user.AccountRepo;
+import com.culcon.backend.repositories.user.PostCommentRepo;
 import com.culcon.backend.repositories.user.ProductRepo;
 import com.culcon.backend.services.CloudinaryService;
 import com.culcon.backend.services.UserService;
@@ -42,6 +46,7 @@ public class UserImplement implements UserService {
 	private final AccountRepo accountRepo;
 	private final CloudinaryService cloudinaryService;
 	private final ProductRepo productRepo;
+	private final PostCommentRepo postCommentRepo;
 
 	@Override
 	public Account getAccountByEmail(String email) throws AccountNotFoundException {
@@ -200,5 +205,23 @@ public class UserImplement implements UserService {
 		account.setProfilePictureUri((String) uploadInfo.get("url"));
 
 		return CloudinaryImageDTO.from(uploadInfo);
+	}
+
+	@Override
+	public BlogComment commentOnBlog(String blogId, String comment, HttpServletRequest request) {
+		var account = authService.getUserInformation(request);
+		var postId = PostInteractionId.builder()
+			.account(account)
+			.postId(blogId)
+			.timestamp(Timestamp.valueOf(LocalDateTime.now()))
+			.build();
+
+		var commentEntity = PostComment.builder()
+			.comment(comment)
+			.postInteractionId(postId)
+			.build();
+
+		var commentOnBlog = postCommentRepo.save(commentEntity);
+		return BlogComment.from(commentOnBlog);
 	}
 }

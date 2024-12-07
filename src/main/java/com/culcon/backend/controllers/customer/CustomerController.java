@@ -164,4 +164,14 @@ public class CustomerController {
 	) {
 		return ResponseEntity.ok(orderService.updateOrder(req, id, orderCreation));
 	}
+
+	@Operation(tags = "Blog")
+	@PostMapping("/blog/comment")
+	public ResponseEntity<Object> comment(
+		HttpServletRequest req,
+		@RequestParam String postId,
+		@RequestParam String comment
+	) {
+		return ResponseEntity.ok(userService.commentOnBlog(postId, comment, req));
+	}
 }

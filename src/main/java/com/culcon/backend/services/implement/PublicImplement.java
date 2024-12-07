@@ -1,17 +1,22 @@
 package com.culcon.backend.services.implement;
 
 import com.culcon.backend.dtos.ProductDTO;
+import com.culcon.backend.dtos.blog.BlogComment;
+import com.culcon.backend.dtos.blog.BlogItemInList;
+import com.culcon.backend.models.docs.Blog;
 import com.culcon.backend.models.docs.ProductDoc;
 import com.culcon.backend.models.user.Product;
 import com.culcon.backend.models.user.ProductType;
+import com.culcon.backend.repositories.docs.BlogDocRepo;
 import com.culcon.backend.repositories.docs.MealKitDocRepo;
 import com.culcon.backend.repositories.docs.ProductDocRepo;
-import com.culcon.backend.repositories.user.ProductPriceRepo;
+import com.culcon.backend.repositories.user.PostCommentRepo;
 import com.culcon.backend.repositories.user.ProductRepo;
 import com.culcon.backend.services.PublicService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -22,7 +27,8 @@ public class PublicImplement implements PublicService {
 	private final ProductDocRepo productDocRepo;
 	private final ProductRepo productRepo;
 	private final MealKitDocRepo mealKitDocRepo;
-	private final ProductPriceRepo productPriceRepo;
+	private final BlogDocRepo blogDocRepo;
+	private final PostCommentRepo postCommentRepo;
 
 	@Override
 	public ProductDTO fetchProduct(String id) {
@@ -38,6 +44,46 @@ public class PublicImplement implements PublicService {
 	@Override
 	public List<Product> fetchListOfProducts() {
 		return productRepo.findAll();
+	}
+
+	@Override
+	public List<Product> searchProduct(String keyword, ProductType type) {
+		if (type == null)
+			return productRepo.findAllByProductNameContainingIgnoreCase(keyword);
+		else
+			return productRepo.findAllByProductNameContainingIgnoreCaseAndProductTypes(keyword, type);
+	}
+
+	@Override
+	public List<BlogItemInList> fetchListOfBlog() {
+		return blogDocRepo.findAll().stream().map(BlogItemInList::from).toList();
+	}
+
+	@Override
+	public List<BlogItemInList> searchBlogByTitle(String title, HashSet<String> tags) {
+		var blogs = blogDocRepo.findAllByTitleContainingIgnoreCase(title);
+
+		if (!tags.isEmpty()) {
+			blogs = blogs.stream().filter(
+				blog -> blog.getTags().stream().anyMatch(tags::contains)
+			).toList();
+		}
+
+		return blogs.stream().map(BlogItemInList::from).toList();
+	}
+
+	@Override
+	public List<BlogComment> fetchBlogComment(String id) {
+		return postCommentRepo
+			.findAllByPostInteractionId_PostId(id).stream()
+			.map(BlogComment::from).toList();
+	}
+
+	@Override
+	public Blog fetchBlogDetail(String id) {
+		return blogDocRepo.findById(id).orElseThrow(
+			() -> new NoSuchElementException("Blog not found")
+		);
 	}
 
 	private ProductDoc getDocs(Product product) {
