@@ -12,7 +12,7 @@ import lombok.*;
 @Embeddable
 public class OrderHistoryItem {
 	@ManyToOne
-	private ProductPriceHistory productId;
+	private ProductPriceHistory orderId;
 
 	private Integer quantity;
 }
