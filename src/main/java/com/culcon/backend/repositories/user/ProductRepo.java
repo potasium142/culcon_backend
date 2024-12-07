@@ -13,4 +13,8 @@ public interface ProductRepo extends JpaRepository<Product, String> {
 
 	List<Product> findAllByProductStatus(ProductStatus productStatus);
 
+	List<Product> findAllByProductNameContainingIgnoreCaseAndProductTypes(String name, ProductType productType);
+
+	List<Product> findAllByProductNameContainingIgnoreCase(String name);
+
 }

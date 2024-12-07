@@ -7,12 +7,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Map;
+import java.util.Set;
+
 @Getter
 @Setter
 @Data
 @Builder
 @Document(collection = "Blog")
-public class Blog {
+public class BlogDoc {
 	@Id
 	String id;
 
@@ -21,4 +24,12 @@ public class Blog {
 	String description;
 
 	String markdownText;
+
+	Map<String, String> infos;
+
+	Set<String> tags;
+
+	Set<String> relatedProduct;
+
+	String imageUrl;
 }

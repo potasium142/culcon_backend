@@ -2,7 +2,7 @@ package com.culcon.backend.controllers;
 
 
 import com.cloudinary.Cloudinary;
-import com.culcon.backend.models.docs.Blog;
+import com.culcon.backend.models.docs.BlogDoc;
 import com.culcon.backend.models.docs.MealKitDoc;
 import com.culcon.backend.models.docs.ProductDoc;
 import com.culcon.backend.models.user.*;
@@ -82,10 +82,10 @@ public class DebugController {
 	}
 
 	@PostMapping("/docs/blog/create")
-	public Blog createBlog(
-		@RequestBody Blog blog
+	public BlogDoc createBlog(
+		@RequestBody BlogDoc blogDoc
 	) {
-		return blogRepo.save(blog);
+		return blogRepo.save(blogDoc);
 	}
 
 	@PostMapping("/docs/product/create")

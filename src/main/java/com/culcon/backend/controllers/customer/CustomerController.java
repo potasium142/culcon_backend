@@ -164,4 +164,33 @@ public class CustomerController {
 	) {
 		return ResponseEntity.ok(orderService.updateOrder(req, id, orderCreation));
 	}
+
+	@Operation(tags = "Blog")
+	@PostMapping("/blog/comment")
+	public ResponseEntity<Object> comment(
+		HttpServletRequest req,
+		@RequestParam String postId,
+		@RequestParam String comment
+	) {
+		return ResponseEntity.ok(userService.commentOnBlog(postId, comment, req));
+	}
+
+
+	@Operation(tags = "Blog")
+	@PutMapping("/blog/bookmark")
+	public ResponseEntity<Object> bookmark(
+		HttpServletRequest req,
+		@RequestParam Boolean bookmark,
+		@RequestParam String blogId
+	) {
+		return ResponseEntity.ok(userService.bookmarkBlog(blogId, req, bookmark));
+	}
+
+	@Operation(tags = "Blog")
+	@GetMapping("/fetch/bookmarked-blog")
+	public ResponseEntity<Object> getBookmarkedBlogs(
+		HttpServletRequest req
+	) {
+		return ResponseEntity.ok(userService.getBookmarkedBlog(req));
+	}
 }
