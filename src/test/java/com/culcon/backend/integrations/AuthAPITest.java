@@ -416,7 +416,7 @@ public class AuthAPITest {
 	}
 	@Test
 	@Order(2)
-	@Rollback(value = true) // Đảm bảo dọn dẹp dữ liệu sau bài kiểm tra
+	@Rollback(value = true)
 	void AuthAPI_Register_EmailAlreadyExists() throws Exception {
 		// Tạo tài khoản có email đã tồn tại trong cơ sở dữ liệu
 		Account existingAccount = new Account();
@@ -495,20 +495,10 @@ public class AuthAPITest {
 	@Order(4)
 	@Rollback(value = false)
 	void AuthAPI_EditProfile_Success() throws Exception {
-		Account existingAccount = new Account();
-		existingAccount.setEmail("example@email.com");
-		existingAccount.setPassword("user01");
-		existingAccount.setUsername("user01");
-		existingAccount.setPhone("0123456789");
-		existingAccount.setAddress("Sussy town");
-		existingAccount.setProfileDescription("le sus");
-		userRepository.save(existingAccount);
-
-
 		var result = mockMvc
 				.perform(
-						post("/api/auth/profile/edit")
-								.header("Authorization", "Bearer " + jwtToken) // Sử dụng token hợp lệ
+						post("/api/customer/edit/profile")
+								.header("Authorization",jwtToken) // Sử dụng token hợp lệ
 								.contentType(MediaType.APPLICATION_JSON)
 								.content(testJson.getTestCase("edit_profile").get("input").toString())
 				)
@@ -528,51 +518,11 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = false)
-	void AuthAPI_EditProfile_InvalidUsername() throws Exception {
-		Account existingAccount = new Account();
-		existingAccount.setEmail("example@email.com");
-		existingAccount.setPassword("user01");
-		existingAccount.setUsername("user01");
-		existingAccount.setPhone("0123456789");
-		existingAccount.setAddress("Sussy town");
-		existingAccount.setProfileDescription("le sus");
-		userRepository.save(existingAccount);
-
-
-		var result = mockMvc
-				.perform(
-						post("/api/auth/profile/edit")
-								.header("Authorization", "Bearer " + jwtToken) // Sử dụng token hợp lệ
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(testJson.getTestCase("edit_profile").get("input").toString())
-				)
-				.andExpect(status().isBadRequest())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-
-		// Kiểm tra nội dung phản hồi
-		var jsonResult = new JSONObject(result);
-		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
-	}
-	@Test
-	@Order(4)
-	@Rollback(value = false)
 	void AuthAPI_EditProfile_InvalidLessPhoneNumber() throws Exception {
-		Account existingAccount = new Account();
-		existingAccount.setEmail("example@email.com");
-		existingAccount.setPassword("user01");
-		existingAccount.setUsername("user01");
-		existingAccount.setPhone("0123456789");
-		existingAccount.setAddress("Sussy town");
-		existingAccount.setProfileDescription("le sus");
-		userRepository.save(existingAccount);
-
-
 		var result = mockMvc
 				.perform(
-						post("/api/auth/profile/edit")
-								.header("Authorization", "Bearer " + jwtToken) // Sử dụng token hợp lệ
+						post("/api/customer/edit/profile")
+								.header("Authorization",jwtToken) // Sử dụng token hợp lệ
 								.contentType(MediaType.APPLICATION_JSON)
 								.content(testJson.getTestCase("edit_profileInvalidLessPhoneNumber").get("input").toString())
 				)
@@ -589,22 +539,12 @@ public class AuthAPITest {
 	@Order(4)
 	@Rollback(value = false)
 	void AuthAPI_EditProfile_InvalidMorePhoneNumber() throws Exception {
-		Account existingAccount = new Account();
-		existingAccount.setEmail("example@email.com");
-		existingAccount.setPassword("user01");
-		existingAccount.setUsername("user01");
-		existingAccount.setPhone("0123456789");
-		existingAccount.setAddress("Sussy town");
-		existingAccount.setProfileDescription("le sus");
-		userRepository.save(existingAccount);
-
-
 		var result = mockMvc
 				.perform(
-						post("/api/auth/profile/edit")
-								.header("Authorization", "Bearer " + jwtToken) // Sử dụng token hợp lệ
+						post("/api/customer/edit/profile")
+								.header("Authorization",jwtToken) // Sử dụng token hợp lệ
 								.contentType(MediaType.APPLICATION_JSON)
-								.content(testJson.getTestCase("edit_profile").get("input").toString())
+								.content(testJson.getTestCase("edit_profileInvalidMorePhoneNumber").get("input").toString())
 				)
 				.andExpect(status().isBadRequest())
 				.andReturn()
@@ -619,20 +559,10 @@ public class AuthAPITest {
 	@Order(4)
 	@Rollback(value = false)
 	void AuthAPI_EditProfile_InvalidEmail() throws Exception {
-		Account existingAccount = new Account();
-		existingAccount.setEmail("example@email.com");
-		existingAccount.setPassword("user01");
-		existingAccount.setUsername("user01");
-		existingAccount.setPhone("0123456789");
-		existingAccount.setAddress("Sussy town");
-		existingAccount.setProfileDescription("le sus");
-		userRepository.save(existingAccount);
-
-
 		var result = mockMvc
 				.perform(
-						post("/api/auth/profile/edit")
-								.header("Authorization", "Bearer " + jwtToken) // Sử dụng token hợp lệ
+						post("/api/customer/edit/profile")
+								.header("Authorization",jwtToken) // Sử dụng token hợp lệ
 								.contentType(MediaType.APPLICATION_JSON)
 								.content(testJson.getTestCase("edit_profileInvalidEmail").get("input").toString())
 				)
@@ -649,20 +579,10 @@ public class AuthAPITest {
 	@Order(4)
 	@Rollback(value = false)
 	void AuthAPI_EditProfile_BlankUsername() throws Exception {
-		Account existingAccount = new Account();
-		existingAccount.setEmail("example@email.com");
-		existingAccount.setPassword("user01");
-		existingAccount.setUsername("user01");
-		existingAccount.setPhone("0123456789");
-		existingAccount.setAddress("Sussy town");
-		existingAccount.setProfileDescription("le sus");
-		userRepository.save(existingAccount);
-
-
 		var result = mockMvc
 				.perform(
-						post("/api/auth/profile/edit")
-								.header("Authorization", "Bearer " + jwtToken) // Sử dụng token hợp lệ
+						post("/api/customer/edit/profile")
+								.header("Authorization",jwtToken) // Sử dụng token hợp lệ
 								.contentType(MediaType.APPLICATION_JSON)
 								.content(testJson.getTestCase("edit_profileBlankUsername").get("input").toString())
 				)
@@ -679,20 +599,10 @@ public class AuthAPITest {
 	@Order(4)
 	@Rollback(value = false)
 	void AuthAPI_EditProfile_BlankEmail() throws Exception {
-		Account existingAccount = new Account();
-		existingAccount.setEmail("example@email.com");
-		existingAccount.setPassword("user01");
-		existingAccount.setUsername("user01");
-		existingAccount.setPhone("0123456789");
-		existingAccount.setAddress("Sussy town");
-		existingAccount.setProfileDescription("le sus");
-		userRepository.save(existingAccount);
-
-
 		var result = mockMvc
 				.perform(
-						post("/api/auth/profile/edit")
-								.header("Authorization", "Bearer " + jwtToken) // Sử dụng token hợp lệ
+						post("/api/customer/edit/profile")
+								.header("Authorization",jwtToken) // Sử dụng token hợp lệ
 								.contentType(MediaType.APPLICATION_JSON)
 								.content(testJson.getTestCase("edit_profileBlankEmail").get("input").toString())
 				)
@@ -709,20 +619,11 @@ public class AuthAPITest {
 	@Order(4)
 	@Rollback(value = false)
 	void AuthAPI_EditProfile_BlankPhone() throws Exception {
-		Account existingAccount = new Account();
-		existingAccount.setEmail("example@email.com");
-		existingAccount.setPassword("user01");
-		existingAccount.setUsername("user01");
-		existingAccount.setPhone("0123456789");
-		existingAccount.setAddress("Sussy town");
-		existingAccount.setProfileDescription("le sus");
-		userRepository.save(existingAccount);
-
 
 		var result = mockMvc
 				.perform(
-						post("/api/auth/profile/edit")
-								.header("Authorization", "Bearer " + jwtToken) // Sử dụng token hợp lệ
+						post("/api/customer/edit/profile")
+								.header("Authorization",jwtToken) // Sử dụng token hợp lệ
 								.contentType(MediaType.APPLICATION_JSON)
 								.content(testJson.getTestCase("edit_profileBlankPhone").get("input").toString())
 				)
@@ -730,7 +631,6 @@ public class AuthAPITest {
 				.andReturn()
 				.getResponse()
 				.getContentAsString();
-
 		// Kiểm tra nội dung phản hồi
 		var jsonResult = new JSONObject(result);
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));

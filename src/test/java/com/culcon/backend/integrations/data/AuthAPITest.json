@@ -149,7 +149,6 @@
   "edit_profile": {
     "input": {
       "email": "example@email.com",
-      "password": "user01",
       "username": "user01",
       "phone": "0123456780",
       "address": "lavander town",
@@ -158,9 +157,8 @@
     "output": {
       "email": "example@email.com",
       "username": "user01",
-      "role": "CUSTOMER",
       "status": "NORMAL",
-      "address": "69, Sussy town",
+      "address": "lavander town",
       "phone": "0123456780",
       "profilePictureUri": "defaultProfile",
       "profileDescription": "lavander sus"
@@ -212,11 +210,20 @@
       "description": "lavander sus"
     }
   },
-  "edit_profileBlankEmail": {
+  "edit_profileBlankPhone": {
     "input": {
       "email": "example@email.com",
       "username": "user01",
       "phone": "",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileBlankEmail": {
+    "input": {
+      "email": "",
+      "username": "user01",
+      "phone": "0123456789",
       "address": "lavander town",
       "description": "lavander sus"
     }
