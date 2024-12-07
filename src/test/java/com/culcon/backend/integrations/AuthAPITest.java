@@ -570,8 +570,6 @@ public class AuthAPITest {
 				.andReturn()
 				.getResponse()
 				.getContentAsString();
-
-		// Kiểm tra nội dung phản hồi
 		var jsonResult = new JSONObject(result);
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
@@ -635,5 +633,103 @@ public class AuthAPITest {
 		var jsonResult = new JSONObject(result);
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
+	@Test
+	@Order(4)
+	@Rollback(value = true)
+	void AuthAPI_EditPassword_Success() throws Exception {
 
+		var result = mockMvc
+				.perform(
+						post("/api/customer/edit/password")
+								.header("Authorization",jwtToken) // Sử dụng token hợp lệ
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(testJson.getTestCase("editPassword").get("input").toString())
+				)
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		// Kiểm tra nội dung phản hồi
+		var jsonResult = new JSONObject(result);
+		var localToken = jsonResult.getString("accessToken");
+
+
+		assertEquals(196, localToken.length());
+	}
+	@Test
+	@Order(4)
+	@Rollback(value = true)
+	void AuthAPI_EditPassword_WrongOldPassword() throws Exception {
+
+		var result = mockMvc
+				.perform(
+						post("/api/customer/edit/password")
+								.header("Authorization",jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(testJson.getTestCase("editPassword_WrongOldPassword").get("input").toString())
+				)
+				.andExpect(status().isNotFound())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
+	}
+	@Test
+	@Order(4)
+	@Rollback(value = true)
+	void AuthAPI_EditPassword_BlankOldPassword() throws Exception {
+
+		var result = mockMvc
+				.perform(
+						post("/api/customer/edit/password")
+								.header("Authorization",jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(testJson.getTestCase("editPassword_BlankOldPassword").get("input").toString())
+				)
+				.andExpect(status().isBadRequest())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
+	}
+	@Test
+	@Order(4)
+	@Rollback(value = true)
+	void AuthAPI_EditPassword_BlankNewPassword() throws Exception {
+
+		var result = mockMvc
+				.perform(
+						post("/api/customer/edit/password")
+								.header("Authorization",jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(testJson.getTestCase("editPassword_BlankNewPassword").get("input").toString())
+				)
+				.andExpect(status().isBadRequest())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
+	}
+	@Test
+	@Order(4)
+	@Rollback(value = true)
+	void AuthAPI_EditPassword_InvalidNewPassword() throws Exception {
+
+		var result = mockMvc
+				.perform(
+						post("/api/customer/edit/password")
+								.header("Authorization",jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(testJson.getTestCase("editPassword_InvalidNewPassword").get("input").toString())
+				)
+				.andExpect(status().isBadRequest())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
+	}
 }

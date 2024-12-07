@@ -227,5 +227,35 @@
       "address": "lavander town",
       "description": "lavander sus"
     }
+  },
+  "editPassword": {
+    "input": {
+      "oldPassword": "admin",
+      "password": "123456"
+    }
+  },
+  "editPassword_WrongOldPassword": {
+    "input": {
+      "oldPassword": "admi",
+      "password": "123456"
+    }
+  },
+  "editPassword_BlankOldPassword": {
+    "input": {
+      "oldPassword": "",
+      "password": "123456"
+    }
+  },
+  "editPassword_BlankNewPassword": {
+    "input": {
+      "oldPassword": "admi",
+      "password": ""
+    }
+  },
+  "editPassword_InvalidNewPassword": {
+    "input": {
+      "oldPassword": "admin",
+      "password": "123"
+    }
   }
 }
