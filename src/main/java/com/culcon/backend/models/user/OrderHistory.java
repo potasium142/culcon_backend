@@ -5,7 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -25,15 +25,18 @@ public class OrderHistory {
 
 	@Column(name = "order_date")
 	@JdbcTypeCode(SqlTypes.LOCAL_DATE_TIME)
-	private LocalTime date;
+	@Builder.Default
+	private LocalDateTime date = LocalDateTime.now();
 
 	@Column(name = "order_items")
 	@ElementCollection(fetch = FetchType.LAZY)
+	@JdbcTypeCode(SqlTypes.ARRAY)
 	private List<OrderHistoryItem> items;
 
 	@Column(name = "order_status")
 	@Enumerated(EnumType.ORDINAL)
-	private OrderStatus orderStatus;
+	@Builder.Default
+	private OrderStatus orderStatus = OrderStatus.ON_CONFIRM;
 
 	@Column(name = "total_price")
 	private Float totalPrice;
@@ -44,4 +47,17 @@ public class OrderHistory {
 
 	@Column(name = "delivery_address")
 	private String deliveryAddress;
+
+	@Column(name = "note")
+	private String note;
+
+	@Column(name = "payment_method")
+	@Enumerated(EnumType.ORDINAL)
+	@Builder.Default
+	private PaymentMethod paymentMethod = PaymentMethod.BANKING;
+
+	@Column(name = "payment_status")
+	@Enumerated(EnumType.ORDINAL)
+	@Builder.Default
+	private PaymentStatus paymentStatus = PaymentStatus.PENDING;
 }
