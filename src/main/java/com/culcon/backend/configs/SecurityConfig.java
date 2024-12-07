@@ -1,11 +1,9 @@
 package com.culcon.backend.configs;
 
 import com.culcon.backend.exceptions.CustomAccessDeniedHandler;
-import com.culcon.backend.models.user.Account;
-import com.culcon.backend.services.UserService;
-import com.culcon.backend.services.authenticate.JwtService;
 import com.culcon.backend.services.authenticate.UserAuthService;
 import com.culcon.backend.services.helper.UserHelper;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +23,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.*;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -34,10 +35,10 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.security.auth.login.AccountNotFoundException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
-import java.io.PrintWriter;
-import java.util.Optional;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -47,10 +48,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	private final CustomAccessDeniedHandler customAccessDeniedHandler;
 	private final UserAuthService userAuthService;
-
+	private final ObjectMapper objectMapper;
 	private final LogoutHandler logoutHandler;
-
-	private final JwtService jwtService;
 	private final UserHelper userHelper;
 
 	@Bean
@@ -78,7 +77,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 						"/api/public/**",
 						"/h2-console/**",
 						"/v3/api-docs/**",
-							"/oauth2/**"
+						"/oauth2/**"
 					)
 					.permitAll()
 					.requestMatchers("/api/customer/**")
@@ -95,9 +94,9 @@ public class SecurityConfig implements WebMvcConfigurer {
 			.authenticationProvider(authenticationProvider())
 			.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
 			.oauth2Login(oauth2 -> oauth2
-					.loginPage("/oauth2/authorization/google")
-					.successHandler(authenticationSuccessHandler())
-					.failureHandler(authenticationFailureHandler()))
+				.loginPage("/oauth2/authorization/google")
+				.successHandler(authenticationSuccessHandler())
+				.failureHandler(authenticationFailureHandler()))
 			.logout(
 				logout -> logout
 					.logoutUrl("/api/v1/auth/logout")
@@ -133,9 +132,11 @@ public class SecurityConfig implements WebMvcConfigurer {
 			.allowedOrigins("*")
 			.allowedOrigins("/**")
 			.allowedOrigins("**")
+			.allowedOrigins("/oauth2/**")
 			.allowedOrigins("http://localhost:8080")
 			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 			.allowedHeaders("*")
+			.allowedHeaders("/oauth2/**")
 			.allowedHeaders("/**")
 			.allowedHeaders("**")
 			.exposedHeaders("X-Get-Header");
@@ -156,6 +157,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 		source.registerCorsConfiguration("/**", configuration);
 		source.registerCorsConfiguration("*", configuration);
 		source.registerCorsConfiguration("/api/**", configuration);
+		source.registerCorsConfiguration("/oauth2/**", configuration);
 		return source;
 	}
 
@@ -165,26 +167,19 @@ public class SecurityConfig implements WebMvcConfigurer {
 		return (request, response, authentication) -> {
 			if (authentication instanceof OAuth2AuthenticationToken oauth2Token) {
 				String email = oauth2Token.getPrincipal().getAttribute("email");
-				String username = oauth2Token.getPrincipal().getAttribute("name");
-//				var token = jwtService.generateToken()
-
 
 				try {
-							Account account = userHelper.getAccountByEmail(email.trim());
+					var token = userHelper.loginByEmail(email.trim());
 
+					response.setCharacterEncoding("UTF-8");
+					response.setContentType("application/json");
 
+					PrintWriter out = response.getWriter();
+					out.print(objectMapper.writeValueAsString(
+						Map.of("token", token)
+					));
 
-							response.setCharacterEncoding("UTF-8");
-
-							response.setContentType("application/json");
-
-							PrintWriter out = response.getWriter();
-							out.print("{\"message\": \"Authentication successful for user\", \"" +
-											"email\": \"" + email + "\"}"
-
-//								"token\": \"" + token + "\"}"
-							);
-							out.flush();
+					out.flush();
 
 				} catch (AccountNotFoundException e) {
 					response.setCharacterEncoding("UTF-8");
@@ -193,8 +188,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 					PrintWriter out = response.getWriter();
 					out.print("{\"message\": \"There's no account linked to the service, please create an account with the email\"," +
-							" \"email\": \"" + email + "\"," +
-							" \"username\": \"" + username + "\"}");
+						" \"email\": \"" + email + "\"" + "}");
 					out.flush();
 				}
 
