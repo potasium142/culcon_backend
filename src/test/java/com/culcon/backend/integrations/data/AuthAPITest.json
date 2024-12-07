@@ -194,7 +194,6 @@
   "edit_profileInvalidEmail": {
     "input": {
       "email": "example",
-      "password": "user01",
       "username": "user01",
       "phone": "0123456780",
       "address": "lavander town",
