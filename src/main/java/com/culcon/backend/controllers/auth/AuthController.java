@@ -26,6 +26,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -118,6 +120,30 @@ public class AuthController {
 	public RedirectView googleSignIn() {
 		return new RedirectView("/oauth2/authorization/google");
 	}
+
+
+	@Operation(
+			tags = {"Authentication"},
+			summary = "Signin with google completed")
+	@GetMapping("/signin/google/done")
+	public ResponseEntity<Object> googleSignInDone(@RequestParam(required = false) String token) {
+		// Check if the token is missing
+		if (token == null || token.isEmpty()) {
+			// Return a JSON response with error message
+			Map<String, String> errorResponse = new HashMap<>();
+			errorResponse.put("error", "There's no account linked to the service, please create an account with the email.");
+			return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+		}
+
+		// If token is present, process it and return a success message
+		Map<String, String> successResponse = new HashMap<>();
+		successResponse.put("message", "Successfully signed in with Google.");
+		successResponse.put("token", token);
+
+		return new ResponseEntity<>(successResponse, HttpStatus.OK);
+	}
+
+
 
 
 	@Operation(
