@@ -1,6 +1,6 @@
-package com.culcon.backend.mongodb.docs.docs;
+package com.culcon.backend.mongodb.repository;
 
-import com.culcon.backend.mongodb.docs.ProductDoc;
+import com.culcon.backend.mongodb.model.ProductDoc;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ProductDocRepo extends MongoRepository<ProductDoc, String> {

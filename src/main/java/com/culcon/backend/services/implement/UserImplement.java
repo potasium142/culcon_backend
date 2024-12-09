@@ -9,11 +9,11 @@ import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.dtos.blog.BlogItemInList;
 import com.culcon.backend.exceptions.custom.OTPException;
-import com.culcon.backend.mongodb.docs.BlogDoc;
 import com.culcon.backend.models.Account;
 import com.culcon.backend.models.PostComment;
 import com.culcon.backend.models.PostInteractionId;
-import com.culcon.backend.mongodb.docs.docs.BlogDocRepo;
+import com.culcon.backend.mongodb.model.BlogDoc;
+import com.culcon.backend.mongodb.repository.BlogDocRepo;
 import com.culcon.backend.repositories.AccountOTPRepo;
 import com.culcon.backend.repositories.AccountRepo;
 import com.culcon.backend.repositories.PostCommentRepo;
@@ -83,7 +83,7 @@ public class UserImplement implements UserService {
 		var account = authService.getUserInformation(request);
 
 		var accountOTP = accountOTPRepo.findAccountOTPByOtpAndAccountIdAndEmail(otp, accountID, email)
-				.orElseThrow(() -> new OTPException("OTP not found"));
+			.orElseThrow(() -> new OTPException("OTP not found"));
 
 		var sqlTimestamp = Timestamp.valueOf(LocalDateTime.now());
 		var isTokenExpire = accountOTP.getOtpExpiration().before(sqlTimestamp);
@@ -93,7 +93,6 @@ public class UserImplement implements UserService {
 		}
 
 
-
 		account.setEmail(email.trim());
 
 		accountRepo.save(account);
@@ -101,7 +100,6 @@ public class UserImplement implements UserService {
 		accountOTPRepo.delete(accountOTP);
 
 	}
-
 
 
 	@Override

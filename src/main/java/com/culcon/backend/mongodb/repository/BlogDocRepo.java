@@ -1,6 +1,6 @@
-package com.culcon.backend.mongodb.docs.docs;
+package com.culcon.backend.mongodb.repository;
 
-import com.culcon.backend.mongodb.docs.BlogDoc;
+import com.culcon.backend.mongodb.model.BlogDoc;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;

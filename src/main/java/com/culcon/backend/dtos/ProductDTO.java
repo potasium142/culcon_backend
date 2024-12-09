@@ -1,9 +1,9 @@
 package com.culcon.backend.dtos;
 
-import com.culcon.backend.mongodb.docs.ProductDoc;
 import com.culcon.backend.models.Product;
 import com.culcon.backend.models.ProductStatus;
 import com.culcon.backend.models.ProductType;
+import com.culcon.backend.mongodb.model.ProductDoc;
 import lombok.Builder;
 
 import java.util.HashMap;

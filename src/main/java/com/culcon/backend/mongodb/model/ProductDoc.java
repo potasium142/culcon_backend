@@ -1,4 +1,4 @@
-package com.culcon.backend.mongodb.docs;
+package com.culcon.backend.mongodb.model;
 
 import jakarta.persistence.Id;
 import lombok.Data;

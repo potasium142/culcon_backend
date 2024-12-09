@@ -3,10 +3,10 @@ package com.culcon.backend.controllers;
 
 import com.cloudinary.Cloudinary;
 import com.culcon.backend.models.*;
-import com.culcon.backend.mongodb.docs.MealKitDoc;
-import com.culcon.backend.mongodb.docs.ProductDoc;
-import com.culcon.backend.mongodb.docs.docs.MealKitDocRepo;
-import com.culcon.backend.mongodb.docs.docs.ProductDocRepo;
+import com.culcon.backend.mongodb.model.MealKitDoc;
+import com.culcon.backend.mongodb.model.ProductDoc;
+import com.culcon.backend.mongodb.repository.MealKitDocRepo;
+import com.culcon.backend.mongodb.repository.ProductDocRepo;
 import com.culcon.backend.repositories.CouponRepo;
 import com.culcon.backend.repositories.ProductPriceRepo;
 import com.culcon.backend.repositories.ProductRepo;
