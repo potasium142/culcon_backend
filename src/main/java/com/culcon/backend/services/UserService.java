@@ -24,6 +24,8 @@ public interface UserService {
 
 	Account updateCustomer(CustomerInfoUpdateRequest newData, HttpServletRequest request);
 
+	void updateCustomerEmail(String accountID,String email, String otp, HttpServletRequest request);
+
 	AuthenticationResponse updateCustomerPassword(CustomerPasswordRequest newData, HttpServletRequest request);
 
 	void updateCustomerPasswordOTP(String otp, String id, String newPassword);

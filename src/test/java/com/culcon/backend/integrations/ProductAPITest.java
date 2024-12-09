@@ -46,7 +46,7 @@ public class ProductAPITest {
 	void setUp() throws Exception {
 
 		this.testJson =
-			new JsonReader(this.pwd + "AuthAPITest.json");
+			new JsonReader(this.pwd + "ProductAPITest.json");
 		var result = mockMvc.
 			perform(
 				post("/api/auth/signin")
