@@ -180,7 +180,10 @@ public class SecurityConfig implements WebMvcConfigurer {
 //					));
 //
 //					out.flush();
-					String redirectUrl = "/api/auth/signin/google/done?token=" + token;
+
+					System.out.println(token);
+					String redirectUrl = "http://localhost:3000/frontend/login/google?token=" + token;
+
 
 					response.sendRedirect(redirectUrl);
 
@@ -193,7 +196,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 //					out.print("{\"message\": \"There's no account linked to the service, please create an account with the email\"," +
 //						" \"email\": \"" + email + "\"" + "}");
 //					out.flush();
-					String redirectUrl = "/api/auth/signin/google/done";
+
+					String redirectUrl = "http://localhost:3000/frontend/login/google";
 
 					response.sendRedirect(redirectUrl);
 				}

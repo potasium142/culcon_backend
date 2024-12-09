@@ -14,11 +14,6 @@ public record CustomerInfoUpdateRequest(
 		requiredMode = RequiredMode.REQUIRED)
 	String username,
 
-	@NotBlank
-	@Email
-	@Schema(example = "example@email.com",
-		requiredMode = RequiredMode.REQUIRED)
-	String email,
 
 	@NotBlank
 	@Schema(example = "0123456789",

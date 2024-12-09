@@ -70,7 +70,6 @@ public class UserImplement implements UserService {
 		HttpServletRequest request) {
 		var user = authService.getUserInformation(request);
 
-		user.setEmail(newUserData.email());
 		user.setUsername(newUserData.username());
 		user.setAddress(newUserData.address());
 		user.setPhone(newUserData.phone());
@@ -78,6 +77,31 @@ public class UserImplement implements UserService {
 
 		return userRepository.save(user);
 	}
+
+	@Override
+	public void updateCustomerEmail(String accountID, String email, String otp, HttpServletRequest request) {
+		var account = authService.getUserInformation(request);
+
+		var accountOTP = accountOTPRepo.findAccountOTPByOtpAndAccountIdAndEmail(otp, accountID, email)
+				.orElseThrow(() -> new OTPException("OTP not found"));
+
+		var sqlTimestamp = Timestamp.valueOf(LocalDateTime.now());
+		var isTokenExpire = accountOTP.getOtpExpiration().before(sqlTimestamp);
+
+		if (isTokenExpire) {
+			throw new OTPException("OTP expired");
+		}
+
+
+
+		account.setEmail(email.trim());
+
+		accountRepo.save(account);
+
+		accountOTPRepo.delete(accountOTP);
+
+	}
+
 
 
 	@Override

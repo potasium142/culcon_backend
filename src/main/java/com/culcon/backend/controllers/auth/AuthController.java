@@ -86,7 +86,7 @@ public class AuthController {
 	) throws MessagingException, UnsupportedEncodingException, AccountNotFoundException {
 		Account account = userService.getAccountByEmail(email);
 
-		var otp = otpService.generateOTP(account, 14, 7);
+		var otp = otpService.generateOTP(account, account.getEmail(), 14, 7);
 
 		otpService.sendOTPEmail(otp);
 
@@ -122,26 +122,7 @@ public class AuthController {
 	}
 
 
-	@Operation(
-			tags = {"Authentication"},
-			summary = "Signin with google completed")
-	@GetMapping("/signin/google/done")
-	public ResponseEntity<Object> googleSignInDone(@RequestParam(required = false) String token) {
-		// Check if the token is missing
-		if (token == null || token.isEmpty()) {
-			// Return a JSON response with error message
-			Map<String, String> errorResponse = new HashMap<>();
-			errorResponse.put("error", "There's no account linked to the service, please create an account with the email.");
-			return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-		}
 
-		// If token is present, process it and return a success message
-		Map<String, String> successResponse = new HashMap<>();
-		successResponse.put("message", "Successfully signed in with Google.");
-		successResponse.put("token", token);
-
-		return new ResponseEntity<>(successResponse, HttpStatus.OK);
-	}
 
 
 
