@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -26,8 +27,10 @@ public class Coupon {
 	private Float salePercent;
 
 	@Column(name = "usage_amount")
+	@Min(value = 0)
 	private Integer usageAmount;
 
 	@Column(name = "usage_left")
+	@Min(value = 0)
 	private Integer usageLeft;
 }

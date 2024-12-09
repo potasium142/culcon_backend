@@ -16,10 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 @Service
 @Transactional
@@ -53,19 +50,30 @@ public class OrderImplement implements OrderService {
 
 		var cart = account.getCart();
 
+		var runtimeExceptionPlusPlusTable = new HashMap<Object, Object>();
+
+		var
+
 		for (Map.Entry<String, Integer> entry : orderCreation.product().entrySet()) {
 
-			var prod = productPriceRepo.findFirstById_ProductIdOrderById_DateDesc(entry.getKey())
-				.orElseThrow(() -> new NoSuchElementException("Product not found"));
+			var prodPrice = productPriceRepo.findFirstById_ProductIdOrderById_DateDesc(entry.getKey());
 
-			cart.remove(prod.getId().getProduct());
 
-			totalPrice += prod.getPrice() * (1.0f - prod.getSalePercent() / 100.0f) * entry.getValue();
+			var prod = prodPrice.getId().getProduct();
+
+			if (prod.getAvailableQuantity() < entry.getValue()) {
+				throw new RuntimeException(
+					String.format("Product {%s} does not have enough stock", entry.getKey()));
+			}
+
+			cart.remove(prod);
+
+			totalPrice += prodPrice.getPrice() * (1.0f - prodPrice.getSalePercent() / 100.0f) * entry.getValue();
 
 			if (entry.getValue() > 0)
 				productList.add(
 					OrderHistoryItem.builder()
-						.productId(prod)
+						.productId(prodPrice)
 						.quantity(entry.getValue())
 						.build());
 		}
@@ -88,6 +96,8 @@ public class OrderImplement implements OrderService {
 			.note(orderCreation.note())
 			.paymentMethod(orderCreation.paymentMethod())
 			.deliveryAddress(orderCreation.deliveryAddress())
+			.receiver(orderCreation.receiver())
+			.phonenumber(orderCreation.phoneNumber())
 			.build();
 
 		order = orderHistoryRepo.save(order);
@@ -96,19 +106,19 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public List<OrderItemInList> getListOfOrder(HttpServletRequest req, OrderStatus status) {
+	public List<OrderInList> getListOfOrderByStatus(HttpServletRequest req, OrderStatus status) {
 		var account = authService.getUserInformation(req);
 
 		return orderHistoryRepo.findByUserAndOrderStatus(account, status)
-			.stream().map(OrderItemInList::from).toList();
+			.stream().map(OrderInList::from).toList();
 	}
 
 	@Override
-	public List<OrderItemInList> getListOfAllOrder(HttpServletRequest req) {
+	public List<OrderInList> getListOfAllOrder(HttpServletRequest req) {
 		var account = authService.getUserInformation(req);
 
 		return orderHistoryRepo.findByUser(account)
-			.stream().map(OrderItemInList::from).toList();
+			.stream().map(OrderInList::from).toList();
 	}
 
 	@Override
