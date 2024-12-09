@@ -4,7 +4,7 @@ package com.culcon.backend.controllers.customer;
 import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.dtos.order.OrderCreation;
-import com.culcon.backend.models.user.OrderStatus;
+import com.culcon.backend.models.OrderStatus;
 import com.culcon.backend.services.OrderService;
 import com.culcon.backend.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;

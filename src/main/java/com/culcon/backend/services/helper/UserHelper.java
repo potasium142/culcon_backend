@@ -1,7 +1,7 @@
 package com.culcon.backend.services.helper;
 
-import com.culcon.backend.models.user.Account;
-import com.culcon.backend.repositories.user.AccountRepo;
+import com.culcon.backend.models.Account;
+import com.culcon.backend.repositories.AccountRepo;
 import com.culcon.backend.services.authenticate.JwtService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

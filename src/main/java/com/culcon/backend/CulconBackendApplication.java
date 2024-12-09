@@ -1,7 +1,7 @@
 package com.culcon.backend;
 
-import com.culcon.backend.models.user.Account;
-import com.culcon.backend.repositories.user.AccountRepo;
+import com.culcon.backend.models.Account;
+import com.culcon.backend.repositories.AccountRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

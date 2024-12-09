@@ -1,8 +1,8 @@
 package com.culcon.backend.integrations;
 
 import com.culcon.backend.JsonReader;
-import com.culcon.backend.models.user.Account;
-import com.culcon.backend.repositories.user.AccountRepo;
+import com.culcon.backend.models.Account;
+import com.culcon.backend.repositories.AccountRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.transaction.Transactional;
@@ -43,17 +43,6 @@ public class AuthAPITest {
 
 	@BeforeAll
 	void setUp() throws Exception {
-
-		var admin = Account.builder()
-			.email("example@test")
-			// ADMIN
-			.password("$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq")
-			.phone("0969996669")
-			.username("test_account")
-			.build();
-
-		userRepository.save(admin);
-
 		this.testJson =
 			new JsonReader(this.pwd + "AuthAPITest.json");
 		var result = mockMvc.

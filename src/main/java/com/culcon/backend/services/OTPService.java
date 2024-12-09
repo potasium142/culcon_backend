@@ -1,7 +1,7 @@
 package com.culcon.backend.services;
 
-import com.culcon.backend.models.user.Account;
-import com.culcon.backend.models.user.AccountOTP;
+import com.culcon.backend.models.Account;
+import com.culcon.backend.models.AccountOTP;
 import jakarta.mail.MessagingException;
 
 import java.io.UnsupportedEncodingException;

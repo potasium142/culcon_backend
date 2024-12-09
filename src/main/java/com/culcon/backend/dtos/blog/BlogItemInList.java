@@ -1,6 +1,6 @@
 package com.culcon.backend.dtos.blog;
 
-import com.culcon.backend.models.docs.BlogDoc;
+import com.culcon.backend.mongodb.docs.BlogDoc;
 import lombok.Builder;
 
 import java.util.Set;

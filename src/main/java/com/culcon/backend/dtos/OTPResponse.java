@@ -1,6 +1,6 @@
 package com.culcon.backend.dtos;
 
-import com.culcon.backend.models.user.AccountOTP;
+import com.culcon.backend.models.AccountOTP;
 import lombok.Builder;
 
 import java.sql.Timestamp;

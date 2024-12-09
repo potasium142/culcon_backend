@@ -5,7 +5,7 @@ import com.culcon.backend.dtos.OTPResetPassword;
 import com.culcon.backend.dtos.OTPResponse;
 import com.culcon.backend.dtos.auth.AuthenticationRequest;
 import com.culcon.backend.dtos.auth.CustomerRegisterRequest;
-import com.culcon.backend.models.user.Account;
+import com.culcon.backend.models.Account;
 import com.culcon.backend.services.OTPService;
 import com.culcon.backend.services.UserService;
 import com.culcon.backend.services.authenticate.AuthService;

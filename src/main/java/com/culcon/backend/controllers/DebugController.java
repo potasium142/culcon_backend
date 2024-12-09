@@ -2,23 +2,17 @@ package com.culcon.backend.controllers;
 
 
 import com.cloudinary.Cloudinary;
-import com.culcon.backend.models.docs.BlogDoc;
-import com.culcon.backend.models.docs.MealKitDoc;
-import com.culcon.backend.models.docs.ProductDoc;
-import com.culcon.backend.models.user.*;
-import com.culcon.backend.repositories.docs.BlogDocRepo;
-import com.culcon.backend.repositories.docs.MealKitDocRepo;
-import com.culcon.backend.repositories.docs.ProductDocRepo;
-import com.culcon.backend.repositories.user.CouponRepo;
-import com.culcon.backend.repositories.user.ProductPriceRepo;
-import com.culcon.backend.repositories.user.ProductRepo;
+import com.culcon.backend.models.*;
+import com.culcon.backend.mongodb.docs.MealKitDoc;
+import com.culcon.backend.mongodb.docs.ProductDoc;
+import com.culcon.backend.mongodb.docs.docs.MealKitDocRepo;
+import com.culcon.backend.mongodb.docs.docs.ProductDocRepo;
+import com.culcon.backend.repositories.CouponRepo;
+import com.culcon.backend.repositories.ProductPriceRepo;
+import com.culcon.backend.repositories.ProductRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +25,6 @@ public class DebugController {
 	private final Cloudinary cloudinary;
 	private final ProductRepo productRepo;
 	private final CouponRepo couponRepo;
-	private final BlogDocRepo blogRepo;
 	private final ProductDocRepo productDocRepo;
 	private final MealKitDocRepo mealKitRepo;
 	private final ProductPriceRepo productPriceRepo;
@@ -67,40 +60,11 @@ public class DebugController {
 		return productPriceRepo.save(priceHistory);
 	}
 
-	@GetMapping("/record/product/price/get")
-	public ProductPriceHistory getProductPriceHistory(
-		@RequestParam String id
-	) {
-		return productPriceRepo.findFirstById_ProductIdOrderById_DateDesc(id).orElseThrow();
-	}
-
 	@PostMapping("/record/coupon/create")
 	public Coupon createCoupon(
 		@RequestBody Coupon coupon
 	) {
 		return couponRepo.save(coupon);
-	}
-
-	@PostMapping("/docs/blog/create")
-	public BlogDoc createBlog(
-		@RequestBody BlogDoc blogDoc
-	) {
-		return blogRepo.save(blogDoc);
-	}
-
-	@PostMapping("/docs/product/create")
-	public ProductDoc createProductDoc(
-		@RequestBody ProductDoc productDoc
-	) {
-		return productDocRepo.save(productDoc);
-	}
-
-
-	@PostMapping("/docs/mealkit/create")
-	public MealKitDoc createMealKitDoc(
-		@RequestBody MealKitDoc mealKitDoc
-	) {
-		return mealKitRepo.save(mealKitDoc);
 	}
 
 	@GetMapping("/docs/product/fetch")
@@ -118,22 +82,6 @@ public class DebugController {
 		cloudinary.api().deleteResourcesByPrefix("pfp", Map.of());
 	}
 
-	@PostMapping(value = "/cloudinary/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<?> uploadCloudinary(@RequestPart MultipartFile file) throws IOException {
-		var mapInfo = Map.of(
-			"asset_folder", "test_folder",
-			"display_name", file.getName(),
-			"public_id", file.getName(),
-			"tags", List.of("sussy wussy", "image?", "goddemn")
-		);
-		return ResponseEntity.ok(
-			cloudinary
-				.uploader()
-				.upload(file.getBytes(), mapInfo)
-
-
-		);
-	}
 
 	@GetMapping("/map")
 	public void mapMongoToLocal() {
