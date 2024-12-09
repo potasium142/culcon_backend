@@ -4,7 +4,7 @@ import com.culcon.backend.dtos.order.OrderCreation;
 import com.culcon.backend.dtos.order.OrderDetail;
 import com.culcon.backend.dtos.order.OrderItemInList;
 import com.culcon.backend.dtos.order.OrderSummary;
-import com.culcon.backend.models.user.OrderStatus;
+import com.culcon.backend.models.OrderStatus;
 import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;

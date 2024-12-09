@@ -1,6 +1,6 @@
 package com.culcon.backend.controllers.guest;
 
-import com.culcon.backend.models.user.ProductType;
+import com.culcon.backend.models.ProductType;
 import com.culcon.backend.services.PublicService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;

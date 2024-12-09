@@ -171,25 +171,35 @@ public class SecurityConfig implements WebMvcConfigurer {
 				try {
 					var token = userHelper.loginByEmail(email.trim());
 
-					response.setCharacterEncoding("UTF-8");
-					response.setContentType("application/json");
+//					response.setCharacterEncoding("UTF-8");
+//					response.setContentType("application/json");
+//
+//					PrintWriter out = response.getWriter();
+//					out.print(objectMapper.writeValueAsString(
+//						Map.of("token", token)
+//					));
+//
+//					out.flush();
 
-					PrintWriter out = response.getWriter();
-					out.print(objectMapper.writeValueAsString(
-						Map.of("token", token)
-					));
+					System.out.println(token);
+					String redirectUrl = "http://localhost:3000/frontend/login/google?token=" + token;
 
-					out.flush();
+
+					response.sendRedirect(redirectUrl);
 
 				} catch (AccountNotFoundException e) {
-					response.setCharacterEncoding("UTF-8");
+//					response.setCharacterEncoding("UTF-8");
+//
+//					response.setContentType("application/json");
+//
+//					PrintWriter out = response.getWriter();
+//					out.print("{\"message\": \"There's no account linked to the service, please create an account with the email\"," +
+//						" \"email\": \"" + email + "\"" + "}");
+//					out.flush();
 
-					response.setContentType("application/json");
+					String redirectUrl = "http://localhost:3000/frontend/login/google";
 
-					PrintWriter out = response.getWriter();
-					out.print("{\"message\": \"There's no account linked to the service, please create an account with the email\"," +
-						" \"email\": \"" + email + "\"" + "}");
-					out.flush();
+					response.sendRedirect(redirectUrl);
 				}
 
 

@@ -3,17 +3,19 @@ spring:
     import: optional:file:.env[.properties]
   datasource:
     user:
-      url: jdbc:h2:mem:culcon_user;DB_CLOSE_DELAY=-1
+      url: jdbc:h2:mem:culcon_user;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=TRUE
       username: ${DB_USERNAME}
       password: ${DB_PASSWORD}
     record:
       url: jdbc:h2:mem:culcon_record;DB_CLOSE_DELAY=-1
       username: ${DB_USERNAME}
       password: ${DB_PASSWORD}
+
   jpa:
     hibernate:
       ddl-auto: update
     generate-ddl: true
+    defer-datasource-initialization: true
   data:
     jpa:
       repositories:
@@ -30,6 +32,7 @@ spring:
   sql:
     init:
       mode: always
+      data-locations: classpath:account.sql
   h2:
     console:
       enabled: true

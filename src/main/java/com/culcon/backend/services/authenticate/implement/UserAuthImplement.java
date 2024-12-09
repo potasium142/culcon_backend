@@ -1,6 +1,6 @@
 package com.culcon.backend.services.authenticate.implement;
 
-import com.culcon.backend.repositories.user.AccountRepo;
+import com.culcon.backend.repositories.AccountRepo;
 import com.culcon.backend.services.authenticate.UserAuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;

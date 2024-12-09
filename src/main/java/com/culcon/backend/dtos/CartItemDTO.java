@@ -1,6 +1,6 @@
 package com.culcon.backend.dtos;
 
-import com.culcon.backend.models.user.Product;
+import com.culcon.backend.models.Product;
 import lombok.Builder;
 
 import java.util.Map;

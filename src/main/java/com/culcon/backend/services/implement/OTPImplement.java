@@ -1,8 +1,8 @@
 package com.culcon.backend.services.implement;
 
-import com.culcon.backend.models.user.Account;
-import com.culcon.backend.models.user.AccountOTP;
-import com.culcon.backend.repositories.user.AccountOTPRepo;
+import com.culcon.backend.models.Account;
+import com.culcon.backend.models.AccountOTP;
+import com.culcon.backend.repositories.AccountOTPRepo;
 import com.culcon.backend.services.OTPService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;
@@ -34,7 +34,7 @@ public class OTPImplement implements OTPService {
 
 
 	@Override
-	public AccountOTP generateOTP(Account account,
+	public AccountOTP generateOTP(Account account, String email,
 	                              int otpLength,
 	                              int expireMinutes) {
 		String OTP = RandomString.make(otpLength);
@@ -42,6 +42,7 @@ public class OTPImplement implements OTPService {
 		var accountOTP = accountOTPRepo.findByAccount(account)
 			.orElse(AccountOTP.builder()
 				.account(account)
+					.accountId(account.getId())
 				.build());
 
 		accountOTP.setOtp(OTP);
@@ -50,6 +51,8 @@ public class OTPImplement implements OTPService {
 		Timestamp sqlTimestamp = Timestamp.valueOf(currentDateTime);
 
 		accountOTP.setOtpExpiration(sqlTimestamp);
+
+		accountOTP.setEmail(email);
 
 		return accountOTPRepo.save(accountOTP);
 	}
@@ -79,4 +82,55 @@ public class OTPImplement implements OTPService {
 		helper.setText(content, true);
 		mailSender.send(message);
 	}
+
+	@Override
+	public void sendConfirmToNewEmail(AccountOTP accountOTP)
+			throws UnsupportedEncodingException, MessagingException {
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+		helper.setFrom(new InternetAddress(emailAddress, "Culinary Connect"));
+		Account account = accountOTP.getAccount();
+
+		helper.setTo(accountOTP.getEmail());
+
+		String subject = "Please Confirm Your Email Address";
+
+		String content = "<p>Hello " + account.getUsername() + ",</p>"
+				+ "<p>Thank you for registering at our site. Please confirm your email address:</p>"
+				+ "<p>OTP code: "+ accountOTP.getOtp()+ "</p>"
+				+ "<p>If you did not register, please ignore this email.</p>"
+				+ "<br>"
+				+ "<p>Thank you!</p>";
+
+		helper.setSubject(subject);
+
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+
+	@Override
+	public void sendNoticeToOldEmail(AccountOTP accountOTP)
+			throws UnsupportedEncodingException, MessagingException {
+		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessageHelper helper = new MimeMessageHelper(message);
+		helper.setFrom(new InternetAddress(emailAddress, "Culinary Connect"));
+		Account account = accountOTP.getAccount();
+
+		helper.setTo(account.getEmail());
+
+		String subject = "Email Address Change Request";
+
+		String content = "<p>Hello " + account.getUsername() + ",</p>"
+				+ "<p>We received a request to change the email address associated with your account. If you did not make this request, please ignore this email or contact our support team.</p>"
+				+ "<p>If you did initiate this request,  please ignore this email. Else, ask for our customer support for help</p>"
+				+ "<br>"
+				+ "<p>Thank you!</p>";
+
+
+		helper.setSubject(subject);
+
+		helper.setText(content, true);
+		mailSender.send(message);
+	}
+
 }

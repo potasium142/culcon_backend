@@ -7,7 +7,7 @@ import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.dtos.blog.BlogItemInList;
-import com.culcon.backend.models.user.Account;
+import com.culcon.backend.models.Account;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +23,8 @@ public interface UserService {
 	Account getAccountByEmail(String email) throws AccountNotFoundException;
 
 	Account updateCustomer(CustomerInfoUpdateRequest newData, HttpServletRequest request);
+
+	void updateCustomerEmail(String accountID,String email, String otp, HttpServletRequest request);
 
 	AuthenticationResponse updateCustomerPassword(CustomerPasswordRequest newData, HttpServletRequest request);
 

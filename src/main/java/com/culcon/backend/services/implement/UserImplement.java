@@ -9,15 +9,15 @@ import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.dtos.blog.BlogItemInList;
 import com.culcon.backend.exceptions.custom.OTPException;
-import com.culcon.backend.models.docs.BlogDoc;
-import com.culcon.backend.models.user.Account;
-import com.culcon.backend.models.user.PostComment;
-import com.culcon.backend.models.user.PostInteractionId;
-import com.culcon.backend.repositories.docs.BlogDocRepo;
-import com.culcon.backend.repositories.user.AccountOTPRepo;
-import com.culcon.backend.repositories.user.AccountRepo;
-import com.culcon.backend.repositories.user.PostCommentRepo;
-import com.culcon.backend.repositories.user.ProductRepo;
+import com.culcon.backend.models.Account;
+import com.culcon.backend.models.PostComment;
+import com.culcon.backend.models.PostInteractionId;
+import com.culcon.backend.mongodb.model.BlogDoc;
+import com.culcon.backend.mongodb.repository.BlogDocRepo;
+import com.culcon.backend.repositories.AccountOTPRepo;
+import com.culcon.backend.repositories.AccountRepo;
+import com.culcon.backend.repositories.PostCommentRepo;
+import com.culcon.backend.repositories.ProductRepo;
 import com.culcon.backend.services.CloudinaryService;
 import com.culcon.backend.services.UserService;
 import com.culcon.backend.services.authenticate.AuthService;
@@ -70,13 +70,35 @@ public class UserImplement implements UserService {
 		HttpServletRequest request) {
 		var user = authService.getUserInformation(request);
 
-		user.setEmail(newUserData.email());
 		user.setUsername(newUserData.username());
 		user.setAddress(newUserData.address());
 		user.setPhone(newUserData.phone());
 		user.setProfileDescription(newUserData.description());
 
 		return userRepository.save(user);
+	}
+
+	@Override
+	public void updateCustomerEmail(String accountID, String email, String otp, HttpServletRequest request) {
+		var account = authService.getUserInformation(request);
+
+		var accountOTP = accountOTPRepo.findAccountOTPByOtpAndAccountIdAndEmail(otp, accountID, email)
+			.orElseThrow(() -> new OTPException("OTP not found"));
+
+		var sqlTimestamp = Timestamp.valueOf(LocalDateTime.now());
+		var isTokenExpire = accountOTP.getOtpExpiration().before(sqlTimestamp);
+
+		if (isTokenExpire) {
+			throw new OTPException("OTP expired");
+		}
+
+
+		account.setEmail(email.trim());
+
+		accountRepo.save(account);
+
+		accountOTPRepo.delete(accountOTP);
+
 	}
 
 
