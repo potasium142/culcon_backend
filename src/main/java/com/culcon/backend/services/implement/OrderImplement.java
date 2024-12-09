@@ -1,13 +1,13 @@
 package com.culcon.backend.services.implement;
 
 import com.culcon.backend.dtos.order.*;
-import com.culcon.backend.models.user.Coupon;
-import com.culcon.backend.models.user.OrderHistory;
-import com.culcon.backend.models.user.OrderHistoryItem;
-import com.culcon.backend.models.user.OrderStatus;
-import com.culcon.backend.repositories.user.CouponRepo;
-import com.culcon.backend.repositories.user.OrderHistoryRepo;
-import com.culcon.backend.repositories.user.ProductPriceRepo;
+import com.culcon.backend.models.Coupon;
+import com.culcon.backend.models.OrderHistory;
+import com.culcon.backend.models.OrderHistoryItem;
+import com.culcon.backend.models.OrderStatus;
+import com.culcon.backend.repositories.CouponRepo;
+import com.culcon.backend.repositories.OrderHistoryRepo;
+import com.culcon.backend.repositories.ProductPriceRepo;
 import com.culcon.backend.services.OrderService;
 import com.culcon.backend.services.authenticate.AuthService;
 import jakarta.servlet.http.HttpServletRequest;

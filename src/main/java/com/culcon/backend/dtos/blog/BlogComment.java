@@ -1,6 +1,6 @@
 package com.culcon.backend.dtos.blog;
 
-import com.culcon.backend.models.user.PostComment;
+import com.culcon.backend.models.PostComment;
 import lombok.Builder;
 
 import java.sql.Timestamp;

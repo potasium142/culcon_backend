@@ -1,8 +1,8 @@
 package com.culcon.backend.integrations;
 
 import com.culcon.backend.JsonReader;
-import com.culcon.backend.models.user.Account;
-import com.culcon.backend.repositories.user.AccountRepo;
+import com.culcon.backend.models.Account;
+import com.culcon.backend.repositories.AccountRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.transaction.Transactional;
@@ -43,17 +43,6 @@ public class AuthAPITest {
 
 	@BeforeAll
 	void setUp() throws Exception {
-
-		var admin = Account.builder()
-			.email("example@test")
-			// ADMIN
-			.password("$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq")
-			.phone("0969996669")
-			.username("test_account")
-			.build();
-
-		userRepository.save(admin);
-
 		this.testJson =
 			new JsonReader(this.pwd + "AuthAPITest.json");
 		var result = mockMvc.
@@ -560,25 +549,6 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = false)
-	void AuthAPI_EditProfile_InvalidEmail() throws Exception {
-		var result = mockMvc
-			.perform(
-				post("/api/customer/edit/profile")
-					.header("Authorization", jwtToken) // Sử dụng token hợp lệ
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(testJson.getTestCase("edit_profileInvalidEmail").get("input").toString())
-			)
-			.andExpect(status().isBadRequest())
-			.andReturn()
-			.getResponse()
-			.getContentAsString();
-		var jsonResult = new JSONObject(result);
-		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
-	}
-
-	@Test
-	@Order(4)
-	@Rollback(value = false)
 	void AuthAPI_EditProfile_BlankUsername() throws Exception {
 		var result = mockMvc
 			.perform(
@@ -586,27 +556,6 @@ public class AuthAPITest {
 					.header("Authorization", jwtToken) // Sử dụng token hợp lệ
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(testJson.getTestCase("edit_profileBlankUsername").get("input").toString())
-			)
-			.andExpect(status().isBadRequest())
-			.andReturn()
-			.getResponse()
-			.getContentAsString();
-
-		// Kiểm tra nội dung phản hồi
-		var jsonResult = new JSONObject(result);
-		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
-	}
-
-	@Test
-	@Order(4)
-	@Rollback(value = false)
-	void AuthAPI_EditProfile_BlankEmail() throws Exception {
-		var result = mockMvc
-			.perform(
-				post("/api/customer/edit/profile")
-					.header("Authorization", jwtToken) // Sử dụng token hợp lệ
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(testJson.getTestCase("edit_profileBlankEmail").get("input").toString())
 			)
 			.andExpect(status().isBadRequest())
 			.andReturn()

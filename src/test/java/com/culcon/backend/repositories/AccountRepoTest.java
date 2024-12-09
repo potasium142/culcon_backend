@@ -1,7 +1,6 @@
 package com.culcon.backend.repositories;
 
-import com.culcon.backend.models.user.Account;
-import com.culcon.backend.repositories.user.AccountRepo;
+import com.culcon.backend.models.Account;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

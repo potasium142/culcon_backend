@@ -1,6 +1,6 @@
 package com.culcon.backend.dtos.order;
 
-import com.culcon.backend.models.user.*;
+import com.culcon.backend.models.*;
 import lombok.Builder;
 
 import java.time.LocalDateTime;

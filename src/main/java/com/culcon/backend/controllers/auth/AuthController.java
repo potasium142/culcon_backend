@@ -5,7 +5,7 @@ import com.culcon.backend.dtos.OTPResetPassword;
 import com.culcon.backend.dtos.OTPResponse;
 import com.culcon.backend.dtos.auth.AuthenticationRequest;
 import com.culcon.backend.dtos.auth.CustomerRegisterRequest;
-import com.culcon.backend.models.user.Account;
+import com.culcon.backend.models.Account;
 import com.culcon.backend.services.OTPService;
 import com.culcon.backend.services.UserService;
 import com.culcon.backend.services.authenticate.AuthService;
@@ -26,6 +26,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.security.auth.login.AccountNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -84,7 +86,7 @@ public class AuthController {
 	) throws MessagingException, UnsupportedEncodingException, AccountNotFoundException {
 		Account account = userService.getAccountByEmail(email);
 
-		var otp = otpService.generateOTP(account, 14, 7);
+		var otp = otpService.generateOTP(account, account.getEmail(), 14, 7);
 
 		otpService.sendOTPEmail(otp);
 
@@ -118,6 +120,11 @@ public class AuthController {
 	public RedirectView googleSignIn() {
 		return new RedirectView("/oauth2/authorization/google");
 	}
+
+
+
+
+
 
 
 	@Operation(

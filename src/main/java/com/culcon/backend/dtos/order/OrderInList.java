@@ -1,9 +1,9 @@
 package com.culcon.backend.dtos.order;
 
-import com.culcon.backend.models.user.OrderHistory;
-import com.culcon.backend.models.user.OrderStatus;
-import com.culcon.backend.models.user.PaymentMethod;
-import com.culcon.backend.models.user.PaymentStatus;
+import com.culcon.backend.models.OrderHistory;
+import com.culcon.backend.models.OrderStatus;
+import com.culcon.backend.models.PaymentMethod;
+import com.culcon.backend.models.PaymentStatus;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
