@@ -4,7 +4,7 @@ values ('996d4a65-9561-47d3-8fc2-31a5868dad52',
         '', '{}',
         'example@test',
         '$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq',
-        '0999999999', '',
+        '0969996669', '',
         'defaultProfile',
         1, null,
         'test_account');
