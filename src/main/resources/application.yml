@@ -2,16 +2,9 @@ spring:
   config:
     import: optional:file:.env[.properties]
   datasource:
-    user:
-      url: ${DB_URL_USER}
-      username: ${DB_USERNAME}
-      password: ${DB_PASSWORD}
-      initialization-mode: always
-    record:
-      initialization-mode: always
-      url: ${DB_URL_RECORD}
-      username: ${DB_USERNAME}
-      password: ${DB_PASSWORD}
+    url: ${DB_URL_USER}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
