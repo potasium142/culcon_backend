@@ -42,6 +42,14 @@ public class PublicController {
 	}
 
 	@Operation(
+		tags = {"Product", "Public"}
+	)
+	@GetMapping("/fetch/product/category/{category}")
+	public ResponseEntity<?> fetchProduct(@PathVariable ProductType category) {
+		return new ResponseEntity<>(publicService.fetchListOfProductsByCategory(category), HttpStatus.OK);
+	}
+
+	@Operation(
 		tags = {"Product", "Public", "Search"}
 	)
 	@GetMapping("/search/product")
@@ -86,4 +94,20 @@ public class PublicController {
 		@RequestParam @Nullable HashSet<String> tags) {
 		return ResponseEntity.ok(publicService.searchBlogByTitle(keyword, tags));
 	}
+
+	@Operation(tags = {"Public", "Coupon"})
+	@GetMapping("/fetch/coupon/all")
+	public ResponseEntity<?> fetchAllCoupons() {
+		return ResponseEntity.ok(publicService.fetchAllValidCoupon());
+	}
+
+	@Operation(tags = {"Public", "Coupon"})
+	@GetMapping("/fetch/coupon")
+	public ResponseEntity<?> fetchCoupon(
+		@RequestParam String couponId
+	) {
+		return ResponseEntity.ok(publicService.fetchCoupon(couponId));
+	}
+
+
 }

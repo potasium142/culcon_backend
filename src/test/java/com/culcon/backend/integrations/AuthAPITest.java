@@ -557,7 +557,8 @@ public class AuthAPITest {
 					.contentType(MediaType.APPLICATION_JSON)
 					.param("newEmail", "example_new_email@gmail.com")
 					.param("accountID", "e7b5cd8f-698f-4b46-9028-c70501c3dda6")
-					.param("otp", "........")
+					.param("otp", "IGxW1dtjm12x02")
+
 			)
 			.andExpect(status().isInternalServerError())
 			.andReturn()

@@ -99,6 +99,7 @@ public class DebugController {
 					.imageUrl(imageUrl)
 					.price(proDoc.getPrice())
 					.salePercent(proDoc.getSalePercent())
+					.productTypes(proDoc.getType())
 					.build();
 
 				productRepo.save(pro);
