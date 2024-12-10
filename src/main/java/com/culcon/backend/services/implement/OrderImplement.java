@@ -1,6 +1,7 @@
 package com.culcon.backend.services.implement;
 
 import com.culcon.backend.dtos.order.*;
+import com.culcon.backend.exceptions.custom.RuntimeExceptionPlusPlus;
 import com.culcon.backend.models.Coupon;
 import com.culcon.backend.models.OrderHistory;
 import com.culcon.backend.models.OrderHistoryItem;
@@ -8,6 +9,7 @@ import com.culcon.backend.models.OrderStatus;
 import com.culcon.backend.repositories.CouponRepo;
 import com.culcon.backend.repositories.OrderHistoryRepo;
 import com.culcon.backend.repositories.ProductPriceRepo;
+import com.culcon.backend.repositories.ProductRepo;
 import com.culcon.backend.services.OrderService;
 import com.culcon.backend.services.authenticate.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,21 +32,25 @@ public class OrderImplement implements OrderService {
 	private final ProductPriceRepo productPriceRepo;
 	private final CouponRepo couponRepo;
 	private final OrderHistoryRepo orderHistoryRepo;
+	private final ProductRepo productRepo;
 
 	private Coupon getCoupon(String id) {
-		var coupon = couponRepo.findById(id).orElse(null);
+		var coupon = couponRepo.findById(id).orElseThrow(
+			() -> new NoSuchElementException("Coupon Not Found")
+		);
 
-		if (coupon != null) {
-			var isCouponUsable = coupon.getUsageLeft() > 0 && !coupon.getExpireTime().isBefore(LocalDate.now());
+		if (coupon.getUsageLeft() <= 0)
+			throw new RuntimeException("Coupon ran out of usages");
 
-			return isCouponUsable ? coupon : null;
-		}
+		if (coupon.getExpireTime().isBefore(LocalDate.now()))
+			throw new RuntimeException("Coupon expired");
 
-		return null;
+		return coupon;
 	}
 
 	@Override
 	public OrderSummary createOrder(OrderCreation orderCreation, HttpServletRequest req) {
+		//stinky ass code x2
 		var account = authService.getUserInformation(req);
 
 		var totalPrice = 0.0f;
@@ -53,32 +59,84 @@ public class OrderImplement implements OrderService {
 
 		var cart = account.getCart();
 
+		var notExistProduct = new ArrayList<String>();
+
+		var insufficientAmount = new ArrayList<String>();
+
+		var productNotInCart = new ArrayList<String>();
+
+		var ohNo = false;
+
 		for (Map.Entry<String, Integer> entry : orderCreation.product().entrySet()) {
 
-			var prod = productPriceRepo.findFirstById_ProductIdOrderById_DateDesc(entry.getKey())
-				.orElseThrow(() -> new NoSuchElementException("Product not found"));
+			var prodPrice = productPriceRepo.findFirstById_ProductIdOrderById_DateDesc(entry.getKey());
 
-			cart.remove(prod.getId().getProduct());
+			if (entry.getValue() <= 0) continue;
+
+			if (prodPrice.isEmpty()) {
+				notExistProduct.add(entry.getKey());
+				ohNo = true;
+				continue;
+			}
+
+			var prod = prodPrice.get().getId().getProduct();
+
+			if (prod.getAvailableQuantity() < entry.getValue()) {
+				insufficientAmount.add(entry.getKey());
+				ohNo = true;
+				continue;
+			}
+
+			if (!cart.containsKey(prod)) {
+				productNotInCart.add(entry.getKey());
+				ohNo = true;
+				continue;
+			}
+
+			if (ohNo) continue;
+
+			cart.remove(prod);
+
+			prod.setAvailableQuantity(prod.getAvailableQuantity() - entry.getValue());
+
+			productRepo.save(prod);
 
 			totalPrice += prod.getPrice() * (1.0f - prod.getSalePercent() / 100.0f) * entry.getValue();
 
-			if (entry.getValue() > 0)
-				productList.add(
-					OrderHistoryItem.builder()
-						.productId(prod)
-						.quantity(entry.getValue())
-						.build());
+			productList.add(
+				OrderHistoryItem.builder()
+					.productId(prodPrice.get())
+					.quantity(entry.getValue())
+					.build());
+
 		}
 
-		Coupon coupon = getCoupon(orderCreation.couponId());
+		if (ohNo) {
+			throw new RuntimeExceptionPlusPlus("Error occur during checkout",
+				Map.of(
+					"Non-exist product", notExistProduct,
+					"Insufficient amount", insufficientAmount,
+					"Product not in cart", productNotInCart
+				)
+			);
+		}
 
-		if (coupon != null) {
+		if (productList.isEmpty()) {
+			throw new RuntimeException("Order does not contain any products");
+		}
+
+		Coupon coupon = null;
+
+		if (!orderCreation.couponId().isBlank()) {
+			coupon = getCoupon(orderCreation.couponId());
+
 			totalPrice = totalPrice * (1.0f - coupon.getSalePercent() / 100.0f);
 
 			coupon.setUsageLeft(coupon.getUsageLeft() - 1);
 
 			couponRepo.save(coupon);
 		}
+
 
 		var order = OrderHistory.builder()
 			.user(account)
@@ -87,7 +145,12 @@ public class OrderImplement implements OrderService {
 			.totalPrice(totalPrice)
 			.note(orderCreation.note())
 			.paymentMethod(orderCreation.paymentMethod())
-			.deliveryAddress(orderCreation.deliveryAddress())
+			.deliveryAddress(orderCreation.deliveryAddress().isBlank()
+				? account.getAddress() : orderCreation.deliveryAddress())
+			.receiver(orderCreation.receiver().isBlank()
+				? account.getUsername() : orderCreation.receiver())
+			.phonenumber(orderCreation.phoneNumber().isBlank()
+				? account.getPhone() : orderCreation.phoneNumber())
 			.build();
 
 		order = orderHistoryRepo.save(order);
@@ -96,19 +159,19 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public List<OrderItemInList> getListOfOrder(HttpServletRequest req, OrderStatus status) {
+	public List<OrderInList> getListOfOrderByStatus(HttpServletRequest req, OrderStatus status) {
 		var account = authService.getUserInformation(req);
 
 		return orderHistoryRepo.findByUserAndOrderStatus(account, status)
-			.stream().map(OrderItemInList::from).toList();
+			.stream().map(OrderInList::from).toList();
 	}
 
 	@Override
-	public List<OrderItemInList> getListOfAllOrder(HttpServletRequest req) {
+	public List<OrderInList> getListOfAllOrder(HttpServletRequest req) {
 		var account = authService.getUserInformation(req);
 
 		return orderHistoryRepo.findByUser(account)
-			.stream().map(OrderItemInList::from).toList();
+			.stream().map(OrderInList::from).toList();
 	}
 
 	@Override
@@ -143,35 +206,35 @@ public class OrderImplement implements OrderService {
 
 		var oldCouponId = order.getCoupon() == null ? "" : order.getCoupon().getId();
 
-		if (coupon != null) {
+		var sameCoupon = oldCouponId.equals(coupon.getId());
 
-			var sameCoupon = oldCouponId.equals(coupon.getId());
+		if (!sameCoupon) {
 
-			if (!sameCoupon) {
+			for (OrderHistoryItem item : order.getItems()) {
+				var prod = item.getProductId();
 
-				for (OrderHistoryItem item : order.getItems()) {
-					var prod = item.getProductId();
-
-					totalPrice = prod.getPrice() * (1.0f - prod.getSalePercent() / 100.0f) * item.getQuantity();
-				}
-
-				totalPrice = totalPrice * (1.0f - coupon.getSalePercent() / 100.0f);
-
-				coupon.setUsageLeft(coupon.getUsageLeft() - 1);
-
-				couponRepo.save(coupon);
+				totalPrice = prod.getPrice() * (1.0f - prod.getSalePercent() / 100.0f) * item.getQuantity();
 			}
 
+			totalPrice = totalPrice * (1.0f - coupon.getSalePercent() / 100.0f);
+
+			coupon.setUsageLeft(coupon.getUsageLeft() - 1);
+
+			couponRepo.save(coupon);
 		}
 
 		order.setTotalPrice(totalPrice);
 		order.setCoupon(coupon);
 		order.setPaymentMethod(orderCreation.paymentMethod());
-		order.setDeliveryAddress(orderCreation.deliveryAddress());
+		order.setDeliveryAddress(orderCreation.deliveryAddress().isBlank()
+			? account.getAddress() : orderCreation.deliveryAddress());
+		order.setPhonenumber(orderCreation.phoneNumber().isBlank()
+			? account.getPhone() : orderCreation.phoneNumber());
+		order.setReceiver(orderCreation.receiver().isBlank()
+			? account.getUsername() : orderCreation.receiver());
 		order.setNote(orderCreation.note());
 
 		order = orderHistoryRepo.save(order);
-
 
 		return OrderDetail.builder()
 			.summary(OrderSummary.from(order))

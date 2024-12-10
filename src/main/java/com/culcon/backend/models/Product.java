@@ -1,6 +1,7 @@
 package com.culcon.backend.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 
@@ -25,6 +26,7 @@ public class Product {
 	private ProductType productTypes;
 
 	@Column(name = "available_quantity")
+	@Min(0)
 	private Integer availableQuantity;
 
 	@Column(name = "product_status")

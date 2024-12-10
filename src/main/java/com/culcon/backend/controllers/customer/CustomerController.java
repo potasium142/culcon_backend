@@ -177,7 +177,7 @@ public class CustomerController {
 		@RequestParam OrderStatus orderStatus,
 		HttpServletRequest req
 	) {
-		return ResponseEntity.ok(orderService.getListOfOrder(req, orderStatus));
+		return ResponseEntity.ok(orderService.getListOfOrderByStatus(req, orderStatus));
 	}
 
 	@Operation(tags = "Order")

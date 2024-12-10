@@ -51,6 +51,12 @@ public class OrderHistory {
 	@Column(name = "note")
 	private String note;
 
+	@Column(name = "receiver")
+	private String receiver;
+
+	@Column(name = "phonenumber", length = 12)
+	private String phonenumber;
+
 	@Column(name = "payment_method")
 	@Enumerated(EnumType.ORDINAL)
 	@Builder.Default
