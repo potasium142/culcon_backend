@@ -166,6 +166,9 @@ public class UserImplement implements UserService {
 
 		var itemAmount = account.getCart().getOrDefault(product, 0) + amount;
 
+		if (itemAmount > product.getAvailableQuantity())
+			throw new RuntimeException("Insufficient quantity");
+
 		if (itemAmount <= 0) {
 			account.getCart().remove(product);
 		} else {
@@ -189,6 +192,10 @@ public class UserImplement implements UserService {
 			.filter(prod -> prod.getId().equals(productId))
 			.findFirst()
 			.orElseThrow(() -> new NoSuchElementException("Product not found in cart"));
+
+
+		if (amount > product.getAvailableQuantity())
+			throw new RuntimeException("Insufficient quantity");
 
 		if (amount <= 0) {
 			account.getCart().remove(product);

@@ -9,6 +9,8 @@ import java.util.Map;
 public record OrderCreation(
 	String couponId,
 	String deliveryAddress,
+	String phoneNumber,
+	String receiver,
 	String note,
 	PaymentMethod paymentMethod,
 	Map<String, Integer> product

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Builder
-public record OrderItemInList(
+public record OrderInList(
 	Long id,
 	LocalDateTime date,
 	OrderStatus status,
@@ -20,8 +20,8 @@ public record OrderItemInList(
 	List<OrderItem> items,
 	Integer totalItems
 ) {
-	public static OrderItemInList from(OrderHistory order) {
-		return OrderItemInList.builder()
+	public static OrderInList from(OrderHistory order) {
+		return OrderInList.builder()
 			.id(order.getId())
 			.date(order.getDate())
 			.status(order.getOrderStatus())

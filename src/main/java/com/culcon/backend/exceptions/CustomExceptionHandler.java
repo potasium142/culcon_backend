@@ -1,5 +1,6 @@
 package com.culcon.backend.exceptions;
 
+import com.culcon.backend.exceptions.custom.RuntimeExceptionPlusPlus;
 import com.culcon.backend.exceptions.messages.ExceptionMessage;
 import com.culcon.backend.exceptions.messages.FieldErrorMessage;
 import org.hibernate.exception.ConstraintViolationException;
@@ -18,6 +19,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 @ControllerAdvice
@@ -74,6 +76,17 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(
 			ExceptionMessage.map(ex),
 			HttpStatus.NOT_FOUND);
+	}
+
+	@ExceptionHandler(RuntimeExceptionPlusPlus.class)
+	public ResponseEntity<?> runtimeExceptionPlusPlus(RuntimeExceptionPlusPlus ex) {
+		return new ResponseEntity<>(
+			Map.of(
+				"cause", RuntimeExceptionPlusPlus.class.getSimpleName(),
+				"message", ex.getLocalizedMessage(),
+				"errors", ex.getErrorsTable()
+			), HttpStatus.INTERNAL_SERVER_ERROR
+		);
 	}
 
 	@ExceptionHandler(Exception.class)
