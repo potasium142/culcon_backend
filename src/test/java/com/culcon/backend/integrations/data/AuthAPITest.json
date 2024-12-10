@@ -148,14 +148,13 @@
   },
   "edit_profile": {
     "input": {
-      "email": "example@email.com",
       "username": "user01",
       "phone": "0123456780",
       "address": "lavander town",
       "description": "lavander sus"
     },
     "output": {
-      "email": "example@email.com",
+      "email": "example@test",
       "username": "user01",
       "status": "NORMAL",
       "address": "lavander town",
@@ -166,7 +165,6 @@
   },
   "edit_profileInvalidName": {
     "input": {
-      "email": "example@email.com",
       "username": "user01",
       "phone": "0123456780",
       "address": "lavander town",
@@ -175,8 +173,6 @@
   },
   "edit_profileInvalidLessPhoneNumber": {
     "input": {
-      "email": "example@email.com",
-      "username": "user01",
       "phone": "0123",
       "address": "lavander town",
       "description": "lavander sus"
@@ -184,77 +180,73 @@
   },
   "edit_profileInvalidMorePhoneNumber": {
     "input": {
-      "email": "example@email.com",
       "username": "user01",
       "phone": "01234567891010",
       "address": "lavander town",
       "description": "lavander sus"
     }
   },
-  "edit_profileInvalidEmail": {
+  "edit_profileEmail": {
     "input": {
-      "email": "example",
-      "username": "user01",
-      "phone": "0123456780",
-      "address": "lavander town",
-      "description": "lavander sus"
+      "accountId": "e7b5cd8f-698f-4b46-9028-c70501c3dda6",
+      "newEmail": "example_new_email@gmail.com",
+      "otp": "123456"
     }
   },
-  "edit_profileBlankUsername": {
-    "input": {
-      "email": "example@email.com",
-      "username": "",
-      "phone": "0123456789",
-      "address": "lavander town",
-      "description": "lavander sus"
-    }
-  },
-  "edit_profileBlankPhone": {
-    "input": {
-      "email": "example@email.com",
-      "username": "user01",
-      "phone": "",
-      "address": "lavander town",
-      "description": "lavander sus"
-    }
-  },
-  "edit_profileBlankEmail": {
-    "input": {
-      "email": "",
-      "username": "user01",
-      "phone": "0123456789",
-      "address": "lavander town",
-      "description": "lavander sus"
-    }
-  },
-  "editPassword": {
-    "input": {
-      "oldPassword": "admin",
-      "password": "123456"
-    }
-  },
-  "editPassword_WrongOldPassword": {
-    "input": {
-      "oldPassword": "admi",
-      "password": "123456"
-    }
-  },
-  "editPassword_BlankOldPassword": {
-    "input": {
-      "oldPassword": "",
-      "password": "123456"
-    }
-  },
-  "editPassword_BlankNewPassword": {
-    "input": {
-      "oldPassword": "admi",
-      "password": ""
-    }
-  },
-  "editPassword_InvalidNewPassword": {
-    "input": {
-      "oldPassword": "admin",
-      "password": "123"
+    "edit_profileBlankUsername": {
+      "input": {
+        "username": "",
+        "phone": "0123456789",
+        "address": "lavander town",
+        "description": "lavander sus"
+      }
+    },
+    "edit_profileBlankPhone": {
+      "input": {
+        "username": "user01",
+        "phone": "",
+        "address": "lavander town",
+        "description": "lavander sus"
+      }
+    },
+    "edit_profileBlankEmail": {
+      "input": {
+        "email": "",
+        "username": "user01",
+        "phone": "0123456789",
+        "address": "lavander town",
+        "description": "lavander sus"
+      }
+    },
+    "editPassword": {
+      "input": {
+        "oldPassword": "admin",
+        "password": "123456"
+      }
+    },
+    "editPassword_WrongOldPassword": {
+      "input": {
+        "oldPassword": "admi",
+        "password": "123456"
+      }
+    },
+    "editPassword_BlankOldPassword": {
+      "input": {
+        "oldPassword": "",
+        "password": "123456"
+      }
+    },
+    "editPassword_BlankNewPassword": {
+      "input": {
+        "oldPassword": "admi",
+        "password": ""
+      }
+    },
+    "editPassword_InvalidNewPassword": {
+      "input": {
+        "oldPassword": "admin",
+        "password": "123"
+      }
     }
   }
 }
