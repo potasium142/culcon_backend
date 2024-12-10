@@ -82,6 +82,10 @@ public class UserImplement implements UserService {
 	public void updateCustomerEmail(String accountID, String email, String otp, HttpServletRequest request) {
 		var account = authService.getUserInformation(request);
 
+		if (account.getEmail().equalsIgnoreCase(email.trim())) {
+			throw new IllegalArgumentException("The new email address must be different from the current email address.");
+		}
+
 		var accountOTP = accountOTPRepo.findAccountOTPByOtpAndAccountIdAndEmail(otp, accountID, email)
 			.orElseThrow(() -> new OTPException("OTP not found"));
 

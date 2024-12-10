@@ -117,7 +117,9 @@ public class CustomerController {
 		String newEmail
 	) throws MessagingException, UnsupportedEncodingException {
 		var account = authService.getUserInformation(request);
-
+		if (account.getEmail().equalsIgnoreCase(newEmail.trim())) {
+			throw new IllegalArgumentException("The new email address must be different from the current email address.");
+		}
 
 		var otp = otpService.generateOTP(account, newEmail, 14, 7);
 
