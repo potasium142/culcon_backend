@@ -3,8 +3,7 @@
     <option name="ALTERNATIVE_JRE_PATH" value="17" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <envs>
-      <env name="DB_URL_RECORD" value="jdbc:h2:file:./db/culcon_record;IFEXISTS=FALSE;" />
-      <env name="DB_URL_USER" value="jdbc:h2:file:./db/culcon_user;IFEXISTS=FALSE;" />
+      <env name="DB_URL_USER" value="jdbc:h2:file:./db/culcon_user;IFEXISTS=FALSE;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE " />
     </envs>
     <module name="backend.main" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.culcon.backend.CulconBackendApplication" />

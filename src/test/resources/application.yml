@@ -2,14 +2,9 @@ spring:
   config:
     import: optional:file:.env[.properties]
   datasource:
-    user:
-      url: jdbc:h2:mem:culcon_user;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=TRUE
-      username: ${DB_USERNAME}
-      password: ${DB_PASSWORD}
-    record:
-      url: jdbc:h2:mem:culcon_record;DB_CLOSE_DELAY=-1
-      username: ${DB_USERNAME}
-      password: ${DB_PASSWORD}
+    url: jdbc:h2:mem:culcon_user;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false;CASE_INSENSITIVE_IDENTIFIERS=TRUE
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     hibernate:
