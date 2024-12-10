@@ -5,12 +5,14 @@ import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.dtos.blog.BlogDetail;
 import com.culcon.backend.dtos.blog.BlogItemInList;
 import com.culcon.backend.models.Account;
+import com.culcon.backend.models.Coupon;
 import com.culcon.backend.models.Product;
 import com.culcon.backend.models.ProductType;
 import com.culcon.backend.mongodb.model.ProductDoc;
 import com.culcon.backend.mongodb.repository.BlogDocRepo;
 import com.culcon.backend.mongodb.repository.MealKitDocRepo;
 import com.culcon.backend.mongodb.repository.ProductDocRepo;
+import com.culcon.backend.repositories.CouponRepo;
 import com.culcon.backend.repositories.PostCommentRepo;
 import com.culcon.backend.repositories.ProductRepo;
 import com.culcon.backend.services.PublicService;
@@ -19,6 +21,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -33,6 +36,7 @@ public class PublicImplement implements PublicService {
 	private final BlogDocRepo blogDocRepo;
 	private final PostCommentRepo postCommentRepo;
 	private final AuthService authService;
+	private final CouponRepo couponRepo;
 
 	@Override
 	public ProductDTO fetchProduct(String id) {
@@ -48,6 +52,11 @@ public class PublicImplement implements PublicService {
 	@Override
 	public List<Product> fetchListOfProducts() {
 		return productRepo.findAll();
+	}
+
+	@Override
+	public List<Product> fetchListOfProductsByCategory(ProductType category) {
+		return productRepo.findAllByProductTypes(category);
 	}
 
 	@Override
@@ -108,6 +117,32 @@ public class PublicImplement implements PublicService {
 			.blog(blog)
 			.bookmark(bookmark)
 			.build();
+	}
+
+
+	@Override
+	public Coupon fetchCoupon(String id) {
+
+		var coupon = couponRepo.findById(id).orElseThrow(
+			() -> new NoSuchElementException("Coupon Not Found")
+		);
+
+		if (coupon.getUsageLeft() <= 0)
+			throw new RuntimeException("Coupon ran out of usages");
+
+		if (coupon.getExpireTime().isBefore(LocalDate.now()))
+			throw new RuntimeException("Coupon expired");
+
+		return coupon;
+
+	}
+
+	@Override
+	public List<Coupon> fetchAllValidCoupon() {
+		return couponRepo.findAll()
+			.stream().filter(
+				coupon -> coupon.getUsageLeft() > 0 && !coupon.getExpireTime().isBefore(LocalDate.now())
+			).toList();
 	}
 
 	private ProductDoc getDocs(Product product) {

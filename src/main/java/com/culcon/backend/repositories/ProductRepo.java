@@ -8,13 +8,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ProductRepo extends JpaRepository<Product, String> {
-	List<Product> findByProductTypesAndProductStatus(
-		ProductType productType, ProductStatus productStatus);
 
 	List<Product> findAllByProductStatus(ProductStatus productStatus);
 
 	List<Product> findAllByProductNameContainingIgnoreCaseAndProductTypes(String name, ProductType productType);
 
 	List<Product> findAllByProductNameContainingIgnoreCase(String name);
+
+	List<Product> findAllByProductTypes(ProductType productType);
 
 }

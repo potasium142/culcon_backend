@@ -1,5 +1,6 @@
 package com.culcon.backend.mongodb.model;
 
+import com.culcon.backend.models.ProductType;
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.Getter;
@@ -37,4 +38,6 @@ public class ProductDoc {
 	private Integer daysBeforeExpiry;
 
 	private String articleMD;
+
+	private ProductType type;
 }
