@@ -182,7 +182,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 //					out.flush();
 
 					System.out.println(token);
-					String redirectUrl = "http://localhost:3000/token=" + token;
+					String redirectUrl = "http://localhost:3000/token?value=" + token;
 
 
 					response.sendRedirect(redirectUrl);
@@ -197,7 +197,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 //						" \"email\": \"" + email + "\"" + "}");
 //					out.flush();
 
-					String redirectUrl = "http://localhost:3000/token=null";
+					String redirectUrl = "http://localhost:3000/token";
 
 					response.sendRedirect(redirectUrl);
 				}
