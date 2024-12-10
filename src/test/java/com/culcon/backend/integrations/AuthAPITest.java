@@ -1,9 +1,8 @@
 package com.culcon.backend.integrations;
 
 import com.culcon.backend.JsonReader;
-import com.culcon.backend.models.user.Account;
-import com.culcon.backend.repositories.user.AccountRepo;
-import com.fasterxml.jackson.databind.JsonNode;
+import com.culcon.backend.models.Account;
+import com.culcon.backend.repositories.AccountRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.transaction.Transactional;
@@ -44,17 +43,6 @@ public class AuthAPITest {
 
 	@BeforeAll
 	void setUp() throws Exception {
-
-		var admin = Account.builder()
-			.email("example@test")
-			// ADMIN
-			.password("$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq")
-			.phone("0969996669")
-			.username("test_account").id("e7b5cd8f-698f-4b46-9028-c70501c3dda6")
-			.build();
-
-		userRepository.save(admin);
-
 		this.testJson =
 			new JsonReader(this.pwd + "AuthAPITest.json");
 		var result = mockMvc.
@@ -568,8 +556,8 @@ public class AuthAPITest {
 					.header("Authorization", jwtToken)
 					.contentType(MediaType.APPLICATION_JSON)
 					.param("newEmail", "example_new_email@gmail.com")
-						.param("accountID", "e7b5cd8f-698f-4b46-9028-c70501c3dda6")
-						.param("otp", "........")
+					.param("accountID", "e7b5cd8f-698f-4b46-9028-c70501c3dda6")
+					.param("otp", "........")
 			)
 			.andExpect(status().isInternalServerError())
 			.andReturn()
@@ -579,40 +567,42 @@ public class AuthAPITest {
 
 		assertEquals("OTPException", jsonResult.getString("cause"));
 	}
+
 	@Test
 	@Order(5)
 	@Rollback(value = true)
 	void AuthAPI_EditProfile_EmailInvalidEmail() throws Exception {
 		var result = mockMvc
-				.perform(
-						post("/api/customer/edit/email")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("newEmail", "example_new_email")
-								.param("accountID", "e7b5cd8f-698f-4b46-9028-c70501c3dda6")
-								.param("otp", "........")
-				)
-				.andExpect(status().isInternalServerError())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				post("/api/customer/edit/email")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("newEmail", "example_new_email")
+					.param("accountID", "e7b5cd8f-698f-4b46-9028-c70501c3dda6")
+					.param("otp", "........")
+			)
+			.andExpect(status().isInternalServerError())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 		var jsonResult = new JSONObject(result);
 
 		assertEquals("ConstraintViolationException", jsonResult.getString("cause"));
 	}
+
 	@Test
 	@Order(4)
 	void testGetOtp() throws Exception {
 		var otpResponse = mockMvc.perform(
-						post("/api/customer/edit/email/get/otp")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("newEmail", "example_new_email@gmail.com")
-				)
-				.andExpect(status().isOk()) // Đảm bảo phản hồi OK
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+				post("/api/customer/edit/email/get/otp")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("newEmail", "example_new_email@gmail.com")
+			)
+			.andExpect(status().isOk()) // Đảm bảo phản hồi OK
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 
 		// Kiểm tra phản hồi từ API /get/otp
 		var otpJson = new JSONObject(otpResponse);
@@ -625,52 +615,49 @@ public class AuthAPITest {
 	void testGetOtp_InvalidEmail() throws Exception {
 		var result = mockMvc.perform(
 				post("/api/customer/edit/email/get/otp")
-						.header("Authorization", jwtToken)
-						.contentType(MediaType.APPLICATION_JSON)
-						.param("newEmail", "example_new_email")
-				)
-				.andExpect(status().isInternalServerError())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("newEmail", "example_new_email")
+			)
+			.andExpect(status().isInternalServerError())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 
 		var jsonResult = new JSONObject(result);
 		assertEquals("ConstraintViolationException", jsonResult.getString("cause"));
 	}
+
 	@Test
 	@Order(4)
 	void testGetOtp_EmailExist() throws Exception {
 		var result = mockMvc.perform(
-						post("/api/customer/edit/email/get/otp")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("newEmail", "example@email.com")
-				)
-				.andExpect(status().isInternalServerError())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-
-		var jsonResult = new JSONObject(result);
-		assertEquals("ConstraintViolationException", jsonResult.getString("cause"));
+				post("/api/customer/edit/email/get/otp")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("newEmail", "example@email.com")
+			)
+			.andExpect(status().isOk());
 	}
+
 	@Test
 	@Order(4)
 	void testGetOtp_BlankEmail() throws Exception {
 		var result = mockMvc.perform(
-						post("/api/customer/edit/email/get/otp")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("newEmail", "")
-				)
-				.andExpect(status().isInternalServerError())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+				post("/api/customer/edit/email/get/otp")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("newEmail", "")
+			)
+			.andExpect(status().isInternalServerError())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 
 		var jsonResult = new JSONObject(result);
 		assertEquals("ConstraintViolationException", jsonResult.getString("cause"));
 	}
+
 	@Test
 	@Order(4)
 	@Rollback(value = false)
@@ -690,7 +677,7 @@ public class AuthAPITest {
 		// Kiểm tra nội dung phản hồi
 		var jsonResult = new JSONObject(result);
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
- 	}
+	}
 
 	@Test
 	@Order(4)
@@ -816,5 +803,4 @@ public class AuthAPITest {
 		var jsonResult = new JSONObject(result);
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
-
 }

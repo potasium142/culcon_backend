@@ -1,7 +1,7 @@
 package com.culcon.backend.dtos.order;
 
-import com.culcon.backend.models.user.OrderHistoryItem;
-import com.culcon.backend.models.user.ProductType;
+import com.culcon.backend.models.OrderHistoryItem;
+import com.culcon.backend.models.ProductType;
 import lombok.Builder;
 
 @Builder

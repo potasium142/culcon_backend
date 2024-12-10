@@ -1,8 +1,8 @@
 package com.culcon.backend.services.implement;
 
-import com.culcon.backend.models.user.Account;
-import com.culcon.backend.models.user.AccountOTP;
-import com.culcon.backend.repositories.user.AccountOTPRepo;
+import com.culcon.backend.models.Account;
+import com.culcon.backend.models.AccountOTP;
+import com.culcon.backend.repositories.AccountOTPRepo;
 import com.culcon.backend.services.OTPService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.InternetAddress;

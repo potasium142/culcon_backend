@@ -5,8 +5,7 @@ import com.culcon.backend.dtos.OTPResponse;
 import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.dtos.order.OrderCreation;
-import com.culcon.backend.models.user.Account;
-import com.culcon.backend.models.user.OrderStatus;
+import com.culcon.backend.models.OrderStatus;
 import com.culcon.backend.services.OTPService;
 import com.culcon.backend.services.OrderService;
 import com.culcon.backend.services.UserService;
@@ -18,7 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,7 +25,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
@@ -41,7 +38,6 @@ public class CustomerController {
 	private final OrderService orderService;
 	private final OTPService otpService;
 	private final AuthService authService;
-
 
 
 	@Operation(tags = "Permission Test", summary = "Test permission for guest")
@@ -110,15 +106,15 @@ public class CustomerController {
 	}
 
 	@Operation(
-			tags = {"Account"},
-			summary = "Get email confirm mail account password")
+		tags = {"Account"},
+		summary = "Get email confirm mail account password")
 	@PostMapping("/edit/email/get/otp")
 	public ResponseEntity<Object> forgotSendOTP(
-			HttpServletRequest request,
-			@RequestParam("newEmail")
-			@NotEmpty(message = "Email shouldn't be empty")
-			@Email
-			String newEmail
+		HttpServletRequest request,
+		@RequestParam("newEmail")
+		@NotEmpty(message = "Email shouldn't be empty")
+		@Email
+		String newEmail
 	) throws MessagingException, UnsupportedEncodingException {
 		var account = authService.getUserInformation(request);
 
@@ -132,28 +128,26 @@ public class CustomerController {
 	}
 
 	@Operation(
-			tags = {"Account"},
-			summary = "Edit account password")
+		tags = {"Account"},
+		summary = "Edit account password")
 	@PostMapping("/edit/email")
 	public ResponseEntity<Object> editAccountEmailInfo(
-			HttpServletRequest request,
-			@RequestParam("accountID")
-			@NotEmpty(message = "ID shouldn't be empty")
-			String accountID,
-			@RequestParam("newEmail")
-			@NotEmpty(message = "Email shouldn't be empty")
-			@Email
-			String newEmail,
-			@RequestParam("otp")
-			@NotEmpty(message = "OTP shouldn't be empty")
-			String otp
-			) {
+		HttpServletRequest request,
+		@RequestParam("accountID")
+		@NotEmpty(message = "ID shouldn't be empty")
+		String accountID,
+		@RequestParam("newEmail")
+		@NotEmpty(message = "Email shouldn't be empty")
+		@Email
+		String newEmail,
+		@RequestParam("otp")
+		@NotEmpty(message = "OTP shouldn't be empty")
+		String otp
+	) {
 
 		userService.updateCustomerEmail(accountID, newEmail, otp, request);
 		return new ResponseEntity<>("Email update successfully", HttpStatus.OK);
 	}
-
-
 
 
 	@Operation(

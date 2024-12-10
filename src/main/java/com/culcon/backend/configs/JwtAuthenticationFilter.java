@@ -1,6 +1,6 @@
 package com.culcon.backend.configs;
 
-import com.culcon.backend.repositories.user.AccountRepo;
+import com.culcon.backend.repositories.AccountRepo;
 import com.culcon.backend.services.authenticate.JwtService;
 import com.culcon.backend.services.authenticate.UserAuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
