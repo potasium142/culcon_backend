@@ -1,6 +1,6 @@
 insert into account (id, address, bookmarked_posts, email, password, phone, profile_description, profile_pic_uri,
                      status, token, username)
-values ('996d4a65-9561-47d3-8fc2-31a5868dad52',
+values ('example@test996d4a65-9561-47d3-8fc2-31a5868dad52',
         '', '{}',
         'example@test',
         '$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq',
@@ -9,6 +9,14 @@ values ('996d4a65-9561-47d3-8fc2-31a5868dad52',
         1, null,
         'test_account');
 
+insert into PUBLIC.ACCOUNT (ID, ADDRESS, BOOKMARKED_POSTS, EMAIL, PASSWORD, PHONE, PROFILE_DESCRIPTION, PROFILE_PIC_URI, STATUS, TOKEN, USERNAME)
+values  ('92e063c4-9b8c-4fbe-90fa-edc409fcb287', '','' , 'example@admin0', '$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq', '0123456799', '', 'defaultProfile', 1, null, 'admin'),
+        ('4dd4db35-9748-4de7-93d9-6bc1e19aacb3', '69, Sussy town','' , 'test1e@email.com', '$2a$10$lWZdAr9W29DskVOhvbUeyuSCmMpZIl3LPCrHZ5/jJz/hJYBSO9dGu', '0123456789', 'le sus', 'defaultProfile', 1, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0ZGQ0ZGIzNS05NzQ4LTRkZTctOTNkOS02YmMxZTE5YWFjYjMiLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzM3MzQ1NDMsImV4cCI6MTczMzczNjM0M30.t7B4JfQZCkpvYL5evb4E3KgY7WRPUue1LWC5Yk1xrP8', 'test1'),
+        ('e7b5cd8f-698f-4b46-9028-c70501c3dda6', '69, Sussy town', '', 'trinhquangtung1@gmail.com', '$2a$10$LgtVnziQx33XYu1aPCHXJ.VMXUfX25LDqqYMxbt2ZZrqyxV7y6azq', '0123456780', 'le sus', 'defaultProfile', 1, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlN2I1Y2Q4Zi02OThmLTRiNDYtOTAyOC1jNzA1MDFjM2RkYTYiLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzM4MjcwNTUsImV4cCI6MTczMzgyODg1NX0.jU-I84i0WFGoHeYqVXM53wwmV1aL60u-jEsHY_oOhik', 'test3'),
+        ('48a30b9d-db8c-4ace-a753-80fa4b844c7b', '', '', 'trinh@gmail.com', '$2a$10$O6LQoPxd5bR2iaqTMdJE0O1XqX5WjJznq.Ohqaa/JrVzLd0nSgQ92', '0999999999', '', 'defaultProfile', 1, 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0OGEzMGI5ZC1kYjhjLTRhY2UtYTc1My04MGZhNGI4NDRjN2IiLCJyb2xlIjoiQ1VTVE9NRVIiLCJpYXQiOjE3MzM3Njg0MDgsImV4cCI6MTczMzc3MDIwOH0.V4pXa1VHX3OIwqahOqj5zWytD3D2R_tfy3DvQNSWyDw', 'Trịnh Trần Phương Tuấn');
+
+insert into PUBLIC.ACCOUNT_OTP (ACCOUNT_ID, OTP, OTP_EXPIRATION, ID, EMAIL, ACTIVITY_TYPE)
+values  ('e7b5cd8f-698f-4b46-9028-c70501c3dda6', 'rhKdtAJznpRx3b', '2025-12-11 10:53:08.736461', 3, 'trinhquangtung1@gmail.com', null);
 insert into product (id, available_quantity, image_url, price, product_name, product_status, product_types,
                      sale_percent)
 values ('PD_SNAKEHEAD_FISH_300G', 100,
@@ -77,4 +85,5 @@ values ('2024-12-09 19:30:45.874514', 5, 10, 'PD_SNAKEHEAD_FISH_300G'),
        ('2024-12-09 19:30:45.982994', 12.5, 10, 'MK_01'),
        ('2024-12-09 19:30:45.987656', 15, 12, 'MK_02'),
        ('2024-12-09 19:30:45.991972', 13.5, 10, 'MK_03');
-
+insert into PUBLIC.CART (ACCOUNT_ID, AMOUNT, PRODUCT_ID)
+values  ('92e063c4-9b8c-4fbe-90fa-edc409fcb287', 2, 'MK_01');
