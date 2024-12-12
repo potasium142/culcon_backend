@@ -28,7 +28,7 @@ public record OrderInList(
 			.totalPrice(order.getTotalPrice())
 			.paymentMethod(order.getPaymentMethod())
 			.paymentStatus(order.getPaymentStatus())
-			.items(order.getItems().subList(0, 2).stream()
+			.items(order.getItems().stream().limit(2)
 				.map(OrderItem::from)
 				.toList())
 			.totalItems(order.getItems().size())

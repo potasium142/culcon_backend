@@ -17,7 +17,7 @@ public record OrderItem(
 		var product = item.getProductId().getId().getProduct();
 		return OrderItem.builder()
 			.id(product.getId())
-			.price(product.getPrice())
+			.price(item.getProductId().getPrice())
 			.name(product.getProductName())
 			.imageUrl(product.getImageUrl())
 			.productType(product.getProductTypes())
