@@ -8,6 +8,7 @@ import com.culcon.backend.mongodb.model.ProductDoc;
 import com.culcon.backend.mongodb.repository.MealKitDocRepo;
 import com.culcon.backend.mongodb.repository.ProductDocRepo;
 import com.culcon.backend.repositories.CouponRepo;
+import com.culcon.backend.repositories.OrderHistoryRepo;
 import com.culcon.backend.repositories.ProductPriceRepo;
 import com.culcon.backend.repositories.ProductRepo;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class DebugController {
 	private final ProductDocRepo productDocRepo;
 	private final MealKitDocRepo mealKitRepo;
 	private final ProductPriceRepo productPriceRepo;
+	private final OrderHistoryRepo orderHistoryRepo;
 
 	@GetMapping("/test_permission")
 	public String permissionTest() {
@@ -58,6 +60,26 @@ public class DebugController {
 			.build();
 
 		return productPriceRepo.save(priceHistory);
+	}
+
+	@PostMapping("/order/update/status")
+	public OrderHistory updateOrderStatus(
+		@RequestParam Long orderId,
+		@RequestParam OrderStatus status,
+		@RequestParam PaymentStatus paymentStatus,
+		@RequestParam PaymentMethod paymentMethod
+	) {
+		var order = orderHistoryRepo.findById(orderId).orElseThrow();
+		order.setOrderStatus(status);
+		order.setPaymentStatus(paymentStatus);
+		order.setPaymentMethod(paymentMethod);
+		return orderHistoryRepo.save(order);
+	}
+
+	@GetMapping("/order/get")
+	public List<OrderHistory> getOrderHistory(
+	) {
+		return orderHistoryRepo.findAll();
 	}
 
 	@PostMapping("/record/coupon/create")

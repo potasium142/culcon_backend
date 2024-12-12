@@ -1,9 +1,11 @@
 package com.culcon.backend.exceptions;
 
+import com.culcon.backend.exceptions.custom.OTPException;
 import com.culcon.backend.exceptions.custom.RuntimeExceptionPlusPlus;
 import com.culcon.backend.exceptions.messages.ExceptionMessage;
 import com.culcon.backend.exceptions.messages.FieldErrorMessage;
-import org.hibernate.exception.ConstraintViolationException;
+import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -47,7 +49,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<?> dataIntegrityViolation(DataIntegrityViolationException ex) {
-		var violation = (ConstraintViolationException) ex.getCause();
+		var violation = (org.hibernate.exception.ConstraintViolationException) ex.getCause();
 		var error = FieldErrorMessage.builder()
 			.fieldName("Data integrity violation")
 			.message(violation.getSQLException().getLocalizedMessage())
@@ -89,10 +91,34 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		);
 	}
 
+	@ExceptionHandler(ExpiredJwtException.class)
+	public ResponseEntity<?> expiredJwtException(ExpiredJwtException ex) {
+		return new ResponseEntity<>(
+			ExceptionMessage.map(ex),
+			HttpStatus.UNAUTHORIZED
+		);
+	}
+
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<?> constraintViolationException(ConstraintViolationException ex) {
+		return new ResponseEntity<>(
+			ExceptionMessage.map(ex),
+			HttpStatus.NOT_ACCEPTABLE
+		);
+	}
+
+	@ExceptionHandler(OTPException.class)
+	public ResponseEntity<?> otpException(OTPException ex) {
+		return new ResponseEntity<>(
+			ExceptionMessage.map(ex),
+			HttpStatus.NOT_ACCEPTABLE
+		);
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> genericException(Exception ex) {
 		return new ResponseEntity<>(
-			ExceptionMessage.map(ex),
+			ex.getStackTrace(),
 			HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

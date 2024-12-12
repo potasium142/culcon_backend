@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -56,24 +57,33 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		username = account.get().getUsername();
 
-		if (SecurityContextHolder
-			.getContext()
-			.getAuthentication() == null) {
+		try {
+			if (SecurityContextHolder
+				.getContext()
+				.getAuthentication() == null) {
 
-			UserDetails userDetails = this.userService.userDetailsServices().loadUserByUsername(username);
+				UserDetails userDetails = this.userService.userDetailsServices().loadUserByUsername(username);
 
-			if (jwtService.isTokenValid(jwtToken, userDetails)) {
-				var authToken = new UsernamePasswordAuthenticationToken(
-					userDetails,
-					null,
-					userDetails.getAuthorities());
-				authToken.setDetails(
-					new WebAuthenticationDetailsSource()
-						.buildDetails(request));
+				if (jwtService.isTokenValid(jwtToken, userDetails)) {
+					var authToken = new UsernamePasswordAuthenticationToken(
+						userDetails,
+						null,
+						userDetails.getAuthorities());
+					authToken.setDetails(
+						new WebAuthenticationDetailsSource()
+							.buildDetails(request));
 
-				SecurityContextHolder.getContext().setAuthentication(authToken);
+					SecurityContextHolder.getContext().setAuthentication(authToken);
+				}
 			}
+			filterChain.doFilter(request, response);
+		} catch (Exception e) {
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.getWriter().write(
+				objectMapper.writeValueAsString(
+					Map.of(e.getClass().getSimpleName(), e.getMessage())
+				)
+			);
 		}
-		filterChain.doFilter(request, response);
 	}
 }
