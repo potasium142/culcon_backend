@@ -560,7 +560,7 @@ public class AuthAPITest {
 					.param("otp", "IGxW1dtjm12x02")
 
 			)
-			.andExpect(status().isInternalServerError())
+			.andExpect(status().isNotAcceptable())
 			.andReturn()
 			.getResponse()
 			.getContentAsString();
@@ -582,7 +582,7 @@ public class AuthAPITest {
 					.param("accountID", "e7b5cd8f-698f-4b46-9028-c70501c3dda6")
 					.param("otp", "........")
 			)
-			.andExpect(status().isInternalServerError())
+			.andExpect(status().isNotAcceptable())
 			.andReturn()
 			.getResponse()
 			.getContentAsString();
@@ -620,7 +620,7 @@ public class AuthAPITest {
 					.contentType(MediaType.APPLICATION_JSON)
 					.param("newEmail", "example_new_email")
 			)
-			.andExpect(status().isInternalServerError())
+			.andExpect(status().isNotAcceptable())
 			.andReturn()
 			.getResponse()
 			.getContentAsString();
@@ -650,7 +650,7 @@ public class AuthAPITest {
 					.contentType(MediaType.APPLICATION_JSON)
 					.param("newEmail", "")
 			)
-			.andExpect(status().isInternalServerError())
+			.andExpect(status().isNotAcceptable())
 			.andReturn()
 			.getResponse()
 			.getContentAsString();
