@@ -1,8 +1,6 @@
-name: Java CI with Gradle
+name: Integration test
 
 on:
-  push:
-    branches: [ "main", "stable" ]
   pull_request:
     branches: [ "main", "stable" ]
 
@@ -19,7 +17,7 @@ jobs:
 
       - uses: actions/setup-java@v4
         with:
-          java-version: 17
+          java-version: 21
           distribution: temurin
 
       - name: Setup Gradle

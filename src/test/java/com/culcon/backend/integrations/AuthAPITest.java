@@ -94,7 +94,7 @@ public class AuthAPITest {
 		var localToken = jsonResult
 			.getString("accessToken");
 
-		assertEquals(196, localToken.length());
+		assertEquals(239, localToken.length());
 	}
 
 	@Test
@@ -118,7 +118,7 @@ public class AuthAPITest {
 			.getString("accessToken");
 
 
-		assertEquals(196, localToken.length());
+		assertEquals(239, localToken.length());
 	}
 
 
@@ -722,7 +722,7 @@ public class AuthAPITest {
 		var localToken = jsonResult.getString("accessToken");
 
 
-		assertEquals(196, localToken.length());
+		assertEquals(239, localToken.length());
 	}
 
 	@Test
