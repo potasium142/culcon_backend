@@ -4,24 +4,24 @@ import com.culcon.backend.repositories.AccountRepo;
 import com.culcon.backend.services.authenticate.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.*;
 import java.util.function.Function;
 
 @Service
+@RequiredArgsConstructor
 public class JwtImplement implements JwtService {
-	@Autowired
-	private AccountRepo accountRepo;
+	private final AccountRepo accountRepo;
 
 	@Value("${jwt.secret-key}")
 	private String secretKey;
@@ -53,7 +53,7 @@ public class JwtImplement implements JwtService {
 			.claim("role", populateAuthorities(userDetails.getAuthorities()))
 			.issuedAt(new Date(System.currentTimeMillis()))
 			.expiration(new Date(System.currentTimeMillis() + jwtExpiration))
-			.signWith(getSigningKey(), SignatureAlgorithm.HS256)
+			.signWith(getSigningKey())
 			.compact();
 	}
 
@@ -81,7 +81,7 @@ public class JwtImplement implements JwtService {
 
 	private Claims extractAllClaims(String token) {
 		return Jwts.parser()
-			.setSigningKey(getSigningKey())
+			.verifyWith((SecretKey) getSigningKey())
 			.build()
 			.parseSignedClaims(token)
 			.getPayload();
