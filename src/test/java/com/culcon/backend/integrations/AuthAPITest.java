@@ -72,7 +72,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(2)
-	@Rollback(false)
+	@Rollback(true)
 	void AuthAPI_Register_Success() throws Exception {
 		var result = mockMvc.
 			perform(
@@ -405,29 +405,26 @@ public class AuthAPITest {
 	@Test
 	@Order(2)
 	void AuthAPI_Register_EmailAlreadyExists() throws Exception {
-		// Tạo tài khoản có email đã tồn tại trong cơ sở dữ liệu
 		Account existingAccount = new Account();
 		existingAccount.setEmail("example@email.com");
 		existingAccount.setPassword("user01");
 		existingAccount.setUsername("user01");
 		existingAccount.setPhone("0123456780");
-		userRepository.save(existingAccount); // Lưu tài khoản mẫu vào cơ sở dữ liệu
+		userRepository.save(existingAccount);
 
-		// Gửi yêu cầu đăng ký với email đã tồn tại
 		var result = mockMvc
 			.perform(
 				post("/api/auth/register")
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(testJson.getTestCase("register_exists_email").get("input").toString())
 			)
-			.andExpect(status().isNotAcceptable()) // Kiểm tra HTTP status 400
+			.andExpect(status().isNotAcceptable())
 			.andReturn()
 			.getResponse()
 			.getContentAsString();
 
 		// Kiểm tra nội dung phản hồi
 		var jsonResult = new JSONObject(result);
-		// Kiểm tra giá trị của các trường
 		assertEquals("Data integrity violation", jsonResult.getString("fieldName"), "Unique index or primary key violation");
 	}
 
@@ -519,7 +516,6 @@ public class AuthAPITest {
 			.getResponse()
 			.getContentAsString();
 
-		// Kiểm tra nội dung phản hồi
 		var jsonResult = new JSONObject(result);
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
@@ -1049,5 +1045,139 @@ public class AuthAPITest {
 				.getResponse()
 				.getContentAsString();
 	}
+	@Test
+	void AuthAPI_Coupon() throws Exception {
+		var result = mockMvc
+				.perform(
+						get("/api/public/fetch/coupon")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.param("couponId", "cou132")
+				)
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+	}
+	@Test
+	@Order(5)
+	void AuthAPI_Order_Success() throws Exception {
+		var result = mockMvc
+				.perform(
+						post("/api/customer/order/create")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(testJson.getTestCase("order_success").get("input").toString())
+				)
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("ON_CONFIRM", jsonResult.getString("status"));
+	}
+	@Test
+	@Order(5)
+	void AuthAPI_Order_BlankPayment() throws Exception {
+		var result = mockMvc
+				.perform(
+						post("/api/customer/order/create")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(testJson.getTestCase("order_BlankPlayment").get("input").toString())
+				)
+				.andExpect(status().isBadRequest())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("Failed to read request", jsonResult.getString("detail"));
 
+	}
+	@Test
+	@Order(5)
+	void AuthAPI_Order_WrongNumberProductInCart() throws Exception {
+		var result = mockMvc
+				.perform(
+						post("/api/customer/order/create")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(testJson.getTestCase("order_WrongNumberProductInCart").get("input").toString())
+				)
+				.andExpect(status().isBadRequest())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("Bad Request", jsonResult.getString("title"));
+	}
+	@Test
+	@Order(5)
+	void AuthAPI_Order_InvalidCoupon() throws Exception {
+		var result = mockMvc
+				.perform(
+						post("/api/customer/order/create")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(testJson.getTestCase("order_InvalidCoupon").get("input").toString())
+				)
+				.andExpect(status().isNotFound())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
+	}
+	@Test
+	@Order(5)
+	void AuthAPI_Order_InvalidPhoneNumber() throws Exception {
+		var result = mockMvc
+				.perform(
+						post("/api/customer/order/create")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(testJson.getTestCase("order_InvalidPhoneNumber").get("input").toString())
+				)
+				.andExpect(status().isBadRequest())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
+	}
+	@Test
+	@Rollback (true)
+	void AuthAPI_Order_CancelSuccess() throws Exception {
+		var result = mockMvc
+				.perform(
+						delete("/api/customer/order/cancel")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.param("id", "152")
+				)
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("CANCELLED", jsonResult.getString("status"));
+	}
+	@Test
+	@Order(6)
+	@Rollback
+	void AuthAPI_Order_CancelNotExcistOrder() throws Exception {
+		var result = mockMvc
+				.perform(
+						delete("/api/customer/order/cancel")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.param("id", "102")
+				)
+				.andExpect(status().isNotFound())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
+	}
 }
