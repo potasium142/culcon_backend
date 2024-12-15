@@ -1,4 +1,4 @@
-FROM docker.io/openjdk:17-alpine
+FROM docker.io/alpine/java:21-jre
 
 WORKDIR /workdir
 
@@ -10,7 +10,6 @@ COPY build/libs/backend-0.0.1-SNAPSHOT.jar /workdir/app.jar
 ARG DB_USERNAME=culcon
 ARG DB_PASSWORD=culcon
 ARG DB_URL_USER=jdbc:h2:file:./db/culcon_user;IFEXISTS=FALSE;
-ARG DB_URL_RECORD=jdbc:h2:file:./db/culcon_record;IFEXISTS=FALSE;
 ARG EMAIL_ADDRESS=culinaryconnect.777@gmail.com
 ARG EMAIL_PASSWORD=ukzv ubhu doze buay
 ARG CLOUDINARY_NAME=dolsfyjf7
@@ -22,7 +21,6 @@ ARG MONGODB_NAME=Culcon
 ENV DB_USERNAME=${DB_USERNAME}
 ENV DB_PASSWORD=${DB_PASSWORD}
 ENV DB_URL_USER=${DB_URL_USER}
-ENV DB_URL_RECORD=${DB_URL_RECORD}
 ENV EMAIL_ADDRESS=${EMAIL_ADDRESS}
 ENV CLOUDINARY_NAME=${CLOUDINARY_NAME}
 ENV CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}

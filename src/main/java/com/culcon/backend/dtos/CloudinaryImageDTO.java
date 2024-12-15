@@ -12,7 +12,7 @@ public record CloudinaryImageDTO(
 	String displayName,
 	List<Object> tags
 ) {
-	public static Map toMap(CloudinaryImageDTO dto) {
+	public static Map<Object, Object> toMap(CloudinaryImageDTO dto) {
 		return Map.of(
 			"folder", dto.folder(),
 			"url", dto.url(),

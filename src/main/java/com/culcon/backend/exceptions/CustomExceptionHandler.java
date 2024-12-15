@@ -117,8 +117,9 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> genericException(Exception ex) {
+		ex.printStackTrace();
 		return new ResponseEntity<>(
-			ex.getStackTrace(),
+			ExceptionMessage.map(ex),
 			HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

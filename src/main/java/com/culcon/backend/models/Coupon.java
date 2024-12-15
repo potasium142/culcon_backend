@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "coupon")
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Coupon {

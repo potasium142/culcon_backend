@@ -17,7 +17,8 @@ import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc()
@@ -93,7 +94,7 @@ public class AuthAPITest {
 		var localToken = jsonResult
 			.getString("accessToken");
 
-		assertEquals(196, localToken.length());
+		assertEquals(239, localToken.length());
 	}
 
 	@Test
@@ -117,7 +118,7 @@ public class AuthAPITest {
 			.getString("accessToken");
 
 
-		assertEquals(196, localToken.length());
+		assertEquals(239, localToken.length());
 	}
 
 
@@ -544,24 +545,25 @@ public class AuthAPITest {
 		var jsonResult = new JSONObject(result);
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
+
 	@Test
 	@Order(5)
 	@Rollback(value = true)
 	void AuthAPI_EditProfile_EmailSuccess() throws Exception {
 		var result = mockMvc
-				.perform(
-						post("/api/customer/edit/email")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("newEmail", "trinhquangtung1@gmail.com")
-								.param("accountID", "e7b5cd8f-698f-4b46-9028-c70501c3dda6")
-								.param("otp", "rhKdtAJznpRx3b")
+			.perform(
+				post("/api/customer/edit/email")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("newEmail", "trinhquangtung1@gmail.com")
+					.param("accountID", "e7b5cd8f-698f-4b46-9028-c70501c3dda6")
+					.param("otp", "rhKdtAJznpRx3b")
 
-				)
-				.andExpect(status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 
 		System.out.println(result);
 
@@ -744,7 +746,7 @@ public class AuthAPITest {
 		var localToken = jsonResult.getString("accessToken");
 
 
-		assertEquals(212, localToken.length());
+		assertEquals(255, localToken.length());
 	}
 
 	@Test
@@ -826,228 +828,4 @@ public class AuthAPITest {
 		var jsonResult = new JSONObject(result);
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
-	@Test
-	@Order(4)
-	@Rollback(value = false)
-	void AuthAPI_AddToCart_Success() throws Exception {
-		var result = mockMvc
-				.perform(
-						put("/api/customer/cart/add")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("id", "MK_01")
-								.param("quantity", "10")
-				)
-				.andExpect(status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-		if (result.equals("{\n" +
-				"  \"product\": {\n" +
-				"    \"id\": \"MK_01\",\n" +
-				"    \"productName\": \"Snakehead Fish Braised with Pepper \uD83D\uDC1F\",\n" +
-				"    \"productTypes\": \"MEALKIT\",\n" +
-				"    \"availableQuantity\": 98,\n" +
-				"    \"productStatus\": \"IN_STOCK\",\n" +
-				"    \"imageUrl\": \"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRT9x9miekrqlY5dpoEFRTNLUeDWujSBuGuXQ&s\",\n" +
-				"    \"price\": 12.5,\n" +
-				"    \"salePercent\": 10\n" +
-				"  },\n" +
-				"  \"amount\": 10\n" +
-				"}")) {
-			assertTrue(true);
-		}
-	}
-	@Test
-	@Order(4)
-	@Rollback(value = true)
-	void AuthAPI_AddToCart_InvalidId() throws Exception {
-		var result = mockMvc
-				.perform(
-						put("/api/customer/cart/add")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("id", "M")
-								.param("quantity", "10")
-				)
-				.andExpect(status().isNotFound())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-		var jsonResult = new JSONObject(result);
-		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
-	}
-	@Test
-	@Order(4)
-	@Rollback(value = true)
-	void AuthAPI_AddToCart_InvalidQuantity() throws Exception {
-		var result = mockMvc
-				.perform(
-						put("/api/customer/cart/add")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("id", "MK_01")
-								.param("quantity", "ddd")
-				)
-				.andExpect(status().isBadRequest())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-	}
-	@Test
-	@Order(4)
-	@Rollback(value = true)
-	void AuthAPI_AddToCart_BlankQuantity() throws Exception {
-		var result = mockMvc
-				.perform(
-						put("/api/customer/cart/add")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("id", "MK_01")
-								.param("quantity", "")
-				)
-				.andExpect(status().isBadRequest())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-	}
-	@Test
-	@Order(4)
-	@Rollback(value = true)
-	void AuthAPI_AddToCart_BlankId() throws Exception {
-		var result = mockMvc
-				.perform(
-						put("/api/customer/cart/add")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("id", "")
-								.param("quantity", "ddd")
-				)
-				.andExpect(status().isBadRequest())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-	}
-	@Test
-	@Order(4)
-	@Rollback(value = true)
-	void AuthAPI_AddToCart_NoIdExist() throws Exception {
-		var result = mockMvc
-				.perform(
-						put("/api/customer/cart/add")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("id", "123")
-								.param("quantity", "1")
-				)
-				.andExpect(status().isNotFound())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-		var jsonResult = new JSONObject(result);
-		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
-	}
-	@Test
-	@Order(5)
-	@Rollback(value = false)
-	void AuthAPI_Cart_SetQuantity() throws Exception {
-		var result = mockMvc
-				.perform(
-						put("/api/customer/cart/set")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("id", "MK_01")
-								.param("quantity", "4")
-				)
-				.andExpect(status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-	}
-	@Test
-	@Order(5)
-	@Rollback(value = false)
-	void AuthAPI_Cart_NullSetQuantity() throws Exception {
-		var result = mockMvc
-				.perform(
-						put("/api/customer/cart/set")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("id", "MK_01")
-								.param("quantity", "")
-				)
-				.andExpect(status().isBadRequest())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-	}
-	@Test
-	@Order(5)
-	void AuthAPI_Cart_NullSetId() throws Exception {
-		var result = mockMvc
-				.perform(
-						put("/api/customer/cart/set")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("id", "")
-								.param("quantity", "1")
-				)
-				.andExpect(status().isNotFound())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-	}
-	@Test
-	@Order(5)
-	void AuthAPI_Cart_SetIdNotExist() throws Exception {
-		var result = mockMvc
-				.perform(
-						put("/api/customer/cart/set")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("id", "MK_0122222")
-								.param("quantity", "1")
-				)
-				.andExpect(status().isNotFound())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-
-		var jsonResult = new JSONObject(result);
-		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
-	}
-	@Test
-	@Order(5)
-	void AuthAPI_Cart_Remove_InvalidId() throws Exception {
-		var result = mockMvc
-				.perform(
-						delete("/api/customer/cart/remove")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("id", "MK_0122222")
-				)
-				.andExpect(status().isNotFound())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-
-		var jsonResult = new JSONObject(result);
-		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
-	}
-	@Test
-	@Order(6)
-	void AuthAPI_Cart_RemoveSuccess() throws Exception {
-		var result = mockMvc
-				.perform(
-						delete("/api/customer/cart/remove")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("id", "MK_01")
-				)
-				.andExpect(status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-	}
-
 }

@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class PostInteractionId {
 	private String postId;
 
