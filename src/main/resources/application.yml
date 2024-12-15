@@ -1,23 +1,73 @@
 spring:
-    config:
-        import: optional:file:.env[.properties]
-    datasource:
-        url: ${DB_URL}
-        username: ${DB_USERNAME}
-        password: ${DB_PASSWORD}
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: ${DB_URL_USER}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+  data:
+    mongodb:
+      uri: ${MONGODB_URL}
+      database: ${MONGODB_NAME}
     jpa:
-        hibernate:
-            ddl-auto: update
-    servlet:
-        multipart:
-            max-file-size: 10MB
-    sql:
-        init:
-            mode: always
+      repositories:
+        bootstrap-mode: default
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  sql:
+    init:
+      mode: always
+  h2:
+    console:
+      enabled: true
+      settings:
+        web-allow-others: true
+
+  mail:
+    host: smtp.gmail.com
+    username: ${EMAIL_ADDRESS}
+    password: ${EMAIL_PASSWORD}
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        connectiontimeout: 5000
+        timeout: 3000
+
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 212155081312-he5p1bdtliddgjgr2ltokvcdmece9at7.apps.googleusercontent.com
+            client-secret: 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
+            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+            scope: profile, email
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
 
 
 
 jwt:
-    secret-key: 482087CE4EEB98990B21E80477B6F8F7973770A5C836FF23BAA85ADCD786139B50C11D935B6C1512F36E8DA99A70788992E0EBD70F2BD5E7817CFA0D141C9270
-    expiration:
-        access-token: 1800000
+  secret-key: 482087CE4EEB98990B21E80477B6F8F7973770A5C836FF23BAA85ADCD786139B50C11D935B6C1512F36E8DA99A70788992E0EBD70F2BD5E7817CFA0D141C9270
+  expiration:
+    access-token: 1800000000
+
+cloudinary:
+  cloud-name: ${CLOUDINARY_NAME}
+  api-key: ${CLOUDINARY_API_KEY}
+  api-secret: ${CLOUDINARY_API_SECRET}

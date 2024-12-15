@@ -1,25 +1,33 @@
 package com.culcon.backend.controllers.auth;
 
+import com.culcon.backend.configs.LogoutService;
+import com.culcon.backend.dtos.OTPResetPassword;
+import com.culcon.backend.dtos.OTPResponse;
+import com.culcon.backend.dtos.auth.AuthenticationRequest;
+import com.culcon.backend.dtos.auth.CustomerRegisterRequest;
+import com.culcon.backend.models.Account;
+import com.culcon.backend.services.OTPService;
+import com.culcon.backend.services.UserService;
+import com.culcon.backend.services.authenticate.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.mail.MessagingException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
-import com.culcon.backend.configs.LogoutService;
-import com.culcon.backend.dtos.auth.AuthenticationRequest;
-import com.culcon.backend.dtos.auth.CustomerRegisterRequest;
-import com.culcon.backend.services.AuthService;
-
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import javax.security.auth.login.AccountNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -27,48 +35,104 @@ import lombok.RequiredArgsConstructor;
 @Validated
 public class AuthController {
 
-    private final AuthService authService;
-    private final LogoutService logoutService;
+	private final AuthService authService;
+	private final LogoutService logoutService;
 
-    @Operation(
-            tags = { "Authentication", "Account" },
-            summary = "Customer register API")
-    @PostMapping("/register")
-    public ResponseEntity<Object> registerCustomer(
-            @Valid
-            @RequestBody
-            CustomerRegisterRequest request) {
-        var registerLoginToken = authService.registerCustomer(request);
-        return new ResponseEntity<>(
-                registerLoginToken,
-                HttpStatus.OK);
-    }
+	private final UserService userService;
+	private final OTPService otpService;
 
-    @Operation(tags = { "Authentication" })
-    @PostMapping("/signin")
-    public ResponseEntity<Object> signIn(
-            @RequestBody
-            @Valid
-            AuthenticationRequest authenticate) {
-        var authenStatus = authService.authenticate(authenticate);
-        return new ResponseEntity<>(authenStatus, HttpStatus.OK);
-    }
+	@Operation(
+		tags = {"Authentication", "Account"},
+		summary = "Customer register API")
+	@PostMapping("/register")
+	public ResponseEntity<Object> registerCustomer(
+		@Valid
+		@RequestBody
+		CustomerRegisterRequest request) {
+		var registerLoginToken = authService.registerCustomer(request);
+		return new ResponseEntity<>(
+			registerLoginToken,
+			HttpStatus.OK);
+	}
 
-    @Operation(tags = { "Authentication" })
-    @PostMapping("/logout")
-    public void logout(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            Authentication authentication) {
-        logoutService.logout(request, response, authentication);
-    }
 
-    @Operation(
-            tags = { "Account" },
-            summary = "Get raw account information")
-    @GetMapping("/account")
-    public ResponseEntity<Object> getCurrentLoginUser(
-            HttpServletRequest request) {
-        return authService.getUserInformation(request);
-    }
+	@Operation(tags = {"Authentication"})
+	@PostMapping("/signin")
+	public ResponseEntity<Object> signIn(
+		@RequestBody
+		@Valid
+		AuthenticationRequest authenticate) {
+		var authenStatus = authService.authenticate(authenticate);
+		return new ResponseEntity<>(authenStatus, HttpStatus.OK);
+	}
+
+	@Operation(tags = {"Authentication"})
+	@PostMapping("/logout")
+	public void logout(
+		HttpServletRequest request,
+		HttpServletResponse response,
+		Authentication authentication) {
+		logoutService.logout(request, response, authentication);
+	}
+
+
+	@Operation(tags = {"Authentication"})
+	@PostMapping("/forgot/otp/get")
+	public ResponseEntity<Object> forgotSendOTP(
+		@RequestParam("email")
+		@NotEmpty(message = "Email shouldn't be empty")
+		@Email
+		String email
+	) throws MessagingException, UnsupportedEncodingException, AccountNotFoundException {
+		Account account = userService.getAccountByEmail(email);
+
+		var otp = otpService.generateOTP(account, account.getEmail(), 14, 7);
+
+		otpService.sendOTPEmail(otp);
+
+		return new ResponseEntity<>(OTPResponse.of(otp), HttpStatus.OK);
+	}
+
+	@Operation(tags = {"Authentication"})
+	@PostMapping("/forgot/reset")
+	public ResponseEntity<Object> forgotResetPassword(
+		@Valid @RequestBody OTPResetPassword otpForm
+	) {
+		userService.updateCustomerPasswordOTP(otpForm.otp(), otpForm.id(), otpForm.password());
+		return new ResponseEntity<>("Password update successfully", HttpStatus.OK);
+	}
+
+
+	@Operation(
+		tags = {"Account"},
+		summary = "Get raw account information")
+	@GetMapping("/account")
+	public ResponseEntity<Object> getCurrentLoginUser(
+		HttpServletRequest request) {
+		var user = authService.getUserInformation(request);
+		return new ResponseEntity<>(user, HttpStatus.OK);
+	}
+
+	@Operation(
+		tags = {"Authentication"},
+		summary = "Signin with google")
+	@GetMapping("/signin/google")
+	public RedirectView googleSignIn() {
+		return new RedirectView("/oauth2/authorization/google");
+	}
+
+
+
+
+
+
+
+	@Operation(
+		tags = {"Account"},
+		summary = "Get raw account information")
+	@GetMapping("/account/all/test")
+	public ResponseEntity<Object> getAllCustomer() {
+
+		return new ResponseEntity<>(userService.getAccounts(), HttpStatus.OK);
+	}
 }

@@ -1,5 +1,6 @@
 services:
-  culcon_db:
+  culcon_user_db:
+    container_name: culcon_user_db
     image: postgres
     ports:
       - "5432:5432"
@@ -9,14 +10,19 @@ services:
       POSTGRES_DB: culcon_user
 
   app:
-    build:
-      context: .
-      dockerfile: Containerfile
+    image: docker.io/giangltce/culcon_user_backend:main
+    #    build:
+    #      context: .
+    #      dockerfile: Dockerfile
+    container_name: culcon_user_backend
     ports:
       - "8080:8080"
     depends_on:
-      - culcon_db
+      - culcon_user_db
     environment:
-      DB_URL: jdbc:postgresql://culcon_db:5432/culcon_user
-      DB_USERNAME: culcon
-      DB_PASSWORD: culcon
+      - DB_URL_USER=jdbc:postgresql://culcon_user_db:5432/culcon_user
+      - DB_URL_RECORD=jdbc:postgresql://culcon_record_db:5433/culcon_record
+      - DB_USERNAME=culcon
+      - DB_PASSWORD=culcon
+      - EMAIL_ADDRESS=culinaryconnect.777@gmail.com
+      - EMAIL_PASSWORD=ukzv ubhu doze buay

@@ -36,3 +36,11 @@ out/
 ### VS Code ###
 .vscode/
 eclipse-formatter.xml
+
+### H2 DB
+**.db
+/db
+
+
+#Appmap
+/tmp
