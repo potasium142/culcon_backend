@@ -16,7 +16,7 @@
       "username": "user01",
       "password": "user01",
       "email": "example@email.com",
-      "phone": "0123456780"
+      "phone": "0123456781"
     },
     "output": {}
   },
@@ -50,7 +50,7 @@
       "username": "",
       "password": "user01",
       "email": "example@email.com",
-      "phone": "0123456780"
+      "phone": "0123456781"
     },
     "output": {}
   },

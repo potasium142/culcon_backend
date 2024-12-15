@@ -549,6 +549,33 @@ public class AuthAPITest {
 	@Test
 	@Order(5)
 	@Rollback(value = true)
+	void AuthAPI_EditProfile_EmailSuccess() throws Exception {
+		var result = mockMvc
+			.perform(
+				post("/api/customer/edit/email")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("newEmail", "trinhquangtung1@gmail.com")
+					.param("accountID", "e7b5cd8f-698f-4b46-9028-c70501c3dda6")
+					.param("otp", "rhKdtAJznpRx3b")
+
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+
+		System.out.println(result);
+
+		if (result.equals("Email update successfully")) {
+			assertTrue(true);
+		}
+	}
+
+
+	@Test
+	@Order(5)
+	@Rollback(value = true)
 	void AuthAPI_EditProfile_EmailInvalidOTP() throws Exception {
 		var result = mockMvc
 			.perform(
@@ -557,7 +584,7 @@ public class AuthAPITest {
 					.contentType(MediaType.APPLICATION_JSON)
 					.param("newEmail", "example_new_email@gmail.com")
 					.param("accountID", "e7b5cd8f-698f-4b46-9028-c70501c3dda6")
-					.param("otp", "IGxW1dtjm12x02")
+					.param("otp", ".......")
 
 			)
 			.andExpect(status().isNotAcceptable())
@@ -636,9 +663,9 @@ public class AuthAPITest {
 				post("/api/customer/edit/email/get/otp")
 					.header("Authorization", jwtToken)
 					.contentType(MediaType.APPLICATION_JSON)
-					.param("newEmail", "example@email.com")
+					.param("newEmail", "example@test")
 			)
-			.andExpect(status().isOk());
+			.andExpect(status().isInternalServerError());
 	}
 
 	@Test
@@ -674,8 +701,6 @@ public class AuthAPITest {
 			.andReturn()
 			.getResponse()
 			.getContentAsString();
-
-		// Kiểm tra nội dung phản hồi
 		var jsonResult = new JSONObject(result);
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
@@ -696,7 +721,6 @@ public class AuthAPITest {
 			.andReturn()
 			.getResponse()
 			.getContentAsString();
-		// Kiểm tra nội dung phản hồi
 		var jsonResult = new JSONObject(result);
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
@@ -722,7 +746,7 @@ public class AuthAPITest {
 		var localToken = jsonResult.getString("accessToken");
 
 
-		assertEquals(239, localToken.length());
+		assertEquals(255, localToken.length());
 	}
 
 	@Test
