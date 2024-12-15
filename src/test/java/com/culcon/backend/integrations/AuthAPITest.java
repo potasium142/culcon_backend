@@ -804,4 +804,5 @@ public class AuthAPITest {
 		var jsonResult = new JSONObject(result);
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
+
 }
