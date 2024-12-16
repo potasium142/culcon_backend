@@ -22,8 +22,8 @@
   },
   "login_success": {
     "input": {
-      "username": "user01",
-      "password": "user01"
+      "username": "test3",
+      "password": "123456"
     }
   },
   "login_fail": {
@@ -193,60 +193,158 @@
       "otp": "123456"
     }
   },
-    "edit_profileBlankUsername": {
-      "input": {
-        "username": "",
-        "phone": "0123456789",
-        "address": "lavander town",
-        "description": "lavander sus"
+  "edit_profileBlankUsername": {
+    "input": {
+      "username": "",
+      "phone": "0123456789",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileBlankPhone": {
+    "input": {
+      "username": "user01",
+      "phone": "",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileBlankEmail": {
+    "input": {
+      "email": "",
+      "username": "user01",
+      "phone": "0123456789",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "editPassword": {
+    "input": {
+      "oldPassword": "admin",
+      "password": "123456"
+    }
+  },
+  "editPassword_WrongOldPassword": {
+    "input": {
+      "oldPassword": "admi",
+      "password": "123456"
+    }
+  },
+  "editPassword_BlankOldPassword": {
+    "input": {
+      "oldPassword": "",
+      "password": "123456"
+    }
+  },
+  "editPassword_BlankNewPassword": {
+    "input": {
+      "oldPassword": "admi",
+      "password": ""
+    }
+  },
+  "editPassword_InvalidNewPassword": {
+    "input": {
+      "oldPassword": "admin",
+      "password": "123"
+    }
+  },
+  "order_success": {
+    "input": {
+      "couponId": "",
+      "deliveryAddress": "",
+      "phoneNumber": "0123456789",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "BANKING",
+      "product": {
+        "MK_01": 2
       }
-    },
-    "edit_profileBlankPhone": {
-      "input": {
-        "username": "user01",
-        "phone": "",
-        "address": "lavander town",
-        "description": "lavander sus"
+    }
+  },
+  "order_BlankPlayment": {
+    "input": {
+      "couponId": "",
+      "deliveryAddress": "",
+      "phoneNumber": "",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "",
+      "product": {
+        "MK_01": 2
       }
-    },
-    "edit_profileBlankEmail": {
-      "input": {
-        "email": "",
-        "username": "user01",
-        "phone": "0123456789",
-        "address": "lavander town",
-        "description": "lavander sus"
+    }
+  },
+  "order_WrongNumberProductInCart": {
+    "input": {
+      "couponId": "",
+      "deliveryAddress": "",
+      "phoneNumber": "0123456789",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "BANKING",
+      "product": {
+        "MK_01": -1
       }
-    },
-    "editPassword": {
-      "input": {
-        "oldPassword": "admin",
-        "password": "123456"
+    }
+  },
+  "order_InvalidCoupon": {
+    "input": {
+      "couponId": "d",
+      "deliveryAddress": "",
+      "phoneNumber": "0123456789",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "BANKING",
+      "product": {
+        "MK_01": 2
       }
-    },
-    "editPassword_WrongOldPassword": {
-      "input": {
-        "oldPassword": "admi",
-        "password": "123456"
+    }
+  },
+  "order_InvalidPhoneNumber": {
+    "input": {
+      "couponId": "",
+      "deliveryAddress": "",
+      "phoneNumber": "01234",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "BANKING",
+      "product": {
+        "MK_01": 2
       }
-    },
-    "editPassword_BlankOldPassword": {
-      "input": {
-        "oldPassword": "",
-        "password": "123456"
+    }
+  },
+  "order_BlankAddress": {
+    "input": {
+      "couponId": "",
+      "deliveryAddress": "",
+      "phoneNumber": "0123456789",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "BANKING",
+      "product": {
+        "MK_01": 2
       }
-    },
-    "editPassword_BlankNewPassword": {
-      "input": {
-        "oldPassword": "admi",
-        "password": ""
-      }
-    },
-    "editPassword_InvalidNewPassword": {
-      "input": {
-        "oldPassword": "admin",
-        "password": "123"
-      }
+    }
+  },
+  "fogotPassword_Success": {
+    "input": {
+      "id": "c75265e6-f5cc-419b-b183-7b43dbb9f27b",
+      "otp": "RcfM3fKVWuvSUg",
+      "password": "1234567"
+    }
+  },
+  "fogotPassword_InvalidPassword": {
+    "input": {
+      "id": "c75265e6-f5cc-419b-b183-7b43dbb9f27b",
+      "otp": "RcfM3fKVWuvSUg",
+      "password": "123"
+    }
+  },
+  "fogotPassword_InvalidOTP": {
+    "input": {
+      "id": "c75265e6-f5cc-419b-b183-7b43dbb9f27b",
+      "otp": "invalid",
+      "password": "123456"
     }
   }
 }
