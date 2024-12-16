@@ -252,7 +252,7 @@
     "input": {
       "couponId": "",
       "deliveryAddress": "",
-      "phoneNumber": "",
+      "phoneNumber": "0123456789",
       "receiver": "",
       "note": "testnote",
       "paymentMethod": "BANKING",
@@ -278,12 +278,12 @@
     "input": {
       "couponId": "",
       "deliveryAddress": "",
-      "phoneNumber": "",
+      "phoneNumber": "0123456789",
       "receiver": "",
       "note": "testnote",
       "paymentMethod": "BANKING",
       "product": {
-        "MK_01": 1
+        "MK_01": -1
       }
     }
   },
@@ -291,13 +291,61 @@
     "input": {
       "couponId": "d",
       "deliveryAddress": "",
-      "phoneNumber": "",
+      "phoneNumber": "0123456789",
       "receiver": "",
       "note": "testnote",
       "paymentMethod": "BANKING",
       "product": {
         "MK_01": 2
       }
+    }
+
+  },
+  "order_InvalidPhoneNumber": {
+    "input": {
+      "couponId": "",
+      "deliveryAddress": "",
+      "phoneNumber": "01234",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "BANKING",
+      "product": {
+        "MK_01": 2
+      }
+    }
+  },
+  "order_BlankAddress": {
+    "input": {
+      "couponId": "",
+      "deliveryAddress": "",
+      "phoneNumber": "0123456789",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "BANKING",
+      "product": {
+        "MK_01": 2
+      }
+    }
+  },
+  "fogotPassword_Success": {
+    "input": {
+      "id": "c75265e6-f5cc-419b-b183-7b43dbb9f27b",
+      "otp": "RcfM3fKVWuvSUg",
+      "password": "1234567"
+    }
+  },
+  "fogotPassword_InvalidPassword": {
+    "input": {
+      "id": "c75265e6-f5cc-419b-b183-7b43dbb9f27b",
+      "otp": "RcfM3fKVWuvSUg",
+      "password": "123"
+    }
+  },
+  "fogotPassword_InvalidOTP": {
+    "input": {
+      "id": "c75265e6-f5cc-419b-b183-7b43dbb9f27b",
+      "otp": "invalid",
+      "password": "123"
     }
   }
 }
