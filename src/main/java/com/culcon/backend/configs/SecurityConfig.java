@@ -38,7 +38,6 @@ import javax.security.auth.login.AccountNotFoundException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -73,6 +72,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 					.requestMatchers(
 						"/debug/**",
 						"/api/auth/**",
+						"/api/payment/**",
 						"/swagger-ui/**",
 						"/api/public/**",
 						"/h2-console/**",
