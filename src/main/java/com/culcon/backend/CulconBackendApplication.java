@@ -33,7 +33,7 @@ public class CulconBackendApplication implements ApplicationRunner {
 			.username("admin")
 			.build();
 
-		if (!userRepository.existsByUsername("admin"))
-			userRepository.save(admin);
+//		if (!userRepository.existsByUsername("admin"))
+//			userRepository.save(admin);
 	}
 }

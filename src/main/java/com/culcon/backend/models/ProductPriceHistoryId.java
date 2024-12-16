@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @Builder
 @NoArgsConstructor
+@Data
 @AllArgsConstructor
 @Embeddable
 public class ProductPriceHistoryId {

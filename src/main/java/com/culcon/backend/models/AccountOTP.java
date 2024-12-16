@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 @Entity
 @Builder
 @Setter
+@Data
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

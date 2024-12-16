@@ -12,6 +12,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Data
 public class PostComment {
 	@EmbeddedId
 	private PostInteractionId postInteractionId;

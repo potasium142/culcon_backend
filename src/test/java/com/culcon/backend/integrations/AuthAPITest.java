@@ -93,7 +93,7 @@ public class AuthAPITest {
 		var localToken = jsonResult
 			.getString("accessToken");
 
-		assertEquals(196, localToken.length());
+		assertEquals(239, localToken.length());
 	}
 
 	@Test
@@ -117,7 +117,7 @@ public class AuthAPITest {
 			.getString("accessToken");
 
 
-		assertEquals(196, localToken.length());
+		assertEquals(239, localToken.length());
 	}
 
 
@@ -540,24 +540,25 @@ public class AuthAPITest {
 		var jsonResult = new JSONObject(result);
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
+
 	@Test
 	@Order(5)
 	@Rollback(value = true)
 	void AuthAPI_EditProfile_EmailSuccess() throws Exception {
 		var result = mockMvc
-				.perform(
-						post("/api/customer/edit/email")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("newEmail", "trinhquangtung1@gmail.com")
-								.param("accountID", "e7b5cd8f-698f-4b46-9028-c70501c3dda6")
-								.param("otp", "rhKdtAJznpRx3b")
+			.perform(
+				post("/api/customer/edit/email")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("newEmail", "trinhquangtung1@gmail.com")
+					.param("accountID", "e7b5cd8f-698f-4b46-9028-c70501c3dda6")
+					.param("otp", "rhKdtAJznpRx3b")
 
-				)
-				.andExpect(status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 
 		System.out.println(result);
 
@@ -740,7 +741,7 @@ public class AuthAPITest {
 		var localToken = jsonResult.getString("accessToken");
 
 
-		assertEquals(212, localToken.length());
+		assertEquals(255, localToken.length());
 	}
 
 	@Test

@@ -1,6 +1,10 @@
 package com.culcon.backend.dtos.order;
 
-import com.culcon.backend.models.*;
+import com.culcon.backend.dtos.CouponDTO;
+import com.culcon.backend.models.OrderHistory;
+import com.culcon.backend.models.OrderStatus;
+import com.culcon.backend.models.PaymentMethod;
+import com.culcon.backend.models.PaymentStatus;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -11,7 +15,7 @@ public record OrderSummary(
 	LocalDateTime date,
 	OrderStatus status,
 	Float totalPrice,
-	Coupon coupon,
+	CouponDTO coupon,
 	PaymentMethod paymentMethod,
 	PaymentStatus paymentStatus,
 	String deliveryAddress,
@@ -23,7 +27,7 @@ public record OrderSummary(
 			.date(order.getDate())
 			.status(order.getOrderStatus())
 			.totalPrice(order.getTotalPrice())
-			.coupon(order.getCoupon())
+			.coupon(CouponDTO.from(order.getCoupon()))
 			.deliveryAddress(order.getDeliveryAddress())
 			.note(order.getNote())
 			.paymentMethod(order.getPaymentMethod())
