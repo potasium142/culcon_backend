@@ -167,7 +167,7 @@ public class CustomerController {
 	@Operation(tags = "Order")
 	@PostMapping("/order/create")
 	public ResponseEntity<Object> createOrder(
-		@RequestBody OrderCreation orderCreation,
+		@Valid @RequestBody OrderCreation orderCreation,
 		HttpServletRequest request
 	) {
 		return new ResponseEntity<>(orderService.createOrder(orderCreation, request), HttpStatus.OK);
@@ -216,7 +216,7 @@ public class CustomerController {
 	public ResponseEntity<Object> updateOrder(
 		HttpServletRequest req,
 		@RequestParam Long id,
-		@RequestBody OrderCreation orderCreation
+		@Valid @RequestBody OrderCreation orderCreation
 	) {
 		return ResponseEntity.ok(orderService.updateOrder(req, id, orderCreation));
 	}
