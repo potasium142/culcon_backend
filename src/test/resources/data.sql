@@ -1,6 +1,6 @@
 insert into account (id, address, bookmarked_posts, email, password, phone, profile_description, profile_pic_uri,
                      status, token, username)
-values ('example@test996d4a65-9561-47d3-8fc2-31a5868dad52',
+values ('996d4a65-9561-47d3-8fc2-31a5868dad52',
         '', '{}',
         'example@test',
         '$2a$10$n7NTAk2ymn6sYQEmwnqbI.mIqOBFSAWdXoZewi.PiPxQqnZiQq9zq',
@@ -28,12 +28,12 @@ values ('c75265e6-f5cc-419b-b183-7b43dbb9f27b', 'mei mei', '', 'trinhquangtung1@
         'admin');
 
 insert into PUBLIC.ACCOUNT_OTP (ID, ACCOUNT_ID, EMAIL, OTP, OTP_EXPIRATION, ACTIVITY_TYPE)
-values  (2, '94511231-59ce-45cb-9edc-196c378064a1', 'trinhquangtung3105@gmail.com', 'Rgy8YTrwELqlh1',
-         '2025-12-13 11:53:54.715089', null),
-        (3, '5239ecbf-5985-41b5-bcf1-ca91c9f02995', 'trinhquangtung3105@gmail.com', 'WArrbxR2kIbPpG',
-         '2024-12-13 11:54:15.561550', null),
-        (4, 'c75265e6-f5cc-419b-b183-7b43dbb9f27b', 'trinhquangtung1@gmail.com', 'RcfM3fKVWuvSUg',
-         '2025-12-16 17:13:03.159209', null);
+values (2, '94511231-59ce-45cb-9edc-196c378064a1', 'trinhquangtung3105@gmail.com', 'Rgy8YTrwELqlh1',
+        '2025-12-13 11:53:54.715089', null),
+       (3, '5239ecbf-5985-41b5-bcf1-ca91c9f02995', 'trinhquangtung3105@gmail.com', 'WArrbxR2kIbPpG',
+        '2024-12-13 11:54:15.561550', null),
+       (4, 'c75265e6-f5cc-419b-b183-7b43dbb9f27b', 'trinhquangtung1@gmail.com', 'RcfM3fKVWuvSUg',
+        '2025-12-16 17:13:03.159209', null);
 
 insert into product (id, available_quantity, image_url, price, product_name, product_status, product_types,
                      sale_percent)
@@ -110,7 +110,7 @@ values ('cou132', '2025-12-30', 20, 20, 18);
 insert into PUBLIC.ORDER_HISTORY (ID, ORDER_DATE, DELIVERY_ADDRESS, NOTE, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS,
                                   PHONENUMBER, RECEIVER, TOTAL_PRICE, COUPON, USER_ID)
 values (102, '2024-12-12 21:47:26.237815', '69, Sussy town', '', 0, 0, 0, '0123456789', 'test3', 22.5, null,
-        '94511231-59ce-45cb-9edc-196c378064a1'),
+        '996d4a65-9561-47d3-8fc2-31a5868dad52'),
        (152, '2024-12-13 01:24:37.705815', '69, Sussy town', '', 0, 0, 0, '0123456789', 'test3', 11.25, null,
         '94511231-59ce-45cb-9edc-196c378064a1'),
        (153, '2024-12-13 01:25:22.196430', '69, Sussy town', '', 0, 0, 0, '0123456789', 'test3', 11.25, null,

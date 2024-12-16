@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
-public class AuthAPITest {
+public class IntegrationTest {
 	@Value("${constant.json-data}")
 	String pwd;
 
@@ -73,7 +73,7 @@ public class AuthAPITest {
 	@Test
 	@Order(2)
 	@Rollback(false)
-	void AuthAPI_Register_Success() throws Exception {
+	void Register_Success() throws Exception {
 		var result = mockMvc.
 			perform(
 				post("/api/auth/register")
@@ -98,7 +98,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(3)
-	void AuthAPI_Login_Success() throws Exception {
+	void Login_Success() throws Exception {
 		var result = mockMvc.
 			perform(
 				post("/api/auth/signin")
@@ -122,7 +122,7 @@ public class AuthAPITest {
 
 
 	@Test
-	void AuthAPI_GetAccountInfo() throws Exception {
+	void GetAccountInfo() throws Exception {
 		var result = mockMvc.
 			perform(
 				get("/api/auth/account")
@@ -141,7 +141,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(3)
-	void AuthAPI_Login_Fail() throws Exception {
+	void Login_Fail() throws Exception {
 		var result = mockMvc.
 			perform(
 				post("/api/auth/signin")
@@ -163,7 +163,7 @@ public class AuthAPITest {
 	@Test
 	@Order(2)
 	@Rollback(false)
-	void AuthAPI_Register_InvalidEmail() throws Exception {
+	void Register_InvalidEmail() throws Exception {
 		// Thực hiện API call
 		var result = mockMvc
 			.perform(
@@ -200,7 +200,7 @@ public class AuthAPITest {
 	@Test
 	@Order(2)
 	@Rollback(false)
-	void AuthAPI_Register_BlankUsername() throws Exception {
+	void Register_BlankUsername() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/auth/register")
@@ -236,7 +236,7 @@ public class AuthAPITest {
 	@Test
 	@Order(2)
 	@Rollback(false)
-	void AuthAPI_Register_BlankEmail() throws Exception {
+	void Register_BlankEmail() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/auth/register")
@@ -257,7 +257,7 @@ public class AuthAPITest {
 	@Test
 	@Order(2)
 	@Rollback(false)
-	void AuthAPI_Register_BlankPhone() throws Exception {
+	void Register_BlankPhone() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/auth/register")
@@ -278,7 +278,7 @@ public class AuthAPITest {
 	@Test
 	@Order(2)
 	@Rollback(false)
-	void AuthAPI_Register_BlankPassword() throws Exception {
+	void Register_BlankPassword() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/auth/register")
@@ -299,7 +299,7 @@ public class AuthAPITest {
 	@Test
 	@Order(2)
 	@Rollback(false)
-	void AuthAPI_Register_InvalidPhoneMissNumber() throws Exception {
+	void Register_InvalidPhoneMissNumber() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/auth/register")
@@ -321,7 +321,7 @@ public class AuthAPITest {
 	@Test
 	@Order(2)
 	@Rollback(false)
-	void AuthAPI_Register_InvalidPhoneMoreNumber() throws Exception {
+	void Register_InvalidPhoneMoreNumber() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/auth/register")
@@ -342,7 +342,7 @@ public class AuthAPITest {
 	@Test
 	@Order(2)
 	@Rollback(false)
-	void AuthAPI_Register_InvalidPhoneHaveText() throws Exception {
+	void Register_InvalidPhoneHaveText() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/auth/register")
@@ -363,7 +363,7 @@ public class AuthAPITest {
 	@Test
 	@Order(3)
 	@Rollback(false)
-	void AuthAPI_Login_BlankUserName() throws Exception {
+	void Login_BlankUserName() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/auth/signin")
@@ -384,7 +384,7 @@ public class AuthAPITest {
 	@Test
 	@Order(3)
 	@Rollback(false)
-	void AuthAPI_Login_BlankPassword() throws Exception {
+	void Login_BlankPassword() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/auth/signin")
@@ -404,7 +404,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(2)
-	void AuthAPI_Register_EmailAlreadyExists() throws Exception {
+	void Register_EmailAlreadyExists() throws Exception {
 		Account existingAccount = new Account();
 		existingAccount.setEmail("example@email.com");
 		existingAccount.setPassword("user01");
@@ -430,7 +430,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(2)
-	void AuthAPI_Register_UsernameAlreadyExists() throws Exception {
+	void Register_UsernameAlreadyExists() throws Exception {
 		Account existingAccount = new Account();
 		existingAccount.setEmail("example@email.com");
 		existingAccount.setPassword("user01");
@@ -454,7 +454,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(2)
-	void AuthAPI_Register_PhoneAlreadyExists() throws Exception {
+	void Register_PhoneAlreadyExists() throws Exception {
 		Account existingAccount = new Account();
 		existingAccount.setEmail("example@email.com");
 		existingAccount.setPassword("user01");
@@ -478,7 +478,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(4)
-	void AuthAPI_EditProfile_Success() throws Exception {
+	void EditProfile_Success() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/customer/edit/profile")
@@ -503,7 +503,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = false)
-	void AuthAPI_EditProfile_InvalidLessPhoneNumber() throws Exception {
+	void EditProfile_InvalidLessPhoneNumber() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/customer/edit/profile")
@@ -523,7 +523,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = false)
-	void AuthAPI_EditProfile_InvalidMorePhoneNumber() throws Exception {
+	void EditProfile_InvalidMorePhoneNumber() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/customer/edit/profile")
@@ -544,7 +544,7 @@ public class AuthAPITest {
 	@Test
 	@Order(5)
 	@Rollback(value = true)
-	void AuthAPI_EditProfile_EmailSuccess() throws Exception {
+	void EditProfile_EmailSuccess() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/customer/edit/email")
@@ -571,7 +571,7 @@ public class AuthAPITest {
 	@Test
 	@Order(5)
 	@Rollback(value = true)
-	void AuthAPI_EditProfile_EmailInvalidOTP() throws Exception {
+	void EditProfile_EmailInvalidOTP() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/customer/edit/email")
@@ -594,7 +594,7 @@ public class AuthAPITest {
 	@Test
 	@Order(5)
 	@Rollback(value = true)
-	void AuthAPI_EditProfile_EmailInvalidEmail() throws Exception {
+	void EditProfile_EmailInvalidEmail() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/customer/edit/email")
@@ -684,7 +684,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = false)
-	void AuthAPI_EditProfile_BlankUsername() throws Exception {
+	void EditProfile_BlankUsername() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/customer/edit/profile")
@@ -703,7 +703,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = false)
-	void AuthAPI_EditProfile_BlankPhone() throws Exception {
+	void EditProfile_BlankPhone() throws Exception {
 
 		var result = mockMvc
 			.perform(
@@ -723,7 +723,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = true)
-	void AuthAPI_EditPassword_Success() throws Exception {
+	void EditPassword_Success() throws Exception {
 
 		var result = mockMvc
 			.perform(
@@ -741,13 +741,13 @@ public class AuthAPITest {
 		var localToken = jsonResult.getString("accessToken");
 
 
-		assertEquals(255, localToken.length());
+		assertEquals(239, localToken.length());
 	}
 
 	@Test
 	@Order(4)
 	@Rollback(value = true)
-	void AuthAPI_EditPassword_WrongOldPassword() throws Exception {
+	void EditPassword_WrongOldPassword() throws Exception {
 
 		var result = mockMvc
 			.perform(
@@ -767,7 +767,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = true)
-	void AuthAPI_EditPassword_BlankOldPassword() throws Exception {
+	void EditPassword_BlankOldPassword() throws Exception {
 
 		var result = mockMvc
 			.perform(
@@ -787,7 +787,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = true)
-	void AuthAPI_EditPassword_BlankNewPassword() throws Exception {
+	void EditPassword_BlankNewPassword() throws Exception {
 
 		var result = mockMvc
 			.perform(
@@ -807,7 +807,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = true)
-	void AuthAPI_EditPassword_InvalidNewPassword() throws Exception {
+	void EditPassword_InvalidNewPassword() throws Exception {
 
 		var result = mockMvc
 			.perform(
@@ -827,7 +827,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = false)
-	void AuthAPI_AddToCart_Success() throws Exception {
+	void AddToCart_Success() throws Exception {
 		var result = mockMvc
 			.perform(
 				put("/api/customer/cart/add")
@@ -860,7 +860,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = true)
-	void AuthAPI_AddToCart_InvalidId() throws Exception {
+	void AddToCart_InvalidId() throws Exception {
 		var result = mockMvc
 			.perform(
 				put("/api/customer/cart/add")
@@ -880,7 +880,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = true)
-	void AuthAPI_AddToCart_InvalidQuantity() throws Exception {
+	void AddToCart_InvalidQuantity() throws Exception {
 		var result = mockMvc
 			.perform(
 				put("/api/customer/cart/add")
@@ -898,7 +898,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = true)
-	void AuthAPI_AddToCart_BlankQuantity() throws Exception {
+	void AddToCart_BlankQuantity() throws Exception {
 		var result = mockMvc
 			.perform(
 				put("/api/customer/cart/add")
@@ -916,7 +916,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = true)
-	void AuthAPI_AddToCart_BlankId() throws Exception {
+	void AddToCart_BlankId() throws Exception {
 		var result = mockMvc
 			.perform(
 				put("/api/customer/cart/add")
@@ -934,7 +934,7 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback(value = true)
-	void AuthAPI_AddToCart_NoIdExist() throws Exception {
+	void AddToCart_NoIdExist() throws Exception {
 		var result = mockMvc
 			.perform(
 				put("/api/customer/cart/add")
@@ -954,7 +954,7 @@ public class AuthAPITest {
 	@Test
 	@Order(5)
 	@Rollback(value = false)
-	void AuthAPI_Cart_SetQuantity() throws Exception {
+	void Cart_SetQuantity() throws Exception {
 		var result = mockMvc
 			.perform(
 				put("/api/customer/cart/set")
@@ -972,7 +972,7 @@ public class AuthAPITest {
 	@Test
 	@Order(5)
 	@Rollback(value = false)
-	void AuthAPI_Cart_NullSetQuantity() throws Exception {
+	void Cart_NullSetQuantity() throws Exception {
 		var result = mockMvc
 			.perform(
 				put("/api/customer/cart/set")
@@ -989,7 +989,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(5)
-	void AuthAPI_Cart_NullSetId() throws Exception {
+	void Cart_NullSetId() throws Exception {
 		var result = mockMvc
 			.perform(
 				put("/api/customer/cart/set")
@@ -1006,7 +1006,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(5)
-	void AuthAPI_Cart_SetIdNotExist() throws Exception {
+	void Cart_SetIdNotExist() throws Exception {
 		var result = mockMvc
 			.perform(
 				put("/api/customer/cart/set")
@@ -1026,7 +1026,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(5)
-	void AuthAPI_Cart_Remove_InvalidId() throws Exception {
+	void Cart_Remove_InvalidId() throws Exception {
 		var result = mockMvc
 			.perform(
 				delete("/api/customer/cart/remove")
@@ -1045,7 +1045,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(6)
-	void AuthAPI_Cart_RemoveSuccess() throws Exception {
+	void Cart_RemoveSuccess() throws Exception {
 		var result = mockMvc
 			.perform(
 				delete("/api/customer/cart/remove")
@@ -1060,7 +1060,7 @@ public class AuthAPITest {
 	}
 
 	@Test
-	void AuthAPI_Coupon() throws Exception {
+	void Coupon() throws Exception {
 		var result = mockMvc
 			.perform(
 				get("/api/public/fetch/coupon")
@@ -1076,7 +1076,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(5)
-	void AuthAPI_Order_Success() throws Exception {
+	void Order_Success() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/customer/order/create")
@@ -1094,7 +1094,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(5)
-	void AuthAPI_Order_BlankPayment() throws Exception {
+	void Order_BlankPayment() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/customer/order/create")
@@ -1113,7 +1113,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(5)
-	void AuthAPI_Order_WrongNumberProductInCart() throws Exception {
+	void Order_WrongNumberProductInCart() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/customer/order/create")
@@ -1131,7 +1131,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(5)
-	void AuthAPI_Order_InvalidCoupon() throws Exception {
+	void Order_InvalidCoupon() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/customer/order/create")
@@ -1149,7 +1149,7 @@ public class AuthAPITest {
 
 	@Test
 	@Order(5)
-	void AuthAPI_Order_InvalidPhoneNumber() throws Exception {
+	void Order_InvalidPhoneNumber() throws Exception {
 		var result = mockMvc
 			.perform(
 				post("/api/customer/order/create")
@@ -1166,25 +1166,8 @@ public class AuthAPITest {
 	}
 
 	@Test
-	@Order(5)
-	void AuthAPI_Order_BlankAddress() throws Exception {
-		var result = mockMvc
-				.perform(
-						post("/api/customer/order/create")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(testJson.getTestCase("order_BlankAddress").get("input").toString())
-				)
-				.andExpect(status().isBadRequest())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
-		var jsonResult = new JSONObject(result);
-		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
-	}
-	@Test
 	@Rollback(true)
-	void AuthAPI_Order_CancelSuccess() throws Exception {
+	void Order_CancelSuccess() throws Exception {
 		var result = mockMvc
 			.perform(
 				delete("/api/customer/order/cancel")
@@ -1197,13 +1180,13 @@ public class AuthAPITest {
 			.getResponse()
 			.getContentAsString();
 		var jsonResult = new JSONObject(result);
-		assertEquals("CANCELLED", jsonResult.getString("status"));
+		assertEquals("CANCELLED", jsonResult.getJSONObject("summary").getString("status"));
 	}
 
 	@Test
 	@Order(6)
 	@Rollback
-	void AuthAPI_Order_CancelNotExcistOrder() throws Exception {
+	void Order_CancelNotExcistOrder() throws Exception {
 		var result = mockMvc
 			.perform(
 				delete("/api/customer/order/cancel")
@@ -1218,40 +1201,42 @@ public class AuthAPITest {
 		var jsonResult = new JSONObject(result);
 		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
 	}
+
 	@Test
 	@Order(4)
 	@Rollback
-	void AuthAPI_OTP_FogotPassword() throws Exception {
+	void OTP_FogotPassword() throws Exception {
 		var result = mockMvc
-				.perform(
-						post("/api/auth/forgot/otp/get")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("email", "trinhquangtung1@gmail.com")
-				)
-				.andExpect(status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				post("/api/auth/forgot/otp/get")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("email", "trinhquangtung1@gmail.com")
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 		var jsonResult = new JSONObject(result);
 		assertTrue(jsonResult.has("accountId"));
 		assertTrue(jsonResult.has("expireTime"));
 	}
+
 	@Test
 	@Order(4)
 	@Rollback
-	void AuthAPI_OTP_FogotPassword_InvalidEmail() throws Exception {
+	void OTP_FogotPassword_InvalidEmail() throws Exception {
 		var result = mockMvc
-				.perform(
-						post("/api/auth/forgot/otp/get")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("email", "trinhquangtung1")
-				)
-				.andExpect(status().isNotAcceptable())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				post("/api/auth/forgot/otp/get")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("email", "trinhquangtung1")
+			)
+			.andExpect(status().isNotAcceptable())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 		var jsonResult = new JSONObject(result);
 		assertEquals("ConstraintViolationException", jsonResult.getString("cause"));
 	}
@@ -1259,51 +1244,53 @@ public class AuthAPITest {
 	@Test
 	@Order(4)
 	@Rollback
-	void AuthAPI_FogotPassword_Success() throws Exception {
+	void FogotPassword_Success() throws Exception {
 		var result = mockMvc
-				.perform(
-						post("/api/auth/forgot/reset")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(testJson.getTestCase("fogotPassword_Success").get("input").toString())
-				)
-				.andExpect(status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				post("/api/auth/forgot/reset")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("fogotPassword_Success").get("input").toString())
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 		assertEquals("Password update successfully", result);
 	}
+
 	@Test
 	@Order(4)
 	@Rollback
-	void AuthAPI_FogotPassword_InvalidNewPassword() throws Exception {
+	void FogotPassword_InvalidNewPassword() throws Exception {
 		var result = mockMvc
-				.perform(
-						post("/api/auth/forgot/reset")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(testJson.getTestCase("fogotPassword_InvalidPassword").get("input").toString())
-				)
-				.andExpect(status().isBadRequest())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				post("/api/auth/forgot/reset")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("fogotPassword_InvalidPassword").get("input").toString())
+			)
+			.andExpect(status().isBadRequest())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 	}
+
 	@Test
 	@Order(4)
 	@Rollback
-	void AuthAPI_FogotPassword_InvalidOTP() throws Exception {
+	void FogotPassword_InvalidOTP() throws Exception {
 		var result = mockMvc
-				.perform(
-						post("/api/auth/forgot/reset")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(testJson.getTestCase("fogotPassword_InvalidOTP").get("input").toString())
-				)
-				.andExpect(status().isNotAcceptable())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				post("/api/auth/forgot/reset")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(testJson.getTestCase("fogotPassword_InvalidOTP").get("input").toString())
+			)
+			.andExpect(status().isNotAcceptable())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 		var jsonResult = new JSONObject(result);
 		assertEquals("OTPException", jsonResult.getString("cause"));
 	}

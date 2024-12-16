@@ -299,7 +299,6 @@
         "MK_01": 2
       }
     }
-
   },
   "order_InvalidPhoneNumber": {
     "input": {
@@ -345,7 +344,7 @@
     "input": {
       "id": "c75265e6-f5cc-419b-b183-7b43dbb9f27b",
       "otp": "invalid",
-      "password": "123"
+      "password": "123456"
     }
   }
 }
