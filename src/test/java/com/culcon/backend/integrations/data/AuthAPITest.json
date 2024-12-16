@@ -299,18 +299,5 @@
         "MK_01": 2
       }
     }
-  },
-  "order_InvalidPhoneNumber": {
-    "input": {
-      "couponId": "",
-      "deliveryAddress": "",
-      "phoneNumber": "",
-      "receiver": "",
-      "note": "testnote",
-      "paymentMethod": "BANKING",
-      "product": {
-        "MK_01": 2
-      }
-    }
   }
 }
