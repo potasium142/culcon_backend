@@ -2,14 +2,8 @@ package com.culcon.backend.services.implement;
 
 import com.culcon.backend.dtos.order.*;
 import com.culcon.backend.exceptions.custom.RuntimeExceptionPlusPlus;
-import com.culcon.backend.models.Coupon;
-import com.culcon.backend.models.OrderHistory;
-import com.culcon.backend.models.OrderHistoryItem;
-import com.culcon.backend.models.OrderStatus;
-import com.culcon.backend.repositories.CouponRepo;
-import com.culcon.backend.repositories.OrderHistoryRepo;
-import com.culcon.backend.repositories.ProductPriceRepo;
-import com.culcon.backend.repositories.ProductRepo;
+import com.culcon.backend.models.*;
+import com.culcon.backend.repositories.*;
 import com.culcon.backend.services.OrderService;
 import com.culcon.backend.services.PaymentService;
 import com.culcon.backend.services.authenticate.AuthService;
@@ -37,8 +31,15 @@ public class OrderImplement implements OrderService {
 	private final OrderHistoryRepo orderHistoryRepo;
 	private final ProductRepo productRepo;
 	private final PaymentService paymentService;
+	private final PaymentTransactionRepo paymentTransactionRepo;
 
 	private Coupon getCoupon(String id) {
+		if (id.isBlank()) {
+			return Coupon.builder().id(null)
+				.salePercent(0.0f)
+				.build();
+		}
+
 		var coupon = couponRepo.findById(id).orElseThrow(
 			() -> new NoSuchElementException("Coupon Not Found")
 		);
@@ -193,9 +194,8 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public OrderDetail updateOrder(HttpServletRequest req, Long orderId, OrderCreation orderCreation) {
+	public OrderDetail updateOrder(HttpServletRequest req, Long orderId, OrderUpdate orderCreation) throws IOException, ApiException {
 		var account = authService.getUserInformation(req);
-
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
 			.orElseThrow(() -> new NoSuchElementException("Order not found"));
@@ -203,6 +203,18 @@ public class OrderImplement implements OrderService {
 		if (order.getOrderStatus() != OrderStatus.ON_CONFIRM) {
 			throw new IllegalArgumentException("Order can only be edit on confirm status");
 		}
+
+		var payment = paymentTransactionRepo.findByOrder(order);
+
+		var isOnlinePayment = payment.isPresent();
+
+		if (isOnlinePayment) {
+			if (payment.get().getStatus() != PaymentStatus.CREATED) {
+				throw new RuntimeException("Order is already paid");
+			}
+		}
+
+		var isChangePayment = order.getPaymentMethod() == orderCreation.paymentMethod();
 
 		var totalPrice = order.getTotalPrice();
 
@@ -212,7 +224,14 @@ public class OrderImplement implements OrderService {
 
 		var sameCoupon = oldCouponId.equals(coupon.getId());
 
-		if (!sameCoupon) {
+		var isPriceChange = isChangePayment && !sameCoupon;
+
+		if (isPriceChange) {
+			var isPaid = !paymentTransactionRepo.existsByOrderAndStatus(order, PaymentStatus.CREATED);
+
+			if (isPaid) {
+				throw new RuntimeException("Order already paid");
+			}
 
 			for (OrderHistoryItem item : order.getItems()) {
 				var prod = item.getProductId();
@@ -222,13 +241,34 @@ public class OrderImplement implements OrderService {
 
 			totalPrice = totalPrice * (1.0f - coupon.getSalePercent() / 100.0f);
 
-			coupon.setUsageLeft(coupon.getUsageLeft() - 1);
+			if (coupon.getId() != null) {
+				coupon.setUsageLeft(coupon.getUsageLeft() - 1);
 
-			couponRepo.save(coupon);
+				couponRepo.save(coupon);
+			}
+		}
+
+		var isPaymentMethodChange = order.getPaymentMethod() != orderCreation.paymentMethod();
+
+		if (isPaymentMethodChange) {
+			switch (orderCreation.paymentMethod()) {
+				case BANKING -> paymentService.createPayment(orderId, req);
+				case COD -> paymentService.refund(order);
+			}
+		}
+
+
+		if (isOnlinePayment) {
+			if (totalPrice > 0.001f) {
+				paymentService.updatePrice(order, totalPrice);
+			} else {
+				paymentService.refund(order);
+			}
 		}
 
 		order.setTotalPrice(totalPrice);
-		order.setCoupon(coupon);
+		order.setCoupon(
+			coupon.getId() != null ? coupon : null);
 		order.setPaymentMethod(orderCreation.paymentMethod());
 		order.setDeliveryAddress(orderCreation.deliveryAddress().isBlank()
 			? account.getAddress() : orderCreation.deliveryAddress());
@@ -239,6 +279,7 @@ public class OrderImplement implements OrderService {
 		order.setNote(orderCreation.note());
 
 		order = orderHistoryRepo.save(order);
+
 
 		return OrderDetail.builder()
 			.summary(OrderSummary.from(order))

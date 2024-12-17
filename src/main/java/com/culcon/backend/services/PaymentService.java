@@ -19,4 +19,6 @@ public interface PaymentService {
 
 	void refund(OrderHistory order)
 		throws IOException, ApiException;
+
+	void updatePrice(OrderHistory order, Float price) throws IOException, ApiException;
 }

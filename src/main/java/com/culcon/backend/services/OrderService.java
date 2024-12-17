@@ -1,12 +1,11 @@
 package com.culcon.backend.services;
 
-import com.culcon.backend.dtos.order.OrderCreation;
-import com.culcon.backend.dtos.order.OrderDetail;
-import com.culcon.backend.dtos.order.OrderInList;
-import com.culcon.backend.dtos.order.OrderSummary;
+import com.culcon.backend.dtos.order.*;
 import com.culcon.backend.models.OrderStatus;
+import com.paypal.sdk.exceptions.ApiException;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface OrderService {
@@ -18,7 +17,7 @@ public interface OrderService {
 
 	OrderDetail getOrderItem(HttpServletRequest req, Long orderId);
 
-	OrderDetail updateOrder(HttpServletRequest req, Long orderId, OrderCreation orderCreation);
+	OrderDetail updateOrder(HttpServletRequest req, Long orderId, OrderUpdate orderCreation) throws IOException, ApiException;
 
 	OrderDetail cancelOrder(HttpServletRequest req, Long orderId);
 

@@ -5,6 +5,7 @@ import com.culcon.backend.dtos.OTPResponse;
 import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.dtos.order.OrderCreation;
+import com.culcon.backend.dtos.order.OrderUpdate;
 import com.culcon.backend.models.OrderStatus;
 import com.culcon.backend.services.OTPService;
 import com.culcon.backend.services.OrderService;
@@ -216,7 +217,7 @@ public class CustomerController {
 	public ResponseEntity<Object> updateOrder(
 		HttpServletRequest req,
 		@RequestParam Long id,
-		@Valid @RequestBody OrderCreation orderCreation
+		@Valid @RequestBody OrderUpdate orderCreation
 	) {
 		return ResponseEntity.ok(orderService.updateOrder(req, id, orderCreation));
 	}

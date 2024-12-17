@@ -14,6 +14,7 @@ import com.paypal.sdk.controllers.PaymentsController;
 import com.paypal.sdk.exceptions.ApiException;
 import com.paypal.sdk.http.response.ApiResponse;
 import com.paypal.sdk.models.*;
+import com.paypal.sdk.utilities.JsonValue;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -128,6 +129,11 @@ public class PaymentImplement implements PaymentService {
 
 		var paymentTransaction = paymentTransactionO.get();
 
+		if (paymentTransaction.getStatus() == PaymentStatus.CREATED) {
+			paymentTransactionRepo.delete(paymentTransaction);
+			return;
+		}
+
 		PaymentsController paymentsController = client.getPaymentsController();
 
 		CapturesRefundInput capturesRefundInput = new CapturesRefundInput.Builder(
@@ -140,6 +146,35 @@ public class PaymentImplement implements PaymentService {
 
 		paymentTransactionRepo.save(paymentTransaction);
 
+	}
+
+	@Async
+	@Override
+	public void updatePrice(OrderHistory order, Float price) throws IOException, ApiException {
+		var ordersController = client.getOrdersController();
+
+		var ptO = paymentTransactionRepo.findByOrder(order);
+
+		if (ptO.isEmpty()) {
+			return;
+		}
+
+		var pt = ptO.get();
+
+		OrdersPatchInput ordersPatchInput = new OrdersPatchInput.Builder(
+			pt.getTransactionId(), null)
+			.body(Collections.singletonList(
+				new Patch.Builder(PatchOp.REPLACE)
+					.path("/purchase_units/@reference_id=='default'/amount")
+					.value(JsonValue.fromObject(
+						"{\"currency_code\":\"USD\"" +
+							",\"value\":" + price + "}"
+					))
+					.build()
+			))
+			.build();
+
+		ordersController.ordersPatch(ordersPatchInput);
 	}
 
 }
