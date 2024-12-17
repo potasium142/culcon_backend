@@ -79,3 +79,7 @@ cloudinary:
   cloud-name: ${CLOUDINARY_NAME}
   api-key: ${CLOUDINARY_API_KEY}
   api-secret: ${CLOUDINARY_API_SECRET}
+
+paypal:
+  client_id: AYS3_-wrv-6jD7YE7azOAzYNuSktHXsyk2iOwwMn3Xxe1RlZZVMTGBLB1wgYSyHQq_S-kSNYoyZNtCnH
+  secret: EJzIccKX1WZv2pv3_Dp-VmMd2XEIfT5GQKb1LyQLAIaQGvVpsAHffjgWsPE3bm1Gvq4e105bqXNkj8LZ
