@@ -1,17 +1,23 @@
 package com.culcon.backend.services.implement;
 
 import com.culcon.backend.dtos.PaymentDTO;
+import com.culcon.backend.models.OrderHistory;
+import com.culcon.backend.models.PaymentStatus;
 import com.culcon.backend.models.PaymentTransaction;
 import com.culcon.backend.repositories.OrderHistoryRepo;
 import com.culcon.backend.repositories.PaymentTransactionRepo;
 import com.culcon.backend.services.PaymentService;
 import com.culcon.backend.services.authenticate.AuthService;
 import com.paypal.sdk.PaypalServerSdkClient;
+import com.paypal.sdk.controllers.OrdersController;
+import com.paypal.sdk.controllers.PaymentsController;
 import com.paypal.sdk.exceptions.ApiException;
 import com.paypal.sdk.http.response.ApiResponse;
 import com.paypal.sdk.models.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -20,6 +26,7 @@ import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class PaymentImplement implements PaymentService {
 
 	private final PaypalServerSdkClient client;
@@ -29,7 +36,7 @@ public class PaymentImplement implements PaymentService {
 
 
 	@Override
-	public Order createPayment(Long orderId, Float amount,
+	public Order createPayment(Long orderId,
 	                           HttpServletRequest request)
 		throws IOException, ApiException {
 		var ordersController = client.getOrdersController();
@@ -39,6 +46,12 @@ public class PaymentImplement implements PaymentService {
 			() -> new NoSuchElementException("Order not found")
 		);
 
+		var existPayment = paymentTransactionRepo.existsById(orderId);
+
+		if (existPayment) {
+			throw new RuntimeException("Payment already exists");
+		}
+
 		OrdersCreateInput ordersCreateInput = new OrdersCreateInput.Builder(
 			null,
 			new OrderRequest.Builder(
@@ -47,7 +60,7 @@ public class PaymentImplement implements PaymentService {
 					new PurchaseUnitRequest.Builder(
 						new AmountWithBreakdown.Builder(
 							"USD",
-							amount.toString()
+							order.getTotalPrice().toString()
 						).build()
 					).build()
 				)
@@ -60,7 +73,7 @@ public class PaymentImplement implements PaymentService {
 
 		var paymentTransaction = PaymentTransaction.builder()
 			.order(order)
-			.amount(amount)
+			.amount(order.getTotalPrice())
 			.transactionId(result.getId())
 			.build();
 
@@ -69,14 +82,64 @@ public class PaymentImplement implements PaymentService {
 		return result;
 	}
 
-	@Override
-	public ApiResponse<Order> getPayment(String paymentId, HttpServletRequest request) {
-		return null;
-	}
 
 	@Override
-	public PaymentDTO capturePayment(String paymentId, HttpServletRequest request) {
-		return null;
+	public PaymentDTO capturePayment(String transactionId, HttpServletRequest request)
+		throws IOException, ApiException {
+		OrdersCaptureInput ordersCaptureInput = new OrdersCaptureInput.Builder(
+			transactionId, null)
+			.build();
+
+		OrdersController ordersController = client.getOrdersController();
+		ApiResponse<Order> apiResponse = ordersController.ordersCapture(ordersCaptureInput);
+		var result = apiResponse.getResult();
+
+		var paymentTransaction = paymentTransactionRepo.findByTransactionId(result.getId())
+			.orElseThrow(() -> new NoSuchElementException("Transaction not found"));
+
+		var paymentId = result
+			.getPurchaseUnits().getFirst()
+			.getPayments()
+			.getCaptures().getFirst()
+			.getId();
+
+		paymentTransaction.setPaymentId(paymentId);
+
+		paymentTransactionRepo.save(paymentTransaction);
+
+		var order = paymentTransaction.getOrder();
+
+		order.setPaymentStatus(PaymentStatus.RECEIVED);
+
+		orderHistoryRepo.save(order);
+
+		return PaymentDTO.from(paymentTransaction);
+	}
+
+	@Async
+	@Override
+	public void refund(OrderHistory order) throws IOException, ApiException {
+		var paymentTransactionO = paymentTransactionRepo
+			.findByOrder(order);
+
+		if (paymentTransactionO.isEmpty()) {
+			return;
+		}
+
+		var paymentTransaction = paymentTransactionO.get();
+
+		PaymentsController paymentsController = client.getPaymentsController();
+
+		CapturesRefundInput capturesRefundInput = new CapturesRefundInput.Builder(
+			paymentTransaction.getPaymentId(), null).build();
+
+		ApiResponse<Refund> refundApiResponse = paymentsController.capturesRefund(capturesRefundInput);
+
+		paymentTransaction.setStatus(PaymentStatus.REFUNDED);
+		paymentTransaction.setRefundId(refundApiResponse.getResult().getId());
+
+		paymentTransactionRepo.save(paymentTransaction);
+
 	}
 
 }

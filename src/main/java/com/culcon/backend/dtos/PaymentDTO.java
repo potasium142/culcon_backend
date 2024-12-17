@@ -8,14 +8,14 @@ import java.sql.Timestamp;
 
 @Builder
 public record PaymentDTO(
-	String id,
+	Long id,
 	PaymentStatus status,
 	Float amount,
 	Timestamp createTime
 ) {
 	public static PaymentDTO from(PaymentTransaction pt) {
 		return PaymentDTO.builder()
-			.id(pt.getId())
+			.id(pt.getOrder().getId())
 			.status(pt.getStatus())
 			.amount(pt.getAmount())
 			.createTime(pt.getCreateTime())

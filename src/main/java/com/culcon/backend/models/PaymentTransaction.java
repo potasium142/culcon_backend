@@ -18,10 +18,11 @@ import java.time.LocalDateTime;
 public class PaymentTransaction {
 	@Id
 	@Column(name = "order_id")
-	private String id;
+	private Long id;
 
-	@OneToOne
+	@MapsId
 	@JoinColumn(name = "order_id")
+	@OneToOne
 	private OrderHistory order;
 
 	@Column(name = "status")
@@ -31,6 +32,10 @@ public class PaymentTransaction {
 	@Column(name = "payment_id")
 	@Builder.Default
 	private String paymentId = null;
+
+	@Column(name = "refund_id")
+	@Builder.Default
+	private String refundId = null;
 
 	@Column(name = "transaction_id")
 	private String transactionId;

@@ -11,12 +11,15 @@ import com.culcon.backend.repositories.OrderHistoryRepo;
 import com.culcon.backend.repositories.ProductPriceRepo;
 import com.culcon.backend.repositories.ProductRepo;
 import com.culcon.backend.services.OrderService;
+import com.culcon.backend.services.PaymentService;
 import com.culcon.backend.services.authenticate.AuthService;
+import com.paypal.sdk.exceptions.ApiException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,7 @@ public class OrderImplement implements OrderService {
 	private final CouponRepo couponRepo;
 	private final OrderHistoryRepo orderHistoryRepo;
 	private final ProductRepo productRepo;
+	private final PaymentService paymentService;
 
 	private Coupon getCoupon(String id) {
 		var coupon = couponRepo.findById(id).orElseThrow(
@@ -246,7 +250,6 @@ public class OrderImplement implements OrderService {
 	public OrderDetail cancelOrder(HttpServletRequest req, Long orderId) {
 		var account = authService.getUserInformation(req);
 
-
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
 			.orElseThrow(() -> new NoSuchElementException("Order not found"));
 
@@ -254,8 +257,20 @@ public class OrderImplement implements OrderService {
 			throw new IllegalArgumentException("Order can only be cancelled on confirm status");
 		}
 
+		order.getItems().forEach(orderItem -> {
+			var product = orderItem.getProductId().getId().getProduct();
+			product.setAvailableQuantity(product.getAvailableQuantity() + orderItem.getQuantity());
+			productRepo.save(product);
+		});
+
 		order.setOrderStatus(OrderStatus.CANCELLED);
 		order = orderHistoryRepo.save(order);
+
+		try {
+			paymentService.refund(order);
+		} catch (IOException | ApiException e) {
+			throw new RuntimeException(e);
+		}
 
 		return OrderDetail.builder()
 			.items(order.getItems().stream().map(OrderItem::from).toList())
