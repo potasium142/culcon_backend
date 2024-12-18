@@ -6,6 +6,7 @@ import com.culcon.backend.repositories.AccountRepo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import jakarta.transaction.Transactional;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1293,5 +1294,158 @@ public class IntegrationTest {
 			.getContentAsString();
 		var jsonResult = new JSONObject(result);
 		assertEquals("OTPException", jsonResult.getString("cause"));
+	}
+	@Test
+	@Order(4)
+	@Rollback
+	void Blog_PostComment() throws Exception {
+		var result = mockMvc
+				.perform(
+						post("/api/customer/blog/comment")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.param("postId", "B01")
+								.param("comment", "delicous")
+				)
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertTrue(jsonResult.has("accountName"));
+		assertTrue(jsonResult.has("profilePicture"));
+		assertTrue(jsonResult.has("timestamp"));
+		assertTrue(jsonResult.has("comment"));
+	}
+	@Test
+	@Order(4)
+	@Rollback
+	void Blog_Comment_NullpostId() throws Exception {
+		var result = mockMvc
+				.perform(
+						post("/api/customer/blog/comment")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.param("postId", "B012345")
+								.param("comment", "delicous")
+				)
+				.andExpect(status().isNotFound())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
+	}
+	@Test
+	@Order(4)
+	@Rollback
+	void Blog_Bookmark_Save() throws Exception {
+		var result = mockMvc
+				.perform(
+						put("/api/customer/blog/bookmark")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.param("bookmark", "True")
+								.param("blogId", "B01")
+				)
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+	}
+	@Test
+	@Order(4)
+	@Rollback
+	void Blog_Bookmark_UnSave() throws Exception {
+		var result = mockMvc
+				.perform(
+						put("/api/customer/blog/bookmark")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+								.param("bookmark", "False")
+								.param("blogId", "B01")
+				)
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+	}
+	@Test
+	@Order(4)
+	@Rollback
+	void Blog_ShowAllComment() throws Exception {
+		var result = mockMvc
+				.perform(
+						get("/api/public/fetch/blog/comment/{id}", "B01")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+				)
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		if (result.trim().startsWith("[")) {
+			var jsonArray = new JSONArray(result);
+			for (int i = 0; i < jsonArray.length(); i++) {
+				var commentObject = jsonArray.getJSONObject(i); // Correctly access each JSONObject in the array
+				assertTrue(commentObject.has("accountName"));
+				assertTrue(commentObject.has("profilePicture"));
+				assertTrue(commentObject.has("timestamp"));
+				assertTrue(commentObject.has("comment"));
+			}
+		} else if (result.trim().startsWith("{")) {
+			var jsonObject = new JSONObject(result);
+			assertTrue(jsonObject.has("accountName"));
+			assertTrue(jsonObject.has("profilePicture"));
+			assertTrue(jsonObject.has("timestamp"));
+			assertTrue(jsonObject.has("comment"));
+		}
+	}
+	@Test
+	@Order(4)
+	@Rollback
+	void Blog_Post() throws Exception {
+		var result = mockMvc
+				.perform(
+						get("/api/public/fetch/blog/{id}", "B01")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+				)
+				.andExpect(status().isOk())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonObject = new JSONObject(result);
+		// Check the root keys
+		assertTrue(jsonObject.has("blog"));
+		assertTrue(jsonObject.has("bookmark"));
+		// Validate the "blog" object
+		var blogObject = jsonObject.getJSONObject("blog");
+		assertTrue(blogObject.has("id"));
+		assertEquals("B01", blogObject.getString("id"));
+		assertTrue(blogObject.has("title"));
+		assertTrue(blogObject.has("description"));
+		assertTrue(blogObject.has("markdownText"));
+		assertTrue(blogObject.has("infos"));
+		assertTrue(blogObject.has("tags"));
+		assertTrue(blogObject.has("relatedProduct"));
+		assertTrue(blogObject.has("imageUrl"));
+	}
+	@Test
+	@Order(4)
+	@Rollback
+	void Blog_InvalidPost() throws Exception {
+		var result = mockMvc
+				.perform(
+						get("/api/public/fetch/blog/{id}", "B0123")
+								.header("Authorization", jwtToken)
+								.contentType(MediaType.APPLICATION_JSON)
+				)
+				.andExpect(status().isNotFound())
+				.andReturn()
+				.getResponse()
+				.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
 	}
 }
