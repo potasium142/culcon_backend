@@ -72,7 +72,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 					.requestMatchers(
 						"/debug/**",
 						"/api/auth/**",
-						"/api/payment/**",
 						"/swagger-ui/**",
 						"/api/public/**",
 						"/h2-console/**",
@@ -80,7 +79,10 @@ public class SecurityConfig implements WebMvcConfigurer {
 						"/oauth2/**"
 					)
 					.permitAll()
-					.requestMatchers("/api/customer/**")
+					.requestMatchers(
+						"/api/customer/**",
+						"/api/payment/**"
+					)
 					.hasAnyAuthority("CUSTOMER")
 					.anyRequest()
 					.authenticated())

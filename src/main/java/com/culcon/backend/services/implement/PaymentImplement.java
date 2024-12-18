@@ -22,6 +22,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 
@@ -37,16 +39,10 @@ public class PaymentImplement implements PaymentService {
 
 
 	@Override
-	public Order createPayment(OrderHistory order,
-	                           HttpServletRequest request)
+	public void createPayment(OrderHistory order,
+	                          HttpServletRequest request)
 		throws IOException, ApiException {
 		var ordersController = client.getOrdersController();
-
-		var existPayment = paymentTransactionRepo.existsByOrder(order);
-
-		if (existPayment) {
-			throw new RuntimeException("Payment already exists");
-		}
 
 		OrdersCreateInput ordersCreateInput = new OrdersCreateInput.Builder(
 			null,
@@ -74,8 +70,6 @@ public class PaymentImplement implements PaymentService {
 			.build();
 
 		paymentTransactionRepo.save(paymentTransaction);
-
-		return result;
 	}
 
 
@@ -100,6 +94,7 @@ public class PaymentImplement implements PaymentService {
 			.getId();
 
 		paymentTransaction.setPaymentId(paymentId);
+		paymentTransaction.setStatus(PaymentStatus.RECEIVED);
 
 		paymentTransactionRepo.save(paymentTransaction);
 
@@ -113,12 +108,27 @@ public class PaymentImplement implements PaymentService {
 	}
 
 	@Override
-	public PaymentDTO getPayment(Long orderId, HttpServletRequest request) {
+	public String getPayment(Long orderId, HttpServletRequest request) throws IOException, ApiException {
 		var account = authService.getUserInformation(request);
 		var pt = paymentTransactionRepo.findByIdAndOrder_User(orderId, account)
 			.orElseThrow(() -> new NoSuchElementException("Transaction of this order is not found"));
 
-		return PaymentDTO.from(pt);
+		var isOver3Hrs = pt.getCreateTime().before(
+			Timestamp.valueOf(LocalDateTime.now().minusHours(3))
+		);
+
+		if (isOver3Hrs) {
+			createPayment(
+				orderHistoryRepo.findById(orderId).orElseThrow(
+					() -> new NoSuchElementException("Order not found")
+				),
+				request);
+
+			pt = paymentTransactionRepo.findByIdAndOrder_User(orderId, account)
+				.orElseThrow(() -> new NoSuchElementException("Transaction of this order is not found"));
+		}
+
+		return "https://www.sandbox.paypal.com/checkoutnow?token=" + pt.getTransactionId();
 	}
 
 	@Async
@@ -147,6 +157,9 @@ public class PaymentImplement implements PaymentService {
 
 		paymentTransaction.setStatus(PaymentStatus.REFUNDED);
 		paymentTransaction.setRefundId(refundApiResponse.getResult().getId());
+
+		order.setPaymentStatus(PaymentStatus.REFUNDED);
+		orderHistoryRepo.save(order);
 
 		paymentTransactionRepo.save(paymentTransaction);
 

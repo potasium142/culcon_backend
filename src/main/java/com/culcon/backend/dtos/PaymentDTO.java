@@ -10,6 +10,7 @@ import java.sql.Timestamp;
 public record PaymentDTO(
 	Long id,
 	PaymentStatus status,
+	String transactionId,
 	Float amount,
 	Timestamp createTime
 ) {
@@ -18,6 +19,7 @@ public record PaymentDTO(
 			.id(pt.getOrder().getId())
 			.status(pt.getStatus())
 			.amount(pt.getAmount())
+			.transactionId(pt.getTransactionId())
 			.createTime(pt.getCreateTime())
 			.build();
 	}

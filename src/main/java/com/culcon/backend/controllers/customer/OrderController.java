@@ -28,7 +28,7 @@ public class OrderController {
 	public ResponseEntity<Object> createOrder(
 		@Valid @RequestBody OrderCreation orderCreation,
 		HttpServletRequest request
-	) {
+	) throws IOException, ApiException {
 		return new ResponseEntity<>(orderService.createOrder(orderCreation, request), HttpStatus.OK);
 	}
 
@@ -91,8 +91,8 @@ public class OrderController {
 	}
 
 	@Operation(tags = "Order")
-	@PatchMapping("/update/payment")
-	public ResponseEntity<Object> updatePayment(
+	@PatchMapping("/update/coupon")
+	public ResponseEntity<Object> updateCoupon(
 		HttpServletRequest req,
 		@RequestParam Long id,
 		@RequestParam String couponId

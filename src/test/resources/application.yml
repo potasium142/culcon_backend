@@ -81,5 +81,5 @@ cloudinary:
   api-secret: ${CLOUDINARY_API_SECRET}
 
 paypal:
-  client_id: AYS3_-wrv-6jD7YE7azOAzYNuSktHXsyk2iOwwMn3Xxe1RlZZVMTGBLB1wgYSyHQq_S-kSNYoyZNtCnH
-  secret: EJzIccKX1WZv2pv3_Dp-VmMd2XEIfT5GQKb1LyQLAIaQGvVpsAHffjgWsPE3bm1Gvq4e105bqXNkj8LZ
+  client_id: AUKXCltSWGMatyB20LDbHaPesJCD6aVB65TyjSO9C5SyieGrXO9w_buevtw5TIsOTMY-f79icDBZkhFg
+  secret: ENx4yLXDDg1xCsRBdXiXA6z6YF8m1VUoBoNAE_s4WxHeFNE0wCRTlnUdrUj_tSoSkC9jSNob5B6Bn42z

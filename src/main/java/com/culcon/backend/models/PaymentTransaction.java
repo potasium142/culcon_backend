@@ -22,7 +22,7 @@ public class PaymentTransaction {
 
 	@MapsId
 	@JoinColumn(name = "order_id")
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	private OrderHistory order;
 
 	@Column(name = "status")

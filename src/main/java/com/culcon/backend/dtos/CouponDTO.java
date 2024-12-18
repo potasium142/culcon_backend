@@ -9,7 +9,14 @@ public record CouponDTO(
 	Float salePercent
 ) {
 	public static CouponDTO from(Coupon coupon) {
-		return coupon == null ? null : CouponDTO.builder()
+		if (coupon == null) {
+			return CouponDTO.builder()
+				.id("Empty coupon")
+				.salePercent(0.0f)
+				.build();
+		}
+
+		return CouponDTO.builder()
 			.id(coupon.getId())
 			.salePercent(coupon.getSalePercent())
 			.build();

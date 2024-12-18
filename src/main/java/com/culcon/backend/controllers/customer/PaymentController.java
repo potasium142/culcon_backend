@@ -22,7 +22,7 @@ public class PaymentController {
 	public ResponseEntity<?> createOrder(
 		@RequestParam Long orderId,
 		HttpServletRequest request
-	) {
+	) throws IOException, ApiException {
 		var payment = paymentService.getPayment(orderId, request);
 		return ResponseEntity.status(HttpStatus.CREATED).body(payment);
 	}

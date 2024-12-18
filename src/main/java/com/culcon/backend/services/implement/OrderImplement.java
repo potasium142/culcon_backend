@@ -99,7 +99,13 @@ public class OrderImplement implements OrderService {
 
 			if (ohNo) continue;
 
-			cart.remove(prod);
+			var amountLeft = cart.get(prod) - entry.getValue();
+
+			if (amountLeft > 0) {
+				cart.put(prod, amountLeft);
+			} else {
+				cart.remove(prod);
+			}
 
 			prod.setAvailableQuantity(prod.getAvailableQuantity() - entry.getValue());
 
@@ -140,7 +146,6 @@ public class OrderImplement implements OrderService {
 
 			couponRepo.save(coupon);
 		}
-
 
 		var order = OrderHistory.builder()
 			.user(account)
@@ -212,7 +217,7 @@ public class OrderImplement implements OrderService {
 	public CouponDTO updateOrderCoupon(HttpServletRequest req, Long orderId, String couponId) throws IOException, ApiException {
 		var order = getOrderForUpdate(orderId, req);
 
-		if (order.getUpdated()) {
+		if (order.getUpdatedCoupon()) {
 			throw new RuntimeException("Order can only update once");
 		}
 
@@ -240,8 +245,11 @@ public class OrderImplement implements OrderService {
 		}
 
 		order.setTotalPrice(price);
-		order.setUpdated(true);
+		order.setCoupon(newCoupon);
+		order.setUpdatedCoupon(true);
+
 		paymentService.updatePrice(order, price);
+
 		return CouponDTO.from(order.getCoupon());
 	}
 
@@ -253,6 +261,10 @@ public class OrderImplement implements OrderService {
 
 		if (order.getPaymentMethod() == paymentMethod) {
 			throw new RuntimeException("Payment method was not changed");
+		}
+
+		if (order.getUpdatedPayment()) {
+			throw new RuntimeException("Payment method can only update once");
 		}
 
 		var pt = paymentTransactionRepo.findByOrder(order);
@@ -269,6 +281,7 @@ public class OrderImplement implements OrderService {
 		}
 
 		order.setPaymentMethod(paymentMethod);
+		order.setUpdatedPayment(true);
 
 		orderHistoryRepo.save(order);
 
