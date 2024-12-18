@@ -10,7 +10,7 @@ services:
       POSTGRES_DB: culcon_user
 
   app:
-    image: docker.io/giangltce/culcon_user_backend:main
+    image: docker.io/giangltce/culcon_user_backend:non_stable
     #    build:
     #      context: .
     #      dockerfile: Dockerfile

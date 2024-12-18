@@ -4,8 +4,6 @@ package com.culcon.backend.controllers.customer;
 import com.culcon.backend.dtos.OTPResponse;
 import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
-import com.culcon.backend.dtos.order.OrderCreation;
-import com.culcon.backend.models.OrderStatus;
 import com.culcon.backend.services.OTPService;
 import com.culcon.backend.services.OrderService;
 import com.culcon.backend.services.UserService;
@@ -163,63 +161,6 @@ public class CustomerController {
 		return ResponseEntity.ok(userService.updateUserProfilePicture(file, request));
 	}
 
-
-	@Operation(tags = "Order")
-	@PostMapping("/order/create")
-	public ResponseEntity<Object> createOrder(
-		@Valid @RequestBody OrderCreation orderCreation,
-		HttpServletRequest request
-	) {
-		return new ResponseEntity<>(orderService.createOrder(orderCreation, request), HttpStatus.OK);
-	}
-
-	@Operation(tags = "Order")
-	@GetMapping("/order/fetch/category")
-	public ResponseEntity<Object> getOrders(
-		@RequestParam OrderStatus orderStatus,
-		HttpServletRequest req
-	) {
-		return ResponseEntity.ok(orderService.getListOfOrderByStatus(req, orderStatus));
-	}
-
-	@Operation(tags = "Order")
-	@GetMapping("/order/fetch/all")
-	public ResponseEntity<Object> getAllOrders(
-		HttpServletRequest req
-	) {
-		return ResponseEntity.ok(orderService.getListOfAllOrder(req));
-	}
-
-
-	@Operation(tags = "Order")
-	@GetMapping("/order/fetch/detail")
-	public ResponseEntity<Object> getOrderDetails(
-		HttpServletRequest req,
-		@RequestParam Long id
-	) {
-		return ResponseEntity.ok(orderService.getOrderItem(req, id));
-	}
-
-
-	@Operation(tags = "Order")
-	@DeleteMapping("/order/cancel")
-	public ResponseEntity<Object> cancelOrder(
-		HttpServletRequest req,
-		@RequestParam Long id
-	) {
-		return ResponseEntity.ok(orderService.cancelOrder(req, id));
-	}
-
-
-	@Operation(tags = "Order")
-	@PostMapping("/order/update")
-	public ResponseEntity<Object> updateOrder(
-		HttpServletRequest req,
-		@RequestParam Long id,
-		@Valid @RequestBody OrderCreation orderCreation
-	) {
-		return ResponseEntity.ok(orderService.updateOrder(req, id, orderCreation));
-	}
 
 	@Operation(tags = "Blog")
 	@PostMapping("/blog/comment")

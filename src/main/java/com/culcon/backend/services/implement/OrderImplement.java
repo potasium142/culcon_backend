@@ -1,22 +1,20 @@
 package com.culcon.backend.services.implement;
 
+import com.culcon.backend.dtos.CouponDTO;
 import com.culcon.backend.dtos.order.*;
 import com.culcon.backend.exceptions.custom.RuntimeExceptionPlusPlus;
-import com.culcon.backend.models.Coupon;
-import com.culcon.backend.models.OrderHistory;
-import com.culcon.backend.models.OrderHistoryItem;
-import com.culcon.backend.models.OrderStatus;
-import com.culcon.backend.repositories.CouponRepo;
-import com.culcon.backend.repositories.OrderHistoryRepo;
-import com.culcon.backend.repositories.ProductPriceRepo;
-import com.culcon.backend.repositories.ProductRepo;
+import com.culcon.backend.models.*;
+import com.culcon.backend.repositories.*;
 import com.culcon.backend.services.OrderService;
+import com.culcon.backend.services.PaymentService;
 import com.culcon.backend.services.authenticate.AuthService;
+import com.paypal.sdk.exceptions.ApiException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,8 +31,14 @@ public class OrderImplement implements OrderService {
 	private final CouponRepo couponRepo;
 	private final OrderHistoryRepo orderHistoryRepo;
 	private final ProductRepo productRepo;
+	private final PaymentService paymentService;
+	private final PaymentTransactionRepo paymentTransactionRepo;
 
 	private Coupon getCoupon(String id) {
+
+		if (id.isBlank())
+			return null;
+
 		var coupon = couponRepo.findById(id).orElseThrow(
 			() -> new NoSuchElementException("Coupon Not Found")
 		);
@@ -49,7 +53,7 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public OrderSummary createOrder(OrderCreation orderCreation, HttpServletRequest req) {
+	public OrderSummary createOrder(OrderCreation orderCreation, HttpServletRequest req) throws IOException, ApiException {
 		//stinky ass code x2
 		var account = authService.getUserInformation(req);
 
@@ -95,7 +99,13 @@ public class OrderImplement implements OrderService {
 
 			if (ohNo) continue;
 
-			cart.remove(prod);
+			var amountLeft = cart.get(prod) - entry.getValue();
+
+			if (amountLeft > 0) {
+				cart.put(prod, amountLeft);
+			} else {
+				cart.remove(prod);
+			}
 
 			prod.setAvailableQuantity(prod.getAvailableQuantity() - entry.getValue());
 
@@ -137,7 +147,6 @@ public class OrderImplement implements OrderService {
 			couponRepo.save(coupon);
 		}
 
-
 		var order = OrderHistory.builder()
 			.user(account)
 			.items(productList)
@@ -155,7 +164,24 @@ public class OrderImplement implements OrderService {
 
 		order = orderHistoryRepo.save(order);
 
+		if (orderCreation.paymentMethod() == PaymentMethod.BANKING) {
+			paymentService.createPayment(order, req);
+		}
+
 		return OrderSummary.from(order);
+	}
+
+	private OrderHistory getOrderForUpdate(Long orderId, HttpServletRequest req) {
+		var account = authService.getUserInformation(req);
+
+		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
+			.orElseThrow(() -> new NoSuchElementException("Order not found"));
+
+		if (order.getOrderStatus() != OrderStatus.ON_CONFIRM) {
+			throw new RuntimeException("Order status is not on confirm");
+		}
+
+		return order;
 	}
 
 	@Override
@@ -175,12 +201,11 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public OrderDetail getOrderItem(HttpServletRequest req, Long orderId) {
+	public OrderDetail getOrderDetail(HttpServletRequest req, Long orderId) {
 		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
 			.orElseThrow(() -> new NoSuchElementException("Order not found"));
-
 		return OrderDetail.builder()
 			.summary(OrderSummary.from(order))
 			.items(order.getItems().stream().map(OrderItem::from).toList())
@@ -189,43 +214,87 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public OrderDetail updateOrder(HttpServletRequest req, Long orderId, OrderCreation orderCreation) {
-		var account = authService.getUserInformation(req);
+	public CouponDTO updateOrderCoupon(HttpServletRequest req, Long orderId, String couponId) throws IOException, ApiException {
+		var order = getOrderForUpdate(orderId, req);
 
+		if (order.getUpdatedCoupon()) {
+			throw new RuntimeException("Order can only update once");
+		}
+
+		var oldCoupon = order.getCoupon();
+
+		var newCoupon = getCoupon(couponId);
+
+		if (oldCoupon == newCoupon) {
+			throw new RuntimeException("No coupon was change");
+		}
+
+		var price = order.getTotalPrice();
+
+		if (oldCoupon == null) {
+			price = order.getTotalPrice() * (1.0f - newCoupon.getSalePercent() / 100.0f);
+		} else {
+			price = order.getTotalPrice() / (1.0f - oldCoupon.getSalePercent() / 100.0f);
+
+			if (newCoupon == null) {
+				order.setTotalPrice(price);
+			} else {
+				price = price * (1.0f - newCoupon.getSalePercent() / 100.0f);
+				order.setTotalPrice(price);
+			}
+		}
+
+		order.setTotalPrice(price);
+		order.setCoupon(newCoupon);
+		order.setUpdatedCoupon(true);
+
+		paymentService.updatePrice(order, price);
+
+		return CouponDTO.from(order.getCoupon());
+	}
+
+	@Override
+	public OrderSummary changePayment(HttpServletRequest req,
+	                                  Long orderId, PaymentMethod paymentMethod)
+		throws IOException, ApiException {
+		var order = getOrderForUpdate(orderId, req);
+
+		if (order.getPaymentMethod() == paymentMethod) {
+			throw new RuntimeException("Payment method was not changed");
+		}
+
+		if (order.getUpdatedPayment()) {
+			throw new RuntimeException("Payment method can only update once");
+		}
+
+		var pt = paymentTransactionRepo.findByOrder(order);
+
+		if (pt.isPresent()) {
+			if (pt.get().getStatus() != PaymentStatus.CREATED) {
+				throw new RuntimeException("Payment method can only be changed before order was paid");
+			}
+		}
+
+		switch (paymentMethod) {
+			case BANKING -> paymentService.createPayment(order, req);
+			case COD -> pt.ifPresent(paymentTransactionRepo::delete);
+		}
+
+		order.setPaymentMethod(paymentMethod);
+		order.setUpdatedPayment(true);
+
+		orderHistoryRepo.save(order);
+
+		return OrderSummary.from(order);
+	}
+
+	@Override
+	public OrderSummary updateOrder(HttpServletRequest req, Long orderId, OrderUpdate orderCreation) {
+		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
 			.orElseThrow(() -> new NoSuchElementException("Order not found"));
 
-		if (order.getOrderStatus() != OrderStatus.ON_CONFIRM) {
-			throw new IllegalArgumentException("Order can only be edit on confirm status");
-		}
-
-		var totalPrice = order.getTotalPrice();
-
-		Coupon coupon = getCoupon(orderCreation.couponId());
-
-		var oldCouponId = order.getCoupon() == null ? "" : order.getCoupon().getId();
-
-		var sameCoupon = oldCouponId.equals(coupon.getId());
-
-		if (!sameCoupon) {
-
-			for (OrderHistoryItem item : order.getItems()) {
-				var prod = item.getProductId();
-
-				totalPrice = prod.getPrice() * (1.0f - prod.getSalePercent() / 100.0f) * item.getQuantity();
-			}
-
-			totalPrice = totalPrice * (1.0f - coupon.getSalePercent() / 100.0f);
-
-			coupon.setUsageLeft(coupon.getUsageLeft() - 1);
-
-			couponRepo.save(coupon);
-		}
-
-		order.setTotalPrice(totalPrice);
-		order.setCoupon(coupon);
-		order.setPaymentMethod(orderCreation.paymentMethod());
 		order.setDeliveryAddress(orderCreation.deliveryAddress().isBlank()
 			? account.getAddress() : orderCreation.deliveryAddress());
 		order.setPhonenumber(orderCreation.phoneNumber().isBlank()
@@ -236,16 +305,12 @@ public class OrderImplement implements OrderService {
 
 		order = orderHistoryRepo.save(order);
 
-		return OrderDetail.builder()
-			.summary(OrderSummary.from(order))
-			.items(order.getItems().stream().map(OrderItem::from).toList())
-			.build();
+		return OrderSummary.from(order);
 	}
 
 	@Override
-	public OrderDetail cancelOrder(HttpServletRequest req, Long orderId) {
+	public OrderSummary cancelOrder(HttpServletRequest req, Long orderId) {
 		var account = authService.getUserInformation(req);
-
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
 			.orElseThrow(() -> new NoSuchElementException("Order not found"));
@@ -254,12 +319,21 @@ public class OrderImplement implements OrderService {
 			throw new IllegalArgumentException("Order can only be cancelled on confirm status");
 		}
 
+		order.getItems().forEach(orderItem -> {
+			var product = orderItem.getProductId().getId().getProduct();
+			product.setAvailableQuantity(product.getAvailableQuantity() + orderItem.getQuantity());
+			productRepo.save(product);
+		});
+
 		order.setOrderStatus(OrderStatus.CANCELLED);
 		order = orderHistoryRepo.save(order);
 
-		return OrderDetail.builder()
-			.items(order.getItems().stream().map(OrderItem::from).toList())
-			.summary(OrderSummary.from(order))
-			.build();
+		try {
+			paymentService.refund(order);
+		} catch (IOException | ApiException e) {
+			throw new RuntimeException(e);
+		}
+
+		return OrderSummary.from(order);
 	}
 }

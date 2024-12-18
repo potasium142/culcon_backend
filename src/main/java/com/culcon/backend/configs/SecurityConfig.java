@@ -38,7 +38,6 @@ import javax.security.auth.login.AccountNotFoundException;
 import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -80,7 +79,10 @@ public class SecurityConfig implements WebMvcConfigurer {
 						"/oauth2/**"
 					)
 					.permitAll()
-					.requestMatchers("/api/customer/**")
+					.requestMatchers(
+						"/api/customer/**",
+						"/api/payment/**"
+					)
 					.hasAnyAuthority("CUSTOMER")
 					.anyRequest()
 					.authenticated())

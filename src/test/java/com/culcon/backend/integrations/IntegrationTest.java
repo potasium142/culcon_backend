@@ -1181,7 +1181,7 @@ public class IntegrationTest {
 			.getResponse()
 			.getContentAsString();
 		var jsonResult = new JSONObject(result);
-		assertEquals("CANCELLED", jsonResult.getJSONObject("summary").getString("status"));
+		assertEquals("CANCELLED", jsonResult.getString("status"));
 	}
 
 	@Test
