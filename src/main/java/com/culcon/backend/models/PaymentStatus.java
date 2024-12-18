@@ -6,4 +6,5 @@ public enum PaymentStatus {
 	REFUNDED,
 	REFUNDING,
 	CREATED,
+	CHANGED,
 }

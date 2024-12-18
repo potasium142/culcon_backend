@@ -58,6 +58,10 @@ public class OrderHistory {
 	@Column(name = "phonenumber", length = 12)
 	private String phonenumber;
 
+	@Column(name = "updated")
+	@Builder.Default
+	private Boolean updated = false;
+
 	@Column(name = "payment_method")
 	@Enumerated(EnumType.ORDINAL)
 	@Builder.Default

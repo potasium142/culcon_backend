@@ -1,5 +1,6 @@
 package com.culcon.backend.services.implement;
 
+import com.culcon.backend.dtos.CouponDTO;
 import com.culcon.backend.dtos.order.*;
 import com.culcon.backend.exceptions.custom.RuntimeExceptionPlusPlus;
 import com.culcon.backend.models.*;
@@ -34,11 +35,9 @@ public class OrderImplement implements OrderService {
 	private final PaymentTransactionRepo paymentTransactionRepo;
 
 	private Coupon getCoupon(String id) {
-		if (id.isBlank()) {
-			return Coupon.builder().id(null)
-				.salePercent(0.0f)
-				.build();
-		}
+
+		if (id.isBlank())
+			return null;
 
 		var coupon = couponRepo.findById(id).orElseThrow(
 			() -> new NoSuchElementException("Coupon Not Found")
@@ -54,7 +53,7 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public OrderSummary createOrder(OrderCreation orderCreation, HttpServletRequest req) {
+	public OrderSummary createOrder(OrderCreation orderCreation, HttpServletRequest req) throws IOException, ApiException {
 		//stinky ass code x2
 		var account = authService.getUserInformation(req);
 
@@ -160,7 +159,24 @@ public class OrderImplement implements OrderService {
 
 		order = orderHistoryRepo.save(order);
 
+		if (orderCreation.paymentMethod() == PaymentMethod.BANKING) {
+			paymentService.createPayment(order, req);
+		}
+
 		return OrderSummary.from(order);
+	}
+
+	private OrderHistory getOrderForUpdate(Long orderId, HttpServletRequest req) {
+		var account = authService.getUserInformation(req);
+
+		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
+			.orElseThrow(() -> new NoSuchElementException("Order not found"));
+
+		if (order.getOrderStatus() != OrderStatus.ON_CONFIRM) {
+			throw new RuntimeException("Order status is not on confirm");
+		}
+
+		return order;
 	}
 
 	@Override
@@ -180,12 +196,11 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public OrderDetail getOrderItem(HttpServletRequest req, Long orderId) {
+	public OrderDetail getOrderDetail(HttpServletRequest req, Long orderId) {
 		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
 			.orElseThrow(() -> new NoSuchElementException("Order not found"));
-
 		return OrderDetail.builder()
 			.summary(OrderSummary.from(order))
 			.items(order.getItems().stream().map(OrderItem::from).toList())
@@ -194,82 +209,79 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public OrderDetail updateOrder(HttpServletRequest req, Long orderId, OrderUpdate orderCreation) throws IOException, ApiException {
+	public CouponDTO updateOrderCoupon(HttpServletRequest req, Long orderId, String couponId) throws IOException, ApiException {
+		var order = getOrderForUpdate(orderId, req);
+
+		if (order.getUpdated()) {
+			throw new RuntimeException("Order can only update once");
+		}
+
+		var oldCoupon = order.getCoupon();
+
+		var newCoupon = getCoupon(couponId);
+
+		if (oldCoupon == newCoupon) {
+			throw new RuntimeException("No coupon was change");
+		}
+
+		var price = order.getTotalPrice();
+
+		if (oldCoupon == null) {
+			price = order.getTotalPrice() * (1.0f - newCoupon.getSalePercent() / 100.0f);
+		} else {
+			price = order.getTotalPrice() / (1.0f - oldCoupon.getSalePercent() / 100.0f);
+
+			if (newCoupon == null) {
+				order.setTotalPrice(price);
+			} else {
+				price = price * (1.0f - newCoupon.getSalePercent() / 100.0f);
+				order.setTotalPrice(price);
+			}
+		}
+
+		order.setTotalPrice(price);
+		order.setUpdated(true);
+		paymentService.updatePrice(order, price);
+		return CouponDTO.from(order.getCoupon());
+	}
+
+	@Override
+	public OrderSummary changePayment(HttpServletRequest req,
+	                                  Long orderId, PaymentMethod paymentMethod)
+		throws IOException, ApiException {
+		var order = getOrderForUpdate(orderId, req);
+
+		if (order.getPaymentMethod() == paymentMethod) {
+			throw new RuntimeException("Payment method was not changed");
+		}
+
+		var pt = paymentTransactionRepo.findByOrder(order);
+
+		if (pt.isPresent()) {
+			if (pt.get().getStatus() != PaymentStatus.CREATED) {
+				throw new RuntimeException("Payment method can only be changed before order was paid");
+			}
+		}
+
+		switch (paymentMethod) {
+			case BANKING -> paymentService.createPayment(order, req);
+			case COD -> pt.ifPresent(paymentTransactionRepo::delete);
+		}
+
+		order.setPaymentMethod(paymentMethod);
+
+		orderHistoryRepo.save(order);
+
+		return OrderSummary.from(order);
+	}
+
+	@Override
+	public OrderSummary updateOrder(HttpServletRequest req, Long orderId, OrderUpdate orderCreation) {
 		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
 			.orElseThrow(() -> new NoSuchElementException("Order not found"));
 
-		if (order.getOrderStatus() != OrderStatus.ON_CONFIRM) {
-			throw new IllegalArgumentException("Order can only be edit on confirm status");
-		}
-
-		var payment = paymentTransactionRepo.findByOrder(order);
-
-		var isOnlinePayment = payment.isPresent();
-
-		if (isOnlinePayment) {
-			if (payment.get().getStatus() != PaymentStatus.CREATED) {
-				throw new RuntimeException("Order is already paid");
-			}
-		}
-
-		var isChangePayment = order.getPaymentMethod() == orderCreation.paymentMethod();
-
-		var totalPrice = order.getTotalPrice();
-
-		Coupon coupon = getCoupon(orderCreation.couponId());
-
-		var oldCouponId = order.getCoupon() == null ? "" : order.getCoupon().getId();
-
-		var sameCoupon = oldCouponId.equals(coupon.getId());
-
-		var isPriceChange = isChangePayment && !sameCoupon;
-
-		if (isPriceChange) {
-			var isPaid = !paymentTransactionRepo.existsByOrderAndStatus(order, PaymentStatus.CREATED);
-
-			if (isPaid) {
-				throw new RuntimeException("Order already paid");
-			}
-
-			for (OrderHistoryItem item : order.getItems()) {
-				var prod = item.getProductId();
-
-				totalPrice = prod.getPrice() * (1.0f - prod.getSalePercent() / 100.0f) * item.getQuantity();
-			}
-
-			totalPrice = totalPrice * (1.0f - coupon.getSalePercent() / 100.0f);
-
-			if (coupon.getId() != null) {
-				coupon.setUsageLeft(coupon.getUsageLeft() - 1);
-
-				couponRepo.save(coupon);
-			}
-		}
-
-		var isPaymentMethodChange = order.getPaymentMethod() != orderCreation.paymentMethod();
-
-		if (isPaymentMethodChange) {
-			switch (orderCreation.paymentMethod()) {
-				case BANKING -> paymentService.createPayment(orderId, req);
-				case COD -> paymentService.refund(order);
-			}
-		}
-
-
-		if (isOnlinePayment) {
-			if (totalPrice > 0.001f) {
-				paymentService.updatePrice(order, totalPrice);
-			} else {
-				paymentService.refund(order);
-			}
-		}
-
-		order.setTotalPrice(totalPrice);
-		order.setCoupon(
-			coupon.getId() != null ? coupon : null);
-		order.setPaymentMethod(orderCreation.paymentMethod());
 		order.setDeliveryAddress(orderCreation.deliveryAddress().isBlank()
 			? account.getAddress() : orderCreation.deliveryAddress());
 		order.setPhonenumber(orderCreation.phoneNumber().isBlank()
@@ -280,15 +292,11 @@ public class OrderImplement implements OrderService {
 
 		order = orderHistoryRepo.save(order);
 
-
-		return OrderDetail.builder()
-			.summary(OrderSummary.from(order))
-			.items(order.getItems().stream().map(OrderItem::from).toList())
-			.build();
+		return OrderSummary.from(order);
 	}
 
 	@Override
-	public OrderDetail cancelOrder(HttpServletRequest req, Long orderId) {
+	public OrderSummary cancelOrder(HttpServletRequest req, Long orderId) {
 		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
@@ -313,9 +321,6 @@ public class OrderImplement implements OrderService {
 			throw new RuntimeException(e);
 		}
 
-		return OrderDetail.builder()
-			.items(order.getItems().stream().map(OrderItem::from).toList())
-			.summary(OrderSummary.from(order))
-			.build();
+		return OrderSummary.from(order);
 	}
 }

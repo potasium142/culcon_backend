@@ -11,11 +11,13 @@ import java.io.IOException;
 
 @Service
 public interface PaymentService {
-	Order createPayment(Long orderId, HttpServletRequest request)
+	Order createPayment(OrderHistory order, HttpServletRequest request)
 		throws IOException, ApiException;
 
 	PaymentDTO capturePayment(String transactionId, HttpServletRequest request)
 		throws IOException, ApiException;
+
+	PaymentDTO getPayment(Long orderId, HttpServletRequest request);
 
 	void refund(OrderHistory order)
 		throws IOException, ApiException;

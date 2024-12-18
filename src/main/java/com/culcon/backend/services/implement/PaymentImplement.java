@@ -37,17 +37,12 @@ public class PaymentImplement implements PaymentService {
 
 
 	@Override
-	public Order createPayment(Long orderId,
+	public Order createPayment(OrderHistory order,
 	                           HttpServletRequest request)
 		throws IOException, ApiException {
 		var ordersController = client.getOrdersController();
-		var account = authService.getUserInformation(request);
 
-		var order = orderHistoryRepo.findByIdAndUser(orderId, account).orElseThrow(
-			() -> new NoSuchElementException("Order not found")
-		);
-
-		var existPayment = paymentTransactionRepo.existsById(orderId);
+		var existPayment = paymentTransactionRepo.existsByOrder(order);
 
 		if (existPayment) {
 			throw new RuntimeException("Payment already exists");
@@ -115,6 +110,15 @@ public class PaymentImplement implements PaymentService {
 		orderHistoryRepo.save(order);
 
 		return PaymentDTO.from(paymentTransaction);
+	}
+
+	@Override
+	public PaymentDTO getPayment(Long orderId, HttpServletRequest request) {
+		var account = authService.getUserInformation(request);
+		var pt = paymentTransactionRepo.findByIdAndOrder_User(orderId, account)
+			.orElseThrow(() -> new NoSuchElementException("Transaction of this order is not found"));
+
+		return PaymentDTO.from(pt);
 	}
 
 	@Async

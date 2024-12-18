@@ -1,7 +1,9 @@
 package com.culcon.backend.services;
 
+import com.culcon.backend.dtos.CouponDTO;
 import com.culcon.backend.dtos.order.*;
 import com.culcon.backend.models.OrderStatus;
+import com.culcon.backend.models.PaymentMethod;
 import com.paypal.sdk.exceptions.ApiException;
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -9,17 +11,21 @@ import java.io.IOException;
 import java.util.List;
 
 public interface OrderService {
-	OrderSummary createOrder(OrderCreation orderCreation, HttpServletRequest req);
+	OrderSummary createOrder(OrderCreation orderCreation, HttpServletRequest req) throws IOException, ApiException;
 
 	List<OrderInList> getListOfOrderByStatus(HttpServletRequest req, OrderStatus status);
 
 	List<OrderInList> getListOfAllOrder(HttpServletRequest req);
 
-	OrderDetail getOrderItem(HttpServletRequest req, Long orderId);
+	OrderDetail getOrderDetail(HttpServletRequest req, Long orderId);
 
-	OrderDetail updateOrder(HttpServletRequest req, Long orderId, OrderUpdate orderCreation) throws IOException, ApiException;
+	CouponDTO updateOrderCoupon(HttpServletRequest req, Long orderId, String couponId) throws IOException, ApiException;
 
-	OrderDetail cancelOrder(HttpServletRequest req, Long orderId);
+	OrderSummary changePayment(HttpServletRequest req, Long orderId, PaymentMethod paymentMethod) throws IOException, ApiException;
+
+	OrderSummary updateOrder(HttpServletRequest req, Long orderId, OrderUpdate orderCreation);
+
+	OrderSummary cancelOrder(HttpServletRequest req, Long orderId);
 
 
 }
