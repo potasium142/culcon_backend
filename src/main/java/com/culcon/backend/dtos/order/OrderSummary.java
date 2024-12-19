@@ -18,6 +18,8 @@ public record OrderSummary(
 	CouponDTO coupon,
 	PaymentMethod paymentMethod,
 	PaymentStatus paymentStatus,
+	String phoneNumber,
+	String receiver,
 	String deliveryAddress,
 	String note
 ) {
@@ -32,6 +34,8 @@ public record OrderSummary(
 			.note(order.getNote())
 			.paymentMethod(order.getPaymentMethod())
 			.paymentStatus(order.getPaymentStatus())
+			.phoneNumber(order.getPhonenumber())
+			.receiver(order.getReceiver())
 			.build();
 	}
 }
