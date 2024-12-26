@@ -52,7 +52,9 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok")
 
 //    ===============================
-
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
     testCompileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
     testImplementation("com.fasterxml.jackson.core:jackson-databind:2.18.1")

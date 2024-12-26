@@ -26,7 +26,6 @@ public class OrderHistory {
 	private Account user;
 
 	@Column(name = "user_id", insertable = false, updatable = false)
-	@JdbcTypeCode(SqlTypes.UUID)
 	private String accountId;
 
 	@Column(name = "order_date")

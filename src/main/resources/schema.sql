@@ -44,7 +44,7 @@ create table staff_account
 
 create table user_account
 (
-    id                  uuid               not null
+    id                  varchar(255)       not null
         primary key,
     email               varchar            not null
         unique,
@@ -99,7 +99,7 @@ create table employee_info
 create table cart
 (
     amount     integer      not null,
-    account_id uuid         not null
+    account_id varchar(255) not null
         references user_account,
     product_id varchar(255) not null
         references product,
@@ -110,7 +110,7 @@ create table post_comment
 (
     timestamp  timestamp    not null,
     post_id    varchar(255) not null,
-    account_id uuid         not null
+    account_id varchar(255) not null
         references user_account,
     comment    varchar(255) not null,
     primary key (post_id, account_id)
@@ -120,7 +120,7 @@ create table account_otp
 (
     id             bigserial
         primary key,
-    account_id     uuid         not null
+    account_id     varchar(255) not null
         references user_account,
     email          varchar(255) not null,
     otp            varchar(255) not null,
@@ -132,7 +132,7 @@ create table order_history
 (
     id               bigserial
         primary key,
-    user_id          uuid          not null
+    user_id          varchar(255)  not null
         references user_account,
     order_date       timestamp     not null,
     delivery_address varchar(255)  not null,

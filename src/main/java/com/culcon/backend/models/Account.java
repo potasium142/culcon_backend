@@ -9,7 +9,6 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.Builder.Default;
 import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -37,8 +36,6 @@ public class Account implements UserDetails {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Default
-	@JdbcTypeCode(SqlTypes.UUID)
-	@UuidGenerator
 	private String id = "";
 
 	@Column(name = "email", unique = true)
@@ -88,7 +85,8 @@ public class Account implements UserDetails {
 	private Set<String> bookmarkedPost = new HashSet<>();
 
 	@JsonIgnore
-	private String token;
+	@Builder.Default
+	private String token = "";
 
 	@JsonIgnore
 	@ElementCollection(fetch = FetchType.LAZY)

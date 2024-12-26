@@ -1,12 +1,13 @@
 spring:
   config:
     import: optional:file:.env[.properties]
-
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     generate-ddl: true
-    defer-datasource-initialization: true
+    properties:
+      hibernate:
+        dialect: ${DB_DIALECT}
   data:
     jpa:
       repositories:
@@ -24,6 +25,7 @@ spring:
     init:
       mode: always
       data-locations: classpath:data.sql
+      continue-on-error: true
   h2:
     console:
       enabled: true
