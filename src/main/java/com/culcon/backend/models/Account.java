@@ -23,7 +23,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table(name = "account",
+@Table(name = "user_account",
 	uniqueConstraints = {
 		@UniqueConstraint(name = "Username", columnNames = "username"),
 		@UniqueConstraint(name = "Phone", columnNames = "phone"),
@@ -36,6 +36,7 @@ public class Account implements UserDetails {
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.UUID)
 	@Default
+	@JdbcTypeCode(SqlTypes.UUID)
 	private String id = "";
 
 	@Column(name = "email", unique = true)
@@ -58,6 +59,7 @@ public class Account implements UserDetails {
 	@Column(name = "status")
 	@Enumerated(EnumType.ORDINAL)
 	@Default
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
 	private AccountStatus status = AccountStatus.NORMAL;
 
 	@Column(name = "address")

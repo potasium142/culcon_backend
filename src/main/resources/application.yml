@@ -7,7 +7,7 @@ spring:
     password: ${DB_PASSWORD}
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     generate-ddl: true
   data:
     mongodb:
@@ -23,6 +23,7 @@ spring:
   sql:
     init:
       mode: always
+      continue-on-error: true
   h2:
     console:
       enabled: true
