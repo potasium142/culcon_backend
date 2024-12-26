@@ -44,20 +44,20 @@ create table staff_account
 
 create table user_account
 (
-    id                  uuid              not null
+    id                  uuid               not null
         primary key,
-    email               varchar           not null
+    email               varchar            not null
         unique,
-    username            varchar           not null
+    username            varchar            not null
         unique,
-    password            varchar           not null,
-    status              useraccountstatus not null,
-    address             varchar           not null,
-    phone               varchar           not null,
-    profile_pic_uri     varchar           not null,
-    profile_description varchar           not null,
-    token               varchar           not null,
-    bookmarked_posts    varchar(255)[]    not null
+    password            varchar            not null,
+    status              useraccountstatus  not null,
+    address             varchar            not null,
+    phone               varchar            not null,
+    profile_pic_uri     varchar            not null,
+    profile_description varchar            not null,
+    token               varchar            not null,
+    bookmarked_posts    varchar(255) array not null
 );
 
 create table coupon

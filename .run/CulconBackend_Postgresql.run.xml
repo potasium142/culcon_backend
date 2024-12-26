@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CulconBackend_Postgresql" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <envs>
+      <env name="DB_PASSWORD" value="culcon" />
+      <env name="DB_URL_USER" value="jdbc:postgresql://localhost:5432/culcon" />
+      <env name="DB_USERNAME" value="culcon" />
+      <env name="DB_DIALECT" value="" />
+      <env name="DB" value="postgresql" />
+    </envs>
+    <module name="backend.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.culcon.backend.CulconBackendApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
