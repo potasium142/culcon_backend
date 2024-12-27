@@ -33,7 +33,8 @@ public class AccountOTP {
 	private Timestamp otpExpiration;
 
 	@Column(name = "activity_type")
-	private String type;
+	@Builder.Default
+	private String type = "";
 
 	@Column(name = "email")
 	private String email;

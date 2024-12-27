@@ -1,13 +1,13 @@
 spring:
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   config:
     import: optional:file:.env[.properties]
   jpa:
     hibernate:
       ddl-auto: validate
     generate-ddl: true
-    properties:
-      hibernate:
-        dialect: ${DB_DIALECT}
   data:
     jpa:
       repositories:

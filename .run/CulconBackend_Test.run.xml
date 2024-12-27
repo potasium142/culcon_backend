@@ -3,7 +3,8 @@
     <ExternalSystemSettings>
       <option name="env">
         <map>
-          <entry key="DOCKER_HOST" value="unix://$XDG_RUNTIME_DIR/podman/podman.sock" />
+          <entry key="DOCKER_HOST" value="unix:///run/user/1000/podman/podman.sock" />
+          <entry key="TESTCONTAINERS_RYUK_DISABLED" value="true" />
         </map>
       </option>
       <option name="executionName" />

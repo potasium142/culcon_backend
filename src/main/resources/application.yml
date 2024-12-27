@@ -9,9 +9,6 @@ spring:
     hibernate:
       ddl-auto: validate
     generate-ddl: true
-    properties:
-      hibernate:
-        dialect: ${DB_DIALECT}
   data:
     mongodb:
       uri: ${MONGODB_URL}

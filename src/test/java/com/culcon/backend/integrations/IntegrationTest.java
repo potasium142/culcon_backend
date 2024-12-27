@@ -13,26 +13,38 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc()
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
+@Testcontainers
 public class IntegrationTest {
-	static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(
-		"postgres:16-alpine"
-	);
+
+	@LocalServerPort
+	private Integer port;
+
+	@Container
+	static PostgreSQLContainer<?> postgres =
+		new PostgreSQLContainer<>("postgres:16-alpine");
+
+	static {
+		postgres.start();
+	}
 
 	@Value("${constant.json-data}")
 	String pwd;
@@ -62,7 +74,6 @@ public class IntegrationTest {
 
 	@BeforeAll
 	void setUp() throws Exception {
-		postgres.start();
 		this.testJson =
 			new JsonReader(this.pwd + "AuthAPITest.json");
 		var result = mockMvc.
