@@ -5,6 +5,7 @@
       <env name="DB_URL_RECORD" value="jdbc:postgresql://localhost:5432/culcon_record" />
       <env name="DB_URL_USER" value="jdbc:postgresql://localhost:5432/culcon_user" />
       <env name="DB_USERNAME" value="culcon" />
+      <env name="DB_DIALECT" value="" />
     </envs>
     <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
     <module name="backend.main" />
