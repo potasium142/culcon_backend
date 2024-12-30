@@ -147,11 +147,13 @@ public class OrderImplement implements OrderService {
 			couponRepo.save(coupon);
 		}
 
+		var totalPriceRounded = Math.round(totalPrice * 100) / 100.0f;
+
 		var order = OrderHistory.builder()
 			.user(account)
 			.items(productList)
 			.coupon(coupon)
-			.totalPrice(totalPrice)
+			.totalPrice(totalPriceRounded)
 			.note(orderCreation.note())
 			.paymentMethod(orderCreation.paymentMethod())
 			.deliveryAddress(orderCreation.deliveryAddress().isBlank()
