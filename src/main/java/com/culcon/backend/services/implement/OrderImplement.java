@@ -168,6 +168,9 @@ public class OrderImplement implements OrderService {
 
 		if (orderCreation.paymentMethod() == PaymentMethod.BANKING) {
 			paymentService.createPayment(order, req);
+
+//		need a if statement for paypal or VNPay or more here
+			paymentService.createPaymentVNPay(order, "TPB", req);
 		}
 
 		return OrderSummary.from(order);

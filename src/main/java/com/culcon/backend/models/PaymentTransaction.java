@@ -46,4 +46,7 @@ public class PaymentTransaction {
 	@Column(name = "create_time")
 	@Builder.Default
 	private Timestamp createTime = Timestamp.valueOf(LocalDateTime.now());
+
+	@Column(name = "url")
+	private String url;
 }
