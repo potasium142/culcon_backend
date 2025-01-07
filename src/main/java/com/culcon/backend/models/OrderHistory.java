@@ -69,7 +69,7 @@ public class OrderHistory {
 	@Column(name = "payment_method")
 	@Enumerated(EnumType.ORDINAL)
 	@Builder.Default
-	private PaymentMethod paymentMethod = PaymentMethod.BANKING;
+	private PaymentMethod paymentMethod = PaymentMethod.COD;
 
 	@Column(name = "payment_status")
 	@Enumerated(EnumType.ORDINAL)
