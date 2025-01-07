@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -38,9 +39,13 @@ public class IntegrationTest {
 	@LocalServerPort
 	private Integer port;
 
+
 	@Container
 	static PostgreSQLContainer<?> postgres =
-		new PostgreSQLContainer<>("postgres:16-alpine");
+		new PostgreSQLContainer<>(
+			DockerImageName.parse("pgvector/pgvector:0.8.0-pg17")
+				.asCompatibleSubstituteFor("postgres")
+		);
 
 	static {
 		postgres.start();

@@ -7,7 +7,7 @@ create type accountstatus as enum ('ACTIVE', 'DISABLE');
 
 create type producttype as enum ('VEGETABLE', 'MEAT', 'SEASON', 'MEALKIT');
 
-create type paymentmethod as enum ('BANKING', 'COD');
+create type paymentmethod as enum ('PAYPAL','VNPAY', 'COD');
 
 create type paymentstatus as enum ('PENDING', 'RECEIVED', 'REFUNDED', 'REFUNDING', 'CREATED', 'CHANGED');
 
@@ -168,6 +168,7 @@ create table payment_transaction
     payment_id     varchar(255),
     refund_id      varchar(255),
     transaction_id varchar(255),
+    url            varchar(255),
     status         paymentstatus not null,
     amount         real          not null
 );

@@ -257,7 +257,7 @@
       "phoneNumber": "0123456789",
       "receiver": "",
       "note": "testnote",
-      "paymentMethod": "BANKING",
+      "paymentMethod": "COD",
       "product": {
         "MK_01": 2
       }
@@ -283,7 +283,7 @@
       "phoneNumber": "0123456789",
       "receiver": "",
       "note": "testnote",
-      "paymentMethod": "BANKING",
+      "paymentMethod": "COD",
       "product": {
         "MK_01": -1
       }
@@ -296,7 +296,7 @@
       "phoneNumber": "0123456789",
       "receiver": "",
       "note": "testnote",
-      "paymentMethod": "BANKING",
+      "paymentMethod": "COD",
       "product": {
         "MK_01": 2
       }
@@ -309,7 +309,7 @@
       "phoneNumber": "01234",
       "receiver": "",
       "note": "testnote",
-      "paymentMethod": "BANKING",
+      "paymentMethod": "COD",
       "product": {
         "MK_01": 2
       }
@@ -322,7 +322,7 @@
       "phoneNumber": "0123456789",
       "receiver": "",
       "note": "testnote",
-      "paymentMethod": "BANKING",
+      "paymentMethod": "COD",
       "product": {
         "MK_01": 2
       }
