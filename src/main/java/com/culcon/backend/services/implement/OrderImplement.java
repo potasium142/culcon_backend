@@ -166,9 +166,13 @@ public class OrderImplement implements OrderService {
 
 		order = orderHistoryRepo.save(order);
 
-		if (orderCreation.paymentMethod() == PaymentMethod.BANKING) {
-			paymentService.createPayment(order, req);
+		switch (orderCreation.paymentMethod()) {
+			case PAYPAL -> paymentService.createPayment(order, req);
+			case VNPAY -> paymentService.createPaymentVNPay(order, "TPB", req);
+			case COD -> {
+			}
 		}
+
 
 		return OrderSummary.from(order);
 	}
@@ -278,7 +282,8 @@ public class OrderImplement implements OrderService {
 		}
 
 		switch (paymentMethod) {
-			case BANKING -> paymentService.createPayment(order, req);
+			case PAYPAL -> paymentService.createPayment(order, req);
+			case VNPAY -> paymentService.createPaymentVNPay(order, "TPB", req);
 			case COD -> pt.ifPresent(paymentTransactionRepo::delete);
 		}
 

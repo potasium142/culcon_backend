@@ -75,7 +75,7 @@ public class OrderHistory {
 	@Enumerated(EnumType.ORDINAL)
 	@Builder.Default
 	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
-	private PaymentMethod paymentMethod = PaymentMethod.BANKING;
+	private PaymentMethod paymentMethod = PaymentMethod.COD;
 
 	@Column(name = "payment_status")
 	@Enumerated(EnumType.ORDINAL)
