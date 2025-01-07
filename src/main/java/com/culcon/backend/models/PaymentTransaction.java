@@ -47,6 +47,6 @@ public class PaymentTransaction {
 	@Builder.Default
 	private Timestamp createTime = Timestamp.valueOf(LocalDateTime.now());
 
-	@Column(name = "url")
+	@Column(name = "url", columnDefinition = "NVARCHAR(MAX)")
 	private String url;
 }

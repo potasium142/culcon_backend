@@ -168,7 +168,7 @@ public class OrderImplement implements OrderService {
 
 		switch (orderCreation.paymentMethod()) {
 			case PAYPAL -> paymentService.createPayment(order, req);
-			case VNPAY -> paymentService.createPaymentVNPay(order, "TPB", req);
+			case VNPAY -> paymentService.createPaymentVNPay(order, "BIDV", req);
 			case COD -> {
 			}
 		}
