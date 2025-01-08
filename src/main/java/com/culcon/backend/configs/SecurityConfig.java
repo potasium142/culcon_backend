@@ -76,7 +76,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 						"/api/public/**",
 						"/h2-console/**",
 						"/v3/api-docs/**",
-						"/oauth2/**"
+						"/oauth2/**",
+							"/api/payment/vnpay/capture"
 					)
 					.permitAll()
 					.requestMatchers(

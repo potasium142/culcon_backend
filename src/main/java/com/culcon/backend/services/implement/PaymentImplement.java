@@ -206,11 +206,16 @@ public class PaymentImplement implements PaymentService {
 		String vnp_Command = "pay";
 		String orderType = "other";
 
-		double totalPrice = order.getTotalPrice();
-		BigDecimal roundedPrice = new BigDecimal(totalPrice).setScale(2, RoundingMode.HALF_UP);
-		long amount = roundedPrice.multiply(BigDecimal.valueOf(100)).longValue();
+		double totalPriceUSD = order.getTotalPrice();
+		double exchangeRate = 23500.0;
+
+		double totalPriceVND = totalPriceUSD * exchangeRate;
+
+		BigDecimal roundedPriceVND = new BigDecimal(totalPriceVND).setScale(0, RoundingMode.HALF_UP);
+		long amount = roundedPriceVND.multiply(BigDecimal.valueOf(100)).longValue();
 
 		String bankCode = bank;
+		System.out.println(bankCode);
 
 		String vnp_TxnRef = VNPayConfig.getRandomNumber(8);
 		String vnp_IpAddr = VNPayConfig.getIpAddress(request);
@@ -222,7 +227,7 @@ public class PaymentImplement implements PaymentService {
 		vnp_Params.put("vnp_Command", vnp_Command);
 		vnp_Params.put("vnp_TmnCode", vnp_TmnCode);
 		vnp_Params.put("vnp_Amount", String.valueOf(amount));
-		vnp_Params.put("vnp_CurrCode", "USD");
+		vnp_Params.put("vnp_CurrCode", "VND");
 
 
 		if (bankCode != null && !bankCode.isEmpty()) {
@@ -286,6 +291,7 @@ public class PaymentImplement implements PaymentService {
 		var paymentTransaction = PaymentTransaction.builder()
 				.order(order)
 				.amount(order.getTotalPrice())
+				.transactionId(vnp_TxnRef)
 				.url(paymentUrl)
 				.build();
 

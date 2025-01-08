@@ -40,7 +40,7 @@ public class OrderImplement implements OrderService {
 			return null;
 
 		var coupon = couponRepo.findById(id).orElseThrow(
-			() -> new NoSuchElementException("Coupon Not Found")
+				() -> new NoSuchElementException("Coupon Not Found")
 		);
 
 		if (coupon.getUsageLeft() <= 0)
@@ -114,20 +114,20 @@ public class OrderImplement implements OrderService {
 			totalPrice += prod.getPrice() * (1.0f - prod.getSalePercent() / 100.0f) * entry.getValue();
 
 			productList.add(
-				OrderHistoryItem.builder()
-					.productId(prodPrice.get())
-					.quantity(entry.getValue())
-					.build());
+					OrderHistoryItem.builder()
+							.productId(prodPrice.get())
+							.quantity(entry.getValue())
+							.build());
 
 		}
 
 		if (ohNo) {
 			throw new RuntimeExceptionPlusPlus("Error occur during checkout",
-				Map.of(
-					"Non-exist product", notExistProduct,
-					"Insufficient amount", insufficientAmount,
-					"Product not in cart", productNotInCart
-				)
+					Map.of(
+							"Non-exist product", notExistProduct,
+							"Insufficient amount", insufficientAmount,
+							"Product not in cart", productNotInCart
+					)
 			);
 		}
 
@@ -150,25 +150,25 @@ public class OrderImplement implements OrderService {
 		var totalPriceRounded = Math.round(totalPrice * 100) / 100.0f;
 
 		var order = OrderHistory.builder()
-			.user(account)
-			.items(productList)
-			.coupon(coupon)
-			.totalPrice(totalPriceRounded)
-			.note(orderCreation.note())
-			.paymentMethod(orderCreation.paymentMethod())
-			.deliveryAddress(orderCreation.deliveryAddress().isBlank()
-				? account.getAddress() : orderCreation.deliveryAddress())
-			.receiver(orderCreation.receiver().isBlank()
-				? account.getUsername() : orderCreation.receiver())
-			.phonenumber(orderCreation.phoneNumber().isBlank()
-				? account.getPhone() : orderCreation.phoneNumber())
-			.build();
+				.user(account)
+				.items(productList)
+				.coupon(coupon)
+				.totalPrice(totalPriceRounded)
+				.note(orderCreation.note())
+				.paymentMethod(orderCreation.paymentMethod())
+				.deliveryAddress(orderCreation.deliveryAddress().isBlank()
+						? account.getAddress() : orderCreation.deliveryAddress())
+				.receiver(orderCreation.receiver().isBlank()
+						? account.getUsername() : orderCreation.receiver())
+				.phonenumber(orderCreation.phoneNumber().isBlank()
+						? account.getPhone() : orderCreation.phoneNumber())
+				.build();
 
 		order = orderHistoryRepo.save(order);
 
 		switch (orderCreation.paymentMethod()) {
 			case PAYPAL -> paymentService.createPayment(order, req);
-			case VNPAY -> paymentService.createPaymentVNPay(order, "BIDV", req);
+			case VNPAY -> paymentService.createPaymentVNPay(order, "NCB", req);
 			case COD -> {
 			}
 		}
@@ -181,7 +181,7 @@ public class OrderImplement implements OrderService {
 		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
-			.orElseThrow(() -> new NoSuchElementException("Order not found"));
+				.orElseThrow(() -> new NoSuchElementException("Order not found"));
 
 		if (order.getOrderStatus() != OrderStatus.ON_CONFIRM) {
 			throw new RuntimeException("Order status is not on confirm");
@@ -195,7 +195,7 @@ public class OrderImplement implements OrderService {
 		var account = authService.getUserInformation(req);
 
 		return orderHistoryRepo.findByUserAndOrderStatus(account, status)
-			.stream().map(OrderInList::from).toList();
+				.stream().map(OrderInList::from).toList();
 	}
 
 	@Override
@@ -203,7 +203,7 @@ public class OrderImplement implements OrderService {
 		var account = authService.getUserInformation(req);
 
 		return orderHistoryRepo.findByUser(account)
-			.stream().map(OrderInList::from).toList();
+				.stream().map(OrderInList::from).toList();
 	}
 
 	@Override
@@ -211,11 +211,11 @@ public class OrderImplement implements OrderService {
 		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
-			.orElseThrow(() -> new NoSuchElementException("Order not found"));
+				.orElseThrow(() -> new NoSuchElementException("Order not found"));
 		return OrderDetail.builder()
-			.summary(OrderSummary.from(order))
-			.items(order.getItems().stream().map(OrderItem::from).toList())
-			.build();
+				.summary(OrderSummary.from(order))
+				.items(order.getItems().stream().map(OrderItem::from).toList())
+				.build();
 
 	}
 
@@ -261,8 +261,8 @@ public class OrderImplement implements OrderService {
 
 	@Override
 	public OrderSummary changePayment(HttpServletRequest req,
-	                                  Long orderId, PaymentMethod paymentMethod)
-		throws IOException, ApiException {
+									  Long orderId, PaymentMethod paymentMethod)
+			throws IOException, ApiException {
 		var order = getOrderForUpdate(orderId, req);
 
 		if (order.getPaymentMethod() == paymentMethod) {
@@ -283,7 +283,7 @@ public class OrderImplement implements OrderService {
 
 		switch (paymentMethod) {
 			case PAYPAL -> paymentService.createPayment(order, req);
-			case VNPAY -> paymentService.createPaymentVNPay(order, "TPB", req);
+			case VNPAY -> paymentService.createPaymentVNPay(order, "NCB", req);
 			case COD -> pt.ifPresent(paymentTransactionRepo::delete);
 		}
 
@@ -300,14 +300,14 @@ public class OrderImplement implements OrderService {
 		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
-			.orElseThrow(() -> new NoSuchElementException("Order not found"));
+				.orElseThrow(() -> new NoSuchElementException("Order not found"));
 
 		order.setDeliveryAddress(orderCreation.deliveryAddress().isBlank()
-			? account.getAddress() : orderCreation.deliveryAddress());
+				? account.getAddress() : orderCreation.deliveryAddress());
 		order.setPhonenumber(orderCreation.phoneNumber().isBlank()
-			? account.getPhone() : orderCreation.phoneNumber());
+				? account.getPhone() : orderCreation.phoneNumber());
 		order.setReceiver(orderCreation.receiver().isBlank()
-			? account.getUsername() : orderCreation.receiver());
+				? account.getUsername() : orderCreation.receiver());
 		order.setNote(orderCreation.note());
 
 		order = orderHistoryRepo.save(order);
@@ -320,7 +320,7 @@ public class OrderImplement implements OrderService {
 		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
-			.orElseThrow(() -> new NoSuchElementException("Order not found"));
+				.orElseThrow(() -> new NoSuchElementException("Order not found"));
 
 		if (order.getOrderStatus() != OrderStatus.ON_CONFIRM) {
 			throw new IllegalArgumentException("Order can only be cancelled on confirm status");
