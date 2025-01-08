@@ -13,20 +13,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc()
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
+@Testcontainers
 public class IntegrationTest {
+
+	@LocalServerPort
+	private Integer port;
+
+
+	@Container
+	static PostgreSQLContainer<?> postgres =
+		new PostgreSQLContainer<>(
+			DockerImageName.parse("pgvector/pgvector:0.8.0-pg17")
+				.asCompatibleSubstituteFor("postgres")
+		);
+
+	static {
+		postgres.start();
+	}
+
 	@Value("${constant.json-data}")
 	String pwd;
 
@@ -40,6 +64,18 @@ public class IntegrationTest {
 
 	@Autowired
 	private AccountRepo userRepository;
+
+	@AfterAll
+	static void afterAll() {
+		postgres.stop();
+	}
+
+	@DynamicPropertySource
+	static void configureProperties(DynamicPropertyRegistry registry) {
+		registry.add("spring.datasource.url", postgres::getJdbcUrl);
+		registry.add("spring.datasource.username", postgres::getUsername);
+		registry.add("spring.datasource.password", postgres::getPassword);
+	}
 
 	@BeforeAll
 	void setUp() throws Exception {
@@ -1295,95 +1331,100 @@ public class IntegrationTest {
 		var jsonResult = new JSONObject(result);
 		assertEquals("OTPException", jsonResult.getString("cause"));
 	}
+
 	@Test
 	@Order(4)
 	@Rollback
 	void Blog_PostComment() throws Exception {
 		var result = mockMvc
-				.perform(
-						post("/api/customer/blog/comment")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("postId", "B01")
-								.param("comment", "delicous")
-				)
-				.andExpect(status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				post("/api/customer/blog/comment")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("postId", "B01")
+					.param("comment", "delicous")
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 		var jsonResult = new JSONObject(result);
 		assertTrue(jsonResult.has("accountName"));
 		assertTrue(jsonResult.has("profilePicture"));
 		assertTrue(jsonResult.has("timestamp"));
 		assertTrue(jsonResult.has("comment"));
 	}
+
 	@Test
 	@Order(4)
 	@Rollback
 	void Blog_Comment_NullpostId() throws Exception {
 		var result = mockMvc
-				.perform(
-						post("/api/customer/blog/comment")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("postId", "B012345")
-								.param("comment", "delicous")
-				)
-				.andExpect(status().isNotFound())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				post("/api/customer/blog/comment")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("postId", "B012345")
+					.param("comment", "delicous")
+			)
+			.andExpect(status().isNotFound())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 		var jsonResult = new JSONObject(result);
 		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
 	}
+
 	@Test
 	@Order(4)
 	@Rollback
 	void Blog_Bookmark_Save() throws Exception {
 		var result = mockMvc
-				.perform(
-						put("/api/customer/blog/bookmark")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("bookmark", "True")
-								.param("blogId", "B01")
-				)
-				.andExpect(status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				put("/api/customer/blog/bookmark")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("bookmark", "True")
+					.param("blogId", "B01")
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 	}
+
 	@Test
 	@Order(4)
 	@Rollback
 	void Blog_Bookmark_UnSave() throws Exception {
 		var result = mockMvc
-				.perform(
-						put("/api/customer/blog/bookmark")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-								.param("bookmark", "False")
-								.param("blogId", "B01")
-				)
-				.andExpect(status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				put("/api/customer/blog/bookmark")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("bookmark", "False")
+					.param("blogId", "B01")
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 	}
+
 	@Test
 	@Order(4)
 	@Rollback
 	void Blog_ShowAllComment() throws Exception {
 		var result = mockMvc
-				.perform(
-						get("/api/public/fetch/blog/comment/{id}", "B01")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-				)
-				.andExpect(status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				get("/api/public/fetch/blog/comment/{id}", "B01")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 		if (result.trim().startsWith("[")) {
 			var jsonArray = new JSONArray(result);
 			for (int i = 0; i < jsonArray.length(); i++) {
@@ -1401,20 +1442,21 @@ public class IntegrationTest {
 			assertTrue(jsonObject.has("comment"));
 		}
 	}
+
 	@Test
 	@Order(4)
 	@Rollback
 	void Blog_Post() throws Exception {
 		var result = mockMvc
-				.perform(
-						get("/api/public/fetch/blog/{id}", "B01")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-				)
-				.andExpect(status().isOk())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				get("/api/public/fetch/blog/{id}", "B01")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 		var jsonObject = new JSONObject(result);
 		// Check the root keys
 		assertTrue(jsonObject.has("blog"));
@@ -1431,20 +1473,21 @@ public class IntegrationTest {
 		assertTrue(blogObject.has("relatedProduct"));
 		assertTrue(blogObject.has("imageUrl"));
 	}
+
 	@Test
 	@Order(4)
 	@Rollback
 	void Blog_InvalidPost() throws Exception {
 		var result = mockMvc
-				.perform(
-						get("/api/public/fetch/blog/{id}", "B0123")
-								.header("Authorization", jwtToken)
-								.contentType(MediaType.APPLICATION_JSON)
-				)
-				.andExpect(status().isNotFound())
-				.andReturn()
-				.getResponse()
-				.getContentAsString();
+			.perform(
+				get("/api/public/fetch/blog/{id}", "B0123")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+			)
+			.andExpect(status().isNotFound())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
 		var jsonResult = new JSONObject(result);
 		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
 	}

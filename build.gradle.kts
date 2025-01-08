@@ -31,7 +31,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.springframework.boot:spring-boot-devtools")
     implementation("io.jsonwebtoken:jjwt-api:0.12.6")
     implementation("io.swagger.core.v3:swagger-annotations:2.2.26")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
@@ -48,11 +47,12 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
 
     runtimeOnly("com.h2database:h2")
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.projectlombok:lombok")
 
 //    ===============================
-
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("org.testcontainers:postgresql")
     testCompileOnly("org.projectlombok:lombok")
     testAnnotationProcessor("org.projectlombok:lombok")
     testImplementation("com.fasterxml.jackson.core:jackson-databind:2.18.1")

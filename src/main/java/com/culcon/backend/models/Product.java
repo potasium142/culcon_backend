@@ -3,6 +3,8 @@ package com.culcon.backend.models;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 
 @Data
@@ -23,6 +25,7 @@ public class Product {
 
 	@Column(name = "product_types")
 	@Enumerated(EnumType.ORDINAL)
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
 	private ProductType productTypes;
 
 	@Column(name = "available_quantity")
@@ -31,6 +34,7 @@ public class Product {
 
 	@Column(name = "product_status")
 	@Enumerated(EnumType.ORDINAL)
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
 	private ProductStatus productStatus;
 
 	@Column(name = "image_url")

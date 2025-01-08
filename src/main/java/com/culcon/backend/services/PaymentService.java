@@ -22,4 +22,10 @@ public interface PaymentService {
 		throws IOException, ApiException;
 
 	void updatePrice(OrderHistory order, Float price) throws IOException, ApiException;
+
+	void createPaymentVNPay(OrderHistory order, String bank, HttpServletRequest request)
+			throws IOException, ApiException;
+
+	String getPaymentVNPay(Long orderId, HttpServletRequest request) throws IOException, ApiException;
+
 }

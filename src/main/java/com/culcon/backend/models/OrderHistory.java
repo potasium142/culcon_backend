@@ -22,7 +22,11 @@ public class OrderHistory {
 	private Long id;
 
 	@ManyToOne
+	@JoinColumn(name = "user_id")
 	private Account user;
+
+	@Column(name = "user_id", insertable = false, updatable = false)
+	private String accountId;
 
 	@Column(name = "order_date")
 	@JdbcTypeCode(SqlTypes.LOCAL_DATE_TIME)
@@ -37,6 +41,7 @@ public class OrderHistory {
 	@Column(name = "order_status")
 	@Enumerated(EnumType.ORDINAL)
 	@Builder.Default
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
 	private OrderStatus orderStatus = OrderStatus.ON_CONFIRM;
 
 	@Column(name = "total_price")
@@ -69,10 +74,12 @@ public class OrderHistory {
 	@Column(name = "payment_method")
 	@Enumerated(EnumType.ORDINAL)
 	@Builder.Default
-	private PaymentMethod paymentMethod = PaymentMethod.BANKING;
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
+	private PaymentMethod paymentMethod = PaymentMethod.COD;
 
 	@Column(name = "payment_status")
 	@Enumerated(EnumType.ORDINAL)
 	@Builder.Default
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
 	private PaymentStatus paymentStatus = PaymentStatus.PENDING;
 }

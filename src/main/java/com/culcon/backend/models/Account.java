@@ -23,7 +23,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-@Table(name = "account",
+@Table(name = "user_account",
 	uniqueConstraints = {
 		@UniqueConstraint(name = "Username", columnNames = "username"),
 		@UniqueConstraint(name = "Phone", columnNames = "phone"),
@@ -58,6 +58,7 @@ public class Account implements UserDetails {
 	@Column(name = "status")
 	@Enumerated(EnumType.ORDINAL)
 	@Default
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
 	private AccountStatus status = AccountStatus.NORMAL;
 
 	@Column(name = "address")
@@ -84,7 +85,8 @@ public class Account implements UserDetails {
 	private Set<String> bookmarkedPost = new HashSet<>();
 
 	@JsonIgnore
-	private String token;
+	@Builder.Default
+	private String token = "";
 
 	@JsonIgnore
 	@ElementCollection(fetch = FetchType.LAZY)

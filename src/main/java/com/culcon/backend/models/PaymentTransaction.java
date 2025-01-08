@@ -3,6 +3,8 @@ package com.culcon.backend.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -27,6 +29,7 @@ public class PaymentTransaction {
 
 	@Column(name = "status")
 	@Builder.Default
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
 	private PaymentStatus status = PaymentStatus.CREATED;
 
 	@Column(name = "payment_id")
@@ -46,4 +49,7 @@ public class PaymentTransaction {
 	@Column(name = "create_time")
 	@Builder.Default
 	private Timestamp createTime = Timestamp.valueOf(LocalDateTime.now());
+
+	@Column(name = "url")
+	private String url;
 }
