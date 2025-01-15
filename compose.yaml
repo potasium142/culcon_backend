@@ -1,13 +1,13 @@
 services:
-  culcon_user_db:
-    container_name: culcon_user_db
+  culcon_db:
+    container_name: culcon_db
     image: docker.io/pgvector/pgvector:0.8.0-pg17
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: culcon
       POSTGRES_PASSWORD: culcon
-      POSTGRES_DB: culcon_user
+      POSTGRES_DB: culcon
 
   app:
     image: docker.io/giangltce/culcon_user_backend:main
@@ -15,9 +15,9 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - culcon_user_db
+      - culcon_db
     environment:
-      - DB_URL_USER=jdbc:postgresql://culcon_user_db:5432/culcon_user
+      - DB_URL_USER=jdbc:postgresql://culcon_db:5432/culcon_user
       - DB_URL_RECORD=jdbc:postgresql://culcon_record_db:5433/culcon_record
       - DB_USERNAME=culcon
       - DB_PASSWORD=culcon
