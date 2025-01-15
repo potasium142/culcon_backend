@@ -1,7 +1,7 @@
 services:
   culcon_user_db:
     container_name: culcon_user_db
-    image: postgres
+    image: docker.io/pgvector/pgvector:0.8.0-pg17
     ports:
       - "5432:5432"
     environment:
@@ -10,10 +10,7 @@ services:
       POSTGRES_DB: culcon_user
 
   app:
-    image: docker.io/giangltce/culcon_user_backend:non_stable
-    #    build:
-    #      context: .
-    #      dockerfile: Dockerfile
+    image: docker.io/giangltce/culcon_user_backend:main
     container_name: culcon_user_backend
     ports:
       - "8080:8080"
