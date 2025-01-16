@@ -1,6 +1,5 @@
 package com.culcon.backend.mongodb.model;
 
-import com.culcon.backend.models.ProductType;
 import jakarta.persistence.Id;
 import lombok.Data;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 @Document(collection = "ProductInfo")
 @NoArgsConstructor
@@ -27,17 +25,9 @@ public class ProductDoc {
 
 	private HashMap<String, String> infos;
 
-	private Set<String> tags;
+	private List<String> images_url;
 
-	private List<String> imagesUrl;
+	private Integer day_before_expiry;
 
-	private Float price;
-
-	private Float salePercent;
-
-	private Integer daysBeforeExpiry;
-
-	private String articleMD;
-
-	private ProductType type;
+	private String article_md;
 }

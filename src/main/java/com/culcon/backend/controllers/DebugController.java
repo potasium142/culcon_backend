@@ -110,8 +110,8 @@ public class DebugController {
 		productDocRepo.findAll().forEach(
 			proDoc -> {
 
-				var imageUrl = proDoc.getImagesUrl().isEmpty() ?
-					"" : proDoc.getImagesUrl().get(0);
+				var imageUrl = proDoc.getImages_url().isEmpty() ?
+					"" : proDoc.getImages_url().get(0);
 				var pro = Product.builder()
 					.id(proDoc.getId())
 					.availableQuantity(100)
@@ -119,16 +119,15 @@ public class DebugController {
 					.productStatus(ProductStatus.IN_STOCK)
 					.productTypes(ProductType.MEAT)
 					.imageUrl(imageUrl)
-					.price(proDoc.getPrice())
-					.salePercent(proDoc.getSalePercent())
-					.productTypes(proDoc.getType())
+					.price(14.2f)
+					.salePercent(0.0f)
 					.build();
 
 				productRepo.save(pro);
 
 				var price = ProductPriceHistory.builder()
-					.price(proDoc.getPrice())
-					.salePercent(proDoc.getSalePercent())
+					.price(14.2f)
+					.salePercent(0.0f)
 					.id(ProductPriceHistoryId.builder()
 						.date(LocalDateTime.now())
 						.product(pro)
@@ -141,8 +140,8 @@ public class DebugController {
 		mealKitRepo.findAll().forEach(
 			mealKitDoc -> {
 
-				var imageUrl = mealKitDoc.getImagesUrl().isEmpty() ?
-					"" : mealKitDoc.getImagesUrl().get(0);
+				var imageUrl = mealKitDoc.getImages_url().isEmpty() ?
+					"" : mealKitDoc.getImages_url().get(0);
 				var pro = Product.builder()
 					.id(mealKitDoc.getId())
 					.availableQuantity(100)
@@ -150,15 +149,15 @@ public class DebugController {
 					.productStatus(ProductStatus.IN_STOCK)
 					.productTypes(ProductType.MEALKIT)
 					.imageUrl(imageUrl)
-					.price(mealKitDoc.getPrice())
-					.salePercent(mealKitDoc.getSalePercent())
+					.price(14.2f)
+					.salePercent(0.0f)
 					.build();
 
 				productRepo.save(pro);
 
 				var price = ProductPriceHistory.builder()
-					.price(mealKitDoc.getPrice())
-					.salePercent(mealKitDoc.getSalePercent())
+					.price(14.2f)
+					.salePercent(0.0f)
 					.id(ProductPriceHistoryId.builder()
 						.date(LocalDateTime.now())
 						.product(pro)
