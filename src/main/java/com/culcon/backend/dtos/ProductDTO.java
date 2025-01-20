@@ -1,9 +1,9 @@
 package com.culcon.backend.dtos;
 
 import com.culcon.backend.models.Product;
+import com.culcon.backend.models.ProductDoc;
 import com.culcon.backend.models.ProductStatus;
 import com.culcon.backend.models.ProductType;
-import com.culcon.backend.mongodb.model.ProductDoc;
 import lombok.Builder;
 
 import java.util.HashMap;
@@ -51,9 +51,9 @@ public record ProductDTO(
 			.productStatus(product.getProductStatus())
 			.description(productDoc.getDescription())
 			.infos(productDoc.getInfos())
-			.imagesUrl(productDoc.getImages_url())
-			.daysBeforeExpiry(productDoc.getDay_before_expiry())
-			.articleMD(productDoc.getArticleMD())
+			.imagesUrl(productDoc.getImagesUrl())
+			.daysBeforeExpiry(productDoc.getDayBeforeExpiry())
+			.articleMD(productDoc.getArticle())
 			.price(product.getPrice())
 			.salePercent(product.getSalePercent())
 			.build();

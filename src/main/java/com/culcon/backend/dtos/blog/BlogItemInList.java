@@ -1,6 +1,6 @@
 package com.culcon.backend.dtos.blog;
 
-import com.culcon.backend.mongodb.model.BlogDoc;
+import com.culcon.backend.models.Blog;
 import lombok.Builder;
 
 import java.util.Set;
@@ -13,13 +13,12 @@ public record BlogItemInList(
 	String imageUrl,
 	Set<String> tag
 ) {
-	public static BlogItemInList from(BlogDoc blogDoc) {
+	public static BlogItemInList from(Blog blogDoc) {
 		return BlogItemInList.builder()
 			.id(blogDoc.getId())
 			.title(blogDoc.getTitle())
 			.description(blogDoc.getDescription())
-			.imageUrl(blogDoc.getImageUrl())
-			.tag(blogDoc.getTags())
+			.imageUrl(blogDoc.getThumbnail())
 			.build();
 	}
 }

@@ -10,14 +10,10 @@ import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.dtos.blog.BlogItemInList;
 import com.culcon.backend.exceptions.custom.OTPException;
 import com.culcon.backend.models.Account;
+import com.culcon.backend.models.Blog;
 import com.culcon.backend.models.PostComment;
 import com.culcon.backend.models.PostInteractionId;
-import com.culcon.backend.mongodb.model.BlogDoc;
-import com.culcon.backend.mongodb.repository.BlogDocRepo;
-import com.culcon.backend.repositories.AccountOTPRepo;
-import com.culcon.backend.repositories.AccountRepo;
-import com.culcon.backend.repositories.PostCommentRepo;
-import com.culcon.backend.repositories.ProductRepo;
+import com.culcon.backend.repositories.*;
 import com.culcon.backend.services.CloudinaryService;
 import com.culcon.backend.services.UserService;
 import com.culcon.backend.services.authenticate.AuthService;
@@ -50,7 +46,7 @@ public class UserImplement implements UserService {
 	private final CloudinaryService cloudinaryService;
 	private final ProductRepo productRepo;
 	private final PostCommentRepo postCommentRepo;
-	private final BlogDocRepo blogDocRepo;
+	private final BlogRepo blogDocRepo;
 
 	@Override
 	public List<Account> getAccounts() {
@@ -294,7 +290,7 @@ public class UserImplement implements UserService {
 		var account = authService.getUserInformation(request);
 		return account.getBookmarkedPost().stream()
 			.map(b ->
-				blogDocRepo.findById(b).orElse(BlogDoc.builder().build())
+				blogDocRepo.findById(b).orElse(Blog.builder().build())
 			).map(BlogItemInList::from)
 			.toList();
 	}

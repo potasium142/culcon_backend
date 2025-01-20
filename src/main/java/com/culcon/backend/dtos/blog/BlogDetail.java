@@ -1,11 +1,11 @@
 package com.culcon.backend.dtos.blog;
 
-import com.culcon.backend.mongodb.model.BlogDoc;
+import com.culcon.backend.models.Blog;
 import lombok.Builder;
 
 @Builder
 public record BlogDetail(
-	BlogDoc blog,
+	Blog blog,
 	Boolean bookmark
 ) {
 }

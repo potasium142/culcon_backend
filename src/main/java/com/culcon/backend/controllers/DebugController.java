@@ -3,10 +3,6 @@ package com.culcon.backend.controllers;
 
 import com.cloudinary.Cloudinary;
 import com.culcon.backend.models.*;
-import com.culcon.backend.mongodb.model.MealKitDoc;
-import com.culcon.backend.mongodb.model.ProductDoc;
-import com.culcon.backend.mongodb.repository.MealKitDocRepo;
-import com.culcon.backend.mongodb.repository.ProductDocRepo;
 import com.culcon.backend.repositories.CouponRepo;
 import com.culcon.backend.repositories.OrderHistoryRepo;
 import com.culcon.backend.repositories.ProductPriceRepo;
@@ -26,8 +22,6 @@ public class DebugController {
 	private final Cloudinary cloudinary;
 	private final ProductRepo productRepo;
 	private final CouponRepo couponRepo;
-	private final ProductDocRepo productDocRepo;
-	private final MealKitDocRepo mealKitRepo;
 	private final ProductPriceRepo productPriceRepo;
 	private final OrderHistoryRepo orderHistoryRepo;
 
@@ -89,84 +83,10 @@ public class DebugController {
 		return couponRepo.save(coupon);
 	}
 
-	@GetMapping("/docs/product/fetch")
-	public List<ProductDoc> fetchProductDoc() {
-		return productDocRepo.findAll();
-	}
-
-	@GetMapping("/docs/mealkit/fetch")
-	public List<MealKitDoc> fetchMealKitDoc() {
-		return mealKitRepo.findAll();
-	}
 
 	@GetMapping("/cloudinary/clear/user-pfp")
 	public void clearUserPfp() throws Exception {
 		cloudinary.api().deleteResourcesByPrefix("pfp", Map.of());
 	}
 
-
-	@GetMapping("/map")
-	public void mapMongoToLocal() {
-		productDocRepo.findAll().forEach(
-			proDoc -> {
-
-				var imageUrl = proDoc.getImages_url().isEmpty() ?
-					"" : proDoc.getImages_url().get(0);
-				var pro = Product.builder()
-					.id(proDoc.getId())
-					.availableQuantity(100)
-					.productName(proDoc.getName())
-					.productStatus(ProductStatus.IN_STOCK)
-					.productTypes(ProductType.MEAT)
-					.imageUrl(imageUrl)
-					.price(14.2f)
-					.salePercent(0.0f)
-					.build();
-
-				productRepo.save(pro);
-
-				var price = ProductPriceHistory.builder()
-					.price(14.2f)
-					.salePercent(0.0f)
-					.id(ProductPriceHistoryId.builder()
-						.date(LocalDateTime.now())
-						.product(pro)
-						.build())
-					.build();
-
-				productPriceRepo.save(price);
-			});
-
-		mealKitRepo.findAll().forEach(
-			mealKitDoc -> {
-
-				var imageUrl = mealKitDoc.getImages_url().isEmpty() ?
-					"" : mealKitDoc.getImages_url().get(0);
-				var pro = Product.builder()
-					.id(mealKitDoc.getId())
-					.availableQuantity(100)
-					.productName(mealKitDoc.getName())
-					.productStatus(ProductStatus.IN_STOCK)
-					.productTypes(ProductType.MEALKIT)
-					.imageUrl(imageUrl)
-					.price(14.2f)
-					.salePercent(0.0f)
-					.build();
-
-				productRepo.save(pro);
-
-				var price = ProductPriceHistory.builder()
-					.price(14.2f)
-					.salePercent(0.0f)
-					.id(ProductPriceHistoryId.builder()
-						.date(LocalDateTime.now())
-						.product(pro)
-						.build())
-					.build();
-
-				productPriceRepo.save(price);
-			}
-		);
-
-	}
 }

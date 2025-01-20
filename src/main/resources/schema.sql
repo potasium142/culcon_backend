@@ -1,21 +1,31 @@
+create extension if not exists vector;
+
 create sequence order_history_seq
     increment by 50;
+
+create sequence account_otp_id_seq;
+
+alter sequence account_otp_id_seq owned by account_otp.id;
+
+create sequence order_history_id_seq;
+
+alter sequence order_history_id_seq owned by order_history.id;
+
+create type producttype as enum ('VEGETABLE', 'MEAT', 'SEASON', 'MEALKIT');
+
+create type productstatus as enum ('IN_STOCK', 'OUT_OF_STOCK', 'NO_LONGER_IN_SALE');
 
 create type accounttype as enum ('MANAGER', 'STAFF');
 
 create type accountstatus as enum ('ACTIVE', 'DISABLE');
 
-create type producttype as enum ('VEGETABLE', 'MEAT', 'SEASON', 'MEALKIT');
+create type useraccountstatus as enum ('NON_ACTIVE', 'NORMAL', 'BANNED', 'DEACTIVATE');
 
-create type paymentmethod as enum ('PAYPAL','VNPAY', 'COD');
+create type paymentmethod as enum ('BANKING', 'COD');
 
 create type paymentstatus as enum ('PENDING', 'RECEIVED', 'REFUNDED', 'REFUNDING', 'CREATED', 'CHANGED');
 
 create type orderstatus as enum ('ON_CONFIRM', 'ON_PROCESSING', 'ON_SHIPPING', 'SHIPPED', 'CANCELLED');
-
-create type productstatus as enum ('IN_STOCK', 'OUT_OF_STOCK', 'NO_LONGER_IN_SALE');
-
-create type useraccountstatus as enum ('NON_ACTIVE', 'NORMAL', 'BANNED', 'DEACTIVATE');
 
 create table product
 (
@@ -44,20 +54,20 @@ create table staff_account
 
 create table user_account
 (
-    id                  varchar(255)       not null
+    id                  varchar(255)      not null
         primary key,
-    email               varchar            not null
+    email               varchar           not null
         unique,
-    username            varchar            not null
+    username            varchar           not null
         unique,
-    password            varchar            not null,
-    status              useraccountstatus  not null,
-    address             varchar            not null,
-    phone               varchar            not null,
-    profile_pic_uri     varchar            not null,
-    profile_description varchar            not null,
-    token               varchar            not null,
-    bookmarked_posts    varchar(255) array not null
+    password            varchar           not null,
+    status              useraccountstatus not null,
+    address             varchar           not null,
+    phone               varchar           not null,
+    profile_pic_uri     varchar           not null,
+    profile_description varchar           not null,
+    token               varchar           not null,
+    bookmarked_posts    varchar(255)[]    not null
 );
 
 create table coupon
@@ -159,6 +169,41 @@ create table order_history_items
     foreign key (product_id_date, product_id_product_id) references product_price_history
 );
 
+create table product_embedding
+(
+    id                varchar(255)  not null
+        primary key
+        references product,
+    images_embed_yolo vector(512)[] not null,
+    images_embed_clip vector(768)[] not null,
+    description_embed vector(768)   not null
+);
+
+create table product_doc
+(
+    id                varchar(255)   not null
+        primary key
+        references product,
+    description       varchar(255)   not null,
+    images_url        varchar(255)[] not null,
+    infos             jsonb          not null,
+    ingredients       varchar(255)[],
+    instructions      varchar(255)[],
+    article_md        text           not null,
+    day_before_expiry integer        not null
+);
+
+create table blog
+(
+    id          varchar(255) not null
+        primary key,
+    title       varchar(255) not null,
+    description text         not null,
+    article     text         not null,
+    thumbnail   varchar(255) not null,
+    infos       jsonb        not null
+);
+
 create table payment_transaction
 (
     order_id       bigint        not null
@@ -167,10 +212,8 @@ create table payment_transaction
     create_time    timestamp     not null,
     payment_id     varchar(255),
     refund_id      varchar(255),
-    transaction_id varchar(255),
     url            varchar(255),
+    transaction_id varchar(255),
     status         paymentstatus not null,
     amount         real          not null
 );
-
-

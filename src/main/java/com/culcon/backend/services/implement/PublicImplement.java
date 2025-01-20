@@ -4,17 +4,8 @@ import com.culcon.backend.dtos.ProductDTO;
 import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.dtos.blog.BlogDetail;
 import com.culcon.backend.dtos.blog.BlogItemInList;
-import com.culcon.backend.models.Account;
-import com.culcon.backend.models.Coupon;
-import com.culcon.backend.models.Product;
-import com.culcon.backend.models.ProductType;
-import com.culcon.backend.mongodb.model.ProductDoc;
-import com.culcon.backend.mongodb.repository.BlogDocRepo;
-import com.culcon.backend.mongodb.repository.MealKitDocRepo;
-import com.culcon.backend.mongodb.repository.ProductDocRepo;
-import com.culcon.backend.repositories.CouponRepo;
-import com.culcon.backend.repositories.PostCommentRepo;
-import com.culcon.backend.repositories.ProductRepo;
+import com.culcon.backend.models.*;
+import com.culcon.backend.repositories.*;
 import com.culcon.backend.services.PublicService;
 import com.culcon.backend.services.authenticate.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,13 +21,12 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class PublicImplement implements PublicService {
 
-	private final ProductDocRepo productDocRepo;
 	private final ProductRepo productRepo;
-	private final MealKitDocRepo mealKitDocRepo;
-	private final BlogDocRepo blogDocRepo;
+	private final BlogRepo blogDocRepo;
 	private final PostCommentRepo postCommentRepo;
 	private final AuthService authService;
 	private final CouponRepo couponRepo;
+	private final ProductDocRepo productDocRepo;
 
 	@Override
 	public ProductDTO fetchProduct(String id) {
@@ -44,7 +34,8 @@ public class PublicImplement implements PublicService {
 			.findById(id)
 			.orElseThrow(NoSuchElementException::new);
 
-		ProductDoc productDocs = getDocs(productInfo);
+		ProductDoc productDocs = productDocRepo.findById(id).orElseThrow(NoSuchElementException::new);
+
 
 		return ProductDTO.from(productInfo, productDocs);
 	}
@@ -76,11 +67,6 @@ public class PublicImplement implements PublicService {
 	public List<BlogItemInList> searchBlogByTitle(String title, HashSet<String> tags) {
 		var blogs = blogDocRepo.findAllByTitleContainingIgnoreCase(title);
 
-		if (!tags.isEmpty()) {
-			blogs = blogs.stream().filter(
-				blog -> blog.getTags().stream().anyMatch(tags::contains)
-			).toList();
-		}
 
 		return blogs.stream().map(BlogItemInList::from).toList();
 	}
@@ -143,23 +129,5 @@ public class PublicImplement implements PublicService {
 			.stream().filter(
 				coupon -> coupon.getUsageLeft() > 0 && !coupon.getExpireTime().isBefore(LocalDate.now())
 			).toList();
-	}
-
-	private ProductDoc getDocs(Product product) {
-		ProductDoc productDocs;
-
-		var isMealKit = product.getProductTypes() == ProductType.MEALKIT;
-
-		if (isMealKit) {
-			productDocs = mealKitDocRepo
-				.findById(product.getId())
-				.orElse(null);
-		} else {
-			productDocs = productDocRepo
-				.findById(product.getId())
-				.orElse(null);
-		}
-
-		return productDocs;
 	}
 }
