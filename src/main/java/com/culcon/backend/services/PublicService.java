@@ -27,6 +27,8 @@ public interface PublicService {
 
 	List<BlogComment> fetchBlogComment(String id);
 
+	List<BlogComment> fetchReply(String blogId, String commentId);
+
 	BlogDetail fetchBlogDetail(String id, HttpServletRequest req);
 
 	Coupon fetchCoupon(String id);

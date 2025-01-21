@@ -80,9 +80,17 @@ public class PublicController {
 	@Operation(
 		tags = {"Blog", "Public", "Comment"}
 	)
-	@GetMapping("/fetch/blog/comment/{id}")
-	public ResponseEntity<?> fetchBlogComment(@PathVariable String id) {
+	@GetMapping("/fetch/blog/comment")
+	public ResponseEntity<?> fetchBlogComment(@RequestParam String id) {
 		return ResponseEntity.ok(publicService.fetchBlogComment(id));
+	}
+
+	@Operation(
+		tags = {"Blog", "Public", "Comment"}
+	)
+	@GetMapping("/fetch/blog/reply")
+	public ResponseEntity<?> fetchCommentReply(String blogId, String commentId) {
+		return ResponseEntity.ok(publicService.fetchReply(blogId, commentId));
 	}
 
 	@Operation(

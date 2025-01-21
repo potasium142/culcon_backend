@@ -74,9 +74,17 @@ public class PublicImplement implements PublicService {
 	@Override
 	public List<BlogComment> fetchBlogComment(String id) {
 		return postCommentRepo
-			.findAllByPostInteractionId_PostId(id).stream()
+			.findAllByPostIdAndCommentType(id, CommentType.POST).stream()
 			.map(BlogComment::from).toList();
 	}
+
+	@Override
+	public List<BlogComment> fetchReply(String blogId, String commentId) {
+		return postCommentRepo
+			.findAllByPostIdAndParentComment_Id(blogId, commentId).stream()
+			.map(BlogComment::from).toList();
+	}
+
 
 	@Override
 	public BlogDetail fetchBlogDetail(String id, HttpServletRequest req) {
@@ -90,7 +98,7 @@ public class PublicImplement implements PublicService {
 			() -> new NoSuchElementException("Blog not found")
 		);
 
-		Boolean bookmark = false;
+		Boolean bookmark;
 
 		if (account == null)
 			bookmark = null;

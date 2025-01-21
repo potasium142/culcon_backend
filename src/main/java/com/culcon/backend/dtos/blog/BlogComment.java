@@ -7,18 +7,19 @@ import java.sql.Timestamp;
 
 @Builder
 public record BlogComment(
+	String id,
 	String accountName,
 	String profilePicture,
 	Timestamp timestamp,
 	String comment
 ) {
 	public static BlogComment from(PostComment comment) {
-		var account = comment.getPostInteractionId().getAccount();
 		return BlogComment.builder()
+			.id(comment.getId())
 			.comment(comment.getComment())
-			.accountName(account.getUsername())
-			.profilePicture(account.getProfilePictureUri())
-			.timestamp(comment.getPostInteractionId().getTimestamp())
+			.accountName(comment.getAccount().getUsername())
+			.profilePicture(comment.getAccount().getProfilePictureUri())
+			.timestamp(comment.getTimestamp())
 			.build();
 	}
 }

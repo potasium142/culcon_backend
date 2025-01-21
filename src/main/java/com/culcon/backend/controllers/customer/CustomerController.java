@@ -174,6 +174,18 @@ public class CustomerController {
 
 
 	@Operation(tags = "Blog")
+	@PostMapping("/blog/reply")
+	public ResponseEntity<Object> reply(
+		HttpServletRequest req,
+		@RequestParam String postId,
+		@RequestParam String commentId,
+		@RequestParam String comment
+	) {
+		return ResponseEntity.ok(userService.replyComment(postId, commentId, comment, req));
+	}
+
+
+	@Operation(tags = {"Blog", "Comment"})
 	@PutMapping("/blog/bookmark")
 	public ResponseEntity<Object> bookmark(
 		HttpServletRequest req,
@@ -189,5 +201,15 @@ public class CustomerController {
 		HttpServletRequest req
 	) {
 		return ResponseEntity.ok(userService.getBookmarkedBlog(req));
+	}
+
+
+	@Operation(tags = {"Blog", "Comment"})
+
+	@GetMapping("/fetch/comments")
+	public ResponseEntity<Object> getComments(
+		HttpServletRequest req
+	) {
+		return ResponseEntity.ok(userService.getAllComments(req));
 	}
 }

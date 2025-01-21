@@ -7,6 +7,7 @@ import com.culcon.backend.dtos.auth.CustomerInfoUpdateRequest;
 import com.culcon.backend.dtos.auth.CustomerPasswordRequest;
 import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.dtos.blog.BlogItemInList;
+import com.culcon.backend.dtos.blog.UserCommentList;
 import com.culcon.backend.models.Account;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -24,7 +25,7 @@ public interface UserService {
 
 	Account updateCustomer(CustomerInfoUpdateRequest newData, HttpServletRequest request);
 
-	void updateCustomerEmail(String accountID,String email, String otp, HttpServletRequest request);
+	void updateCustomerEmail(String accountID, String email, String otp, HttpServletRequest request);
 
 	AuthenticationResponse updateCustomerPassword(CustomerPasswordRequest newData, HttpServletRequest request);
 
@@ -41,6 +42,10 @@ public interface UserService {
 	CloudinaryImageDTO updateUserProfilePicture(MultipartFile file, HttpServletRequest request) throws IOException;
 
 	BlogComment commentOnBlog(String blogId, String comment, HttpServletRequest request);
+
+	BlogComment replyComment(String blogId, String commentId, String comment, HttpServletRequest request);
+
+	List<UserCommentList> getAllComments(HttpServletRequest request);
 
 	Boolean bookmarkBlog(String blogId, HttpServletRequest request, Boolean bookmark);
 

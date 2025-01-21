@@ -1,9 +1,12 @@
 package com.culcon.backend.models;
 
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -14,8 +17,43 @@ import lombok.*;
 @AllArgsConstructor
 @Data
 public class PostComment {
-	@EmbeddedId
-	private PostInteractionId postInteractionId;
 
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
+
+	@Column(name = "comment_type")
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
+	private CommentType commentType;
+
+	@Column(name = "post_id", insertable = false, updatable = false)
+	private String postId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "post_id")
+	private Blog post;
+
+	@Column(name = "account_id", insertable = false, updatable = false)
+	private String accountId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "account_id")
+	private Account account;
+
+	@Column(name = "parent_comment", insertable = false, updatable = false)
+	@Builder.Default
+	private String parentId = null;
+
+	@ManyToOne
+	@JoinColumn(name = "parent_comment")
+	@Builder.Default
+	private PostComment parentComment = null;
+
+	@Column(name = "comment")
 	private String comment;
+
+	@Column(name = "timestamp")
+	@Builder.Default
+	private Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
 }
