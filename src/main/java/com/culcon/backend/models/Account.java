@@ -5,7 +5,6 @@ import jakarta.annotation.Nonnull;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import lombok.Builder.Default;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -66,7 +65,6 @@ public class Account implements UserDetails {
 	private String address = "";
 
 	@Column(name = "phone", unique = true, length = 12)
-	@Pattern(regexp = "0[1-9]{2}[0-9]{7}")
 	@Default
 	private String phone = "";
 

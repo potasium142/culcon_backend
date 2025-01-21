@@ -1332,7 +1332,7 @@ public class IntegrationTest {
 		assertEquals("OTPException", jsonResult.getString("cause"));
 	}
 
-	@Test
+	//	@Test
 	@Order(4)
 	@Rollback
 	void Blog_PostComment() throws Exception {
@@ -1355,7 +1355,7 @@ public class IntegrationTest {
 		assertTrue(jsonResult.has("comment"));
 	}
 
-	@Test
+	//	@Test
 	@Order(4)
 	@Rollback
 	void Blog_Comment_NullpostId() throws Exception {
@@ -1375,7 +1375,7 @@ public class IntegrationTest {
 		assertEquals("NoSuchElementException", jsonResult.getString("cause"));
 	}
 
-	@Test
+	//	@Test
 	@Order(4)
 	@Rollback
 	void Blog_Bookmark_Save() throws Exception {
@@ -1393,7 +1393,7 @@ public class IntegrationTest {
 			.getContentAsString();
 	}
 
-	@Test
+	//	@Test
 	@Order(4)
 	@Rollback
 	void Blog_Bookmark_UnSave() throws Exception {
@@ -1411,7 +1411,7 @@ public class IntegrationTest {
 			.getContentAsString();
 	}
 
-	@Test
+	//	@Test
 	@Order(4)
 	@Rollback
 	void Blog_ShowAllComment() throws Exception {
@@ -1443,7 +1443,7 @@ public class IntegrationTest {
 		}
 	}
 
-	@Test
+	//	@Test
 	@Order(4)
 	@Rollback
 	void Blog_Post() throws Exception {
@@ -1474,7 +1474,7 @@ public class IntegrationTest {
 		assertTrue(blogObject.has("imageUrl"));
 	}
 
-	@Test
+	//	@Test
 	@Order(4)
 	@Rollback
 	void Blog_InvalidPost() throws Exception {

@@ -35,7 +35,6 @@ dependencies {
     implementation("io.swagger.core.v3:swagger-annotations:2.2.26")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
     implementation("org.springframework.boot:spring-boot-starter-mail")
-    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.modelmapper:modelmapper:3.2.2")
     implementation("com.cloudinary:cloudinary-http44:1.39.0")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
