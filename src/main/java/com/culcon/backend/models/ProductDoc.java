@@ -2,6 +2,7 @@ package com.culcon.backend.models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Immutable;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
@@ -15,6 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Immutable
 @Table(name = "product_doc")
 public class ProductDoc {
 	@Id
@@ -34,7 +36,7 @@ public class ProductDoc {
 
 	@Column(name = "infos")
 	@JdbcTypeCode(SqlTypes.JSON)
-	private HashMap<String, String> infos = new HashMap<>();
+	private HashMap<String, String> infos;
 
 
 	@Column(name = "ingredients")
