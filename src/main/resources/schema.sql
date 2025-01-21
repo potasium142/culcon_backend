@@ -13,7 +13,7 @@ create type accountstatus as enum ('ACTIVE', 'DISABLE');
 
 create type useraccountstatus as enum ('NON_ACTIVE', 'NORMAL', 'BANNED', 'DEACTIVATE');
 
-create type paymentmethod as enum ('BANKING', 'COD');
+create type paymentmethod as enum ('PAYPAL','VNPAY', 'COD');
 
 create type paymentstatus as enum ('PENDING', 'RECEIVED', 'REFUNDED', 'REFUNDING', 'CREATED', 'CHANGED');
 
