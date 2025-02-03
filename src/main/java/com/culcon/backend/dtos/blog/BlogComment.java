@@ -11,15 +11,27 @@ public record BlogComment(
 	String accountName,
 	String profilePicture,
 	Timestamp timestamp,
-	String comment
+	String comment,
+	Boolean deleted
 ) {
 	public static BlogComment from(PostComment comment) {
+		if (comment.isDeleted()) {
+			return BlogComment.builder()
+				.id(comment.getId())
+				.comment(null)
+				.accountName(null)
+				.profilePicture(null)
+				.timestamp(comment.getTimestamp())
+				.deleted(comment.isDeleted())
+				.build();
+		}
 		return BlogComment.builder()
 			.id(comment.getId())
 			.comment(comment.getComment())
 			.accountName(comment.getAccount().getUsername())
 			.profilePicture(comment.getAccount().getProfilePictureUri())
 			.timestamp(comment.getTimestamp())
+			.deleted(comment.isDeleted())
 			.build();
 	}
 }

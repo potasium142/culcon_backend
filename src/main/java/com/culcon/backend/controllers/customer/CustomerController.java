@@ -212,4 +212,13 @@ public class CustomerController {
 	) {
 		return ResponseEntity.ok(userService.getAllComments(req));
 	}
+
+	@Operation(tags = {"Blog", "Comment"})
+	@DeleteMapping("/comment/deleted")
+	public ResponseEntity<Object> deleteComment(
+		String commentId,
+		HttpServletRequest req
+	) {
+		return ResponseEntity.ok(userService.deleteComment(commentId, req));
+	}
 }
