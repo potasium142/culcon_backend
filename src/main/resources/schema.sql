@@ -157,7 +157,8 @@ create table post_comment
     parent_comment varchar(255)
         references post_comment,
     comment        varchar(255) not null,
-    comment_type   commenttype  not null
+    comment_type   commenttype  not null,
+    deleted        boolean      not null
 );
 
 create table account_otp

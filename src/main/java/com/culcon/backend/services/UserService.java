@@ -50,4 +50,6 @@ public interface UserService {
 	Boolean bookmarkBlog(String blogId, HttpServletRequest request, Boolean bookmark);
 
 	List<BlogItemInList> getBookmarkedBlog(HttpServletRequest request);
+
+	Boolean deleteComment(String commentId, HttpServletRequest request);
 }

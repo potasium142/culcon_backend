@@ -320,4 +320,17 @@ public class UserImplement implements UserService {
 			).map(BlogItemInList::from)
 			.toList();
 	}
+
+	@Override
+	public Boolean deleteComment(String commentId, HttpServletRequest request) {
+		var account = authService.getUserInformation(request);
+		var comment = postCommentRepo.findByIdAndAccount(commentId, account)
+			.orElseThrow(() -> new NoSuchElementException("Comment not found"));
+		if (comment.isDeleted()) {
+			throw new IllegalArgumentException("Comment is deleted");
+		}
+		comment.setDeleted(true);
+		comment = postCommentRepo.save(comment);
+		return comment.isDeleted();
+	}
 }

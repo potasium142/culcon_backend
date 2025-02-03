@@ -53,6 +53,9 @@ public class PostComment {
 	@Column(name = "comment")
 	private String comment;
 
+	@Column(name = "deleted")
+	private boolean deleted;
+
 	@Column(name = "timestamp")
 	@Builder.Default
 	private Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
