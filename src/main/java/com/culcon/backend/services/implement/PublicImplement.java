@@ -27,6 +27,7 @@ public class PublicImplement implements PublicService {
 	private final AuthService authService;
 	private final CouponRepo couponRepo;
 	private final ProductDocRepo productDocRepo;
+	private final MealkitIngredientsRepo mealkitIngredientsRepo;
 
 	@Override
 	public ProductDTO fetchProduct(String id) {
@@ -37,7 +38,13 @@ public class PublicImplement implements PublicService {
 		ProductDoc productDocs = productDocRepo.findById(id).orElseThrow(NoSuchElementException::new);
 
 
-		return ProductDTO.from(productInfo, productDocs);
+		var ingredients = mealkitIngredientsRepo
+			.findAllById_Mealkit_Id(id).stream()
+			.map(mk -> mk.getId().getIngredient())
+			.toList();
+
+
+		return ProductDTO.from(productInfo, productDocs, ingredients);
 	}
 
 	@Override
@@ -137,5 +144,10 @@ public class PublicImplement implements PublicService {
 			.stream().filter(
 				coupon -> coupon.getUsageLeft() > 0 && !coupon.getExpireTime().isBefore(LocalDate.now())
 			).toList();
+	}
+
+	@Override
+	public List<Coupon> fetchAllCouponForPrice(Float price) {
+		return couponRepo.findAllByMinimumPriceLessThan(price);
 	}
 }

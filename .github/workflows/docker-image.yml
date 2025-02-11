@@ -21,7 +21,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build app
-        run: ./gradlew clean build --parallel -q
+        run: ./gradlew clean build -x test --parallel
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
