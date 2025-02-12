@@ -1,0 +1,352 @@
+{
+  "get_account_info": {
+    "input": {},
+    "output": {
+      "address": "",
+      "profileDescription": "",
+      "phone": "0969996669",
+      "profilePictureUri": "defaultProfile",
+      "email": "example@test",
+      "username": "test_account",
+      "status": "NORMAL"
+    }
+  },
+  "register": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "address": "",
+      "description": "",
+      "email": "example@email.com",
+      "phone": "0123456781"
+    },
+    "output": {}
+  },
+  "login_success": {
+    "input": {
+      "username": "test3",
+      "password": "123456"
+    }
+  },
+  "login_fail": {
+    "input": {
+      "username": "wrongUser",
+      "password": "wrongPassword"
+    },
+    "output": {
+      "status": 404,
+      "message": "Invalid username or password!"
+    }
+  },
+  "register_InvalidEmail": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "invalid-email-format",
+      "phone": "0123456780"
+    },
+    "output": {}
+  },
+  "register_blank_username": {
+    "input": {
+      "username": "",
+      "password": "user01",
+      "email": "example@email.com",
+      "phone": "0123456781"
+    },
+    "output": {}
+  },
+  "register_blank_email": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "",
+      "phone": "0123456780"
+    },
+    "output": {}
+  },
+  "register_blank_phone": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "example@email.com",
+      "phone": ""
+    }
+  },
+  "register_blank_password": {
+    "input": {
+      "username": "user01",
+      "password": "",
+      "email": "example@email.com",
+      "phone": "0123456780"
+    }
+  },
+  "register_InvalidPhoneNumberMissNumber": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "example@email.com",
+      "phone": "012345678"
+    }
+  },
+  "register_InvalidPhoneNumberMoreNumber": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "example@email.com",
+      "phone": "0123456789101"
+    }
+  },
+  "register_InvalidPhoneNumberHaveText": {
+    "input": {
+      "username": "user01",
+      "password": "user01",
+      "email": "example@email.com",
+      "phone": "Text"
+    }
+  },
+  "login_blankUserName": {
+    "input": {
+      "username": "",
+      "password": "user01"
+    }
+  },
+  "login_blankPassword": {
+    "input": {
+      "username": "user01",
+      "password": ""
+    }
+  },
+  "edit_profile_success": {
+    "input": {
+      "username": "Trinh Quang Tung",
+      "email": "Tung@email.com",
+      "phone": "0123456789"
+    }
+  },
+  "register_exists_email": {
+    "input": {
+      "email": "example@email.com",
+      "password": "user02",
+      "username": "user02",
+      "phone": "0123456781"
+    }
+  },
+  "register_exists_username": {
+    "input": {
+      "email": "example1@email.com",
+      "password": "user01",
+      "username": "user01",
+      "phone": "0123456781"
+    }
+  },
+  "register_exists_phone": {
+    "input": {
+      "email": "example1@email.com",
+      "password": "user02",
+      "username": "user02",
+      "phone": "0123456780"
+    }
+  },
+  "edit_profile": {
+    "input": {
+      "username": "user01",
+      "phone": "0123456780",
+      "address": "lavander town",
+      "description": "lavander sus"
+    },
+    "output": {
+      "email": "example@test",
+      "username": "user01",
+      "status": "NORMAL",
+      "address": "lavander town",
+      "phone": "0123456780",
+      "profilePictureUri": "defaultProfile",
+      "profileDescription": "lavander sus"
+    }
+  },
+  "edit_profileInvalidName": {
+    "input": {
+      "username": "user01",
+      "phone": "0123456780",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileInvalidLessPhoneNumber": {
+    "input": {
+      "phone": "0123",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileInvalidMorePhoneNumber": {
+    "input": {
+      "username": "user01",
+      "phone": "01234567891010",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileEmail": {
+    "input": {
+      "accountId": "e7b5cd8f-698f-4b46-9028-c70501c3dda6",
+      "newEmail": "example_new_email@gmail.com",
+      "otp": "123456"
+    }
+  },
+  "edit_profileBlankUsername": {
+    "input": {
+      "username": "",
+      "phone": "0123456789",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileBlankPhone": {
+    "input": {
+      "username": "user01",
+      "phone": "",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "edit_profileBlankEmail": {
+    "input": {
+      "email": "",
+      "username": "user01",
+      "phone": "0123456789",
+      "address": "lavander town",
+      "description": "lavander sus"
+    }
+  },
+  "editPassword": {
+    "input": {
+      "oldPassword": "admin",
+      "password": "123456"
+    }
+  },
+  "editPassword_WrongOldPassword": {
+    "input": {
+      "oldPassword": "admi",
+      "password": "123456"
+    }
+  },
+  "editPassword_BlankOldPassword": {
+    "input": {
+      "oldPassword": "",
+      "password": "123456"
+    }
+  },
+  "editPassword_BlankNewPassword": {
+    "input": {
+      "oldPassword": "admi",
+      "password": ""
+    }
+  },
+  "editPassword_InvalidNewPassword": {
+    "input": {
+      "oldPassword": "admin",
+      "password": "123"
+    }
+  },
+  "order_success": {
+    "input": {
+      "couponId": "",
+      "deliveryAddress": "",
+      "phoneNumber": "0123456789",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "COD",
+      "product": {
+        "MK_01": 2
+      }
+    }
+  },
+  "order_BlankPlayment": {
+    "input": {
+      "couponId": "",
+      "deliveryAddress": "",
+      "phoneNumber": "",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "",
+      "product": {
+        "MK_01": 2
+      }
+    }
+  },
+  "order_WrongNumberProductInCart": {
+    "input": {
+      "couponId": "",
+      "deliveryAddress": "",
+      "phoneNumber": "0123456789",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "COD",
+      "product": {
+        "MK_01": -1
+      }
+    }
+  },
+  "order_InvalidCoupon": {
+    "input": {
+      "couponId": "d",
+      "deliveryAddress": "",
+      "phoneNumber": "0123456789",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "COD",
+      "product": {
+        "MK_01": 2
+      }
+    }
+  },
+  "order_InvalidPhoneNumber": {
+    "input": {
+      "couponId": "",
+      "deliveryAddress": "",
+      "phoneNumber": "01234",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "COD",
+      "product": {
+        "MK_01": 2
+      }
+    }
+  },
+  "order_BlankAddress": {
+    "input": {
+      "couponId": "",
+      "deliveryAddress": "",
+      "phoneNumber": "0123456789",
+      "receiver": "",
+      "note": "testnote",
+      "paymentMethod": "COD",
+      "product": {
+        "MK_01": 2
+      }
+    }
+  },
+  "fogotPassword_Success": {
+    "input": {
+      "id": "c75265e6-f5cc-419b-b183-7b43dbb9f27b",
+      "otp": "RcfM3fKVWuvSUg",
+      "password": "1234567"
+    }
+  },
+  "fogotPassword_InvalidPassword": {
+    "input": {
+      "id": "c75265e6-f5cc-419b-b183-7b43dbb9f27b",
+      "otp": "RcfM3fKVWuvSUg",
+      "password": "123"
+    }
+  },
+  "fogotPassword_InvalidOTP": {
+    "input": {
+      "id": "c75265e6-f5cc-419b-b183-7b43dbb9f27b",
+      "otp": "invalid",
+      "password": "123456"
+    }
+  }
+}
