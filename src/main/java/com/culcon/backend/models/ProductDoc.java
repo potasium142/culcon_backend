@@ -38,11 +38,6 @@ public class ProductDoc {
 	@JdbcTypeCode(SqlTypes.JSON)
 	private HashMap<String, String> infos;
 
-
-	@Column(name = "ingredients")
-	@JdbcTypeCode(SqlTypes.ARRAY)
-	private List<String> ingredients;
-
 	@Column(name = "instructions")
 	@JdbcTypeCode(SqlTypes.ARRAY)
 	private List<String> instructions;

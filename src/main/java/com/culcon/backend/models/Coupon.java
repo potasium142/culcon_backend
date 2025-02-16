@@ -34,4 +34,7 @@ public class Coupon {
 	@Column(name = "usage_left")
 	@Min(value = 0)
 	private Integer usageLeft;
+
+	@Column(name = "minimum_price")
+	private Float minimumPrice;
 }

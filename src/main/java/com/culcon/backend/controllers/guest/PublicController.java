@@ -117,5 +117,13 @@ public class PublicController {
 		return ResponseEntity.ok(publicService.fetchCoupon(couponId));
 	}
 
+	@Operation(tags = {"Public", "Coupon"})
+	@GetMapping("/fetch/coupon/price")
+	public ResponseEntity<?> fetchCouponByPrice(
+		@RequestParam Float price
+	) {
+		return ResponseEntity.ok(publicService.fetchAllCouponForPrice(price));
+	}
+
 
 }

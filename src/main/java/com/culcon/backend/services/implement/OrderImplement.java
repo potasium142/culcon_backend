@@ -138,13 +138,16 @@ public class OrderImplement implements OrderService {
 		Coupon coupon = null;
 
 		if (!orderCreation.couponId().isBlank()) {
-			coupon = getCoupon(orderCreation.couponId());
+			if (coupon.getMinimumPrice() < totalPrice) {
 
-			totalPrice = totalPrice * (1.0f - coupon.getSalePercent() / 100.0f);
+				coupon = getCoupon(orderCreation.couponId());
 
-			coupon.setUsageLeft(coupon.getUsageLeft() - 1);
+				totalPrice = totalPrice * (1.0f - coupon.getSalePercent() / 100.0f);
 
-			couponRepo.save(coupon);
+				coupon.setUsageLeft(coupon.getUsageLeft() - 1);
+
+				couponRepo.save(coupon);
+			}
 		}
 
 		var totalPriceRounded = Math.round(totalPrice * 100) / 100.0f;
@@ -242,7 +245,10 @@ public class OrderImplement implements OrderService {
 		} else {
 			price = order.getTotalPrice() / (1.0f - oldCoupon.getSalePercent() / 100.0f);
 
+			// stinky ass code cuz im sick as hell
 			if (newCoupon == null) {
+				order.setTotalPrice(price);
+			} else if (newCoupon.getMinimumPrice() > price) {
 				order.setTotalPrice(price);
 			} else {
 				price = price * (1.0f - newCoupon.getSalePercent() / 100.0f);

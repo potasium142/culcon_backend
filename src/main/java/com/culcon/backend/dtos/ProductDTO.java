@@ -37,11 +37,14 @@ public record ProductDTO(
 
 	Float price,
 
-	Float salePercent
+	Float salePercent,
+
+	List<Product> ingredients
 ) {
 	public static ProductDTO from(
 		Product product,
-		ProductDoc productDoc
+		ProductDoc productDoc,
+		List<Product> ingredients
 	) {
 		return ProductDTO.builder()
 			.id(product.getId())
@@ -56,6 +59,7 @@ public record ProductDTO(
 			.articleMD(productDoc.getArticle())
 			.price(product.getPrice())
 			.salePercent(product.getSalePercent())
+			.ingredients(ingredients)
 			.build();
 	}
 }
