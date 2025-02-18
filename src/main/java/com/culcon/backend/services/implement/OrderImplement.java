@@ -135,12 +135,10 @@ public class OrderImplement implements OrderService {
 			throw new RuntimeException("Order does not contain any products");
 		}
 
-		Coupon coupon = null;
+		Coupon coupon = getCoupon(orderCreation.couponId());
 
-		if (!orderCreation.couponId().isBlank()) {
+		if (coupon != null) {
 			if (coupon.getMinimumPrice() < totalPrice) {
-
-				coupon = getCoupon(orderCreation.couponId());
 
 				totalPrice = totalPrice * (1.0f - coupon.getSalePercent() / 100.0f);
 
