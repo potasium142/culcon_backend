@@ -1,6 +1,3 @@
-create sequence order_history_seq
-    increment by 50;
-
 create type producttype as enum ('VEGETABLE', 'MEAT', 'SEASON', 'MEALKIT');
 
 create type productstatus as enum ('IN_STOCK', 'OUT_OF_STOCK', 'NO_LONGER_IN_SALE');
@@ -13,7 +10,7 @@ create type useraccountstatus as enum ('NON_ACTIVE', 'NORMAL', 'BANNED', 'DEACTI
 
 create type commenttype as enum ('POST', 'REPLY');
 
-create type paymentmethod as enum ('PAYPAL','VNPAY', 'COD');
+create type paymentmethod as enum ('PAYPAL', 'VNPAY', 'COD');
 
 create type paymentstatus as enum ('PENDING', 'RECEIVED', 'REFUNDED', 'REFUNDING', 'CREATED', 'CHANGED');
 
@@ -114,6 +111,18 @@ create table product_embedding
     description_embed vector(768)  not null
 );
 
+create table product_stock_history
+(
+    product_id varchar(255) not null
+        references product,
+    date       timestamp    not null,
+    in_price   real         not null,
+    in_stock   integer      not null,
+    primary key (product_id, date),
+    constraint product_stock_history_pk
+        unique (date, product_id)
+);
+
 create table employee_info
 (
     account_id  uuid    not null
@@ -183,7 +192,7 @@ create table account_otp
 
 create table order_history
 (
-    id               bigserial
+    id               varchar(255)  not null
         primary key,
     user_id          varchar(255)  not null
         references user_account,
@@ -192,7 +201,7 @@ create table order_history
     note             varchar(255)  not null,
     total_price      real          not null,
     receiver         varchar(255)  not null,
-    phonenumber      varchar(12)   not null,
+    phonenumber      varchar(255)  not null,
     coupon           varchar
         references coupon,
     updated_coupon   boolean       not null,
@@ -202,9 +211,17 @@ create table order_history
     order_status     orderstatus   not null
 );
 
+create table chat_history
+(
+    id      varchar(255) not null
+        primary key
+        references user_account,
+    chatlog jsonb        not null
+);
+
 create table order_history_items
 (
-    order_history_id      bigint
+    order_history_id      varchar(255)
         references order_history,
     product_id_product_id varchar(255),
     product_id_date       timestamp,
@@ -214,7 +231,7 @@ create table order_history_items
 
 create table payment_transaction
 (
-    order_id       bigint        not null
+    order_id       varchar(255)  not null
         primary key
         references order_history,
     create_time    timestamp     not null,
@@ -224,12 +241,5 @@ create table payment_transaction
     transaction_id varchar(255),
     status         paymentstatus not null,
     amount         real          not null
-);
-
-create table chat_history
-(
-    id      varchar(255) not null
-        primary key,
-    chatlog jsonb        not null
 );
 

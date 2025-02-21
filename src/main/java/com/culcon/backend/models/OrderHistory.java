@@ -18,8 +18,8 @@ import java.util.List;
 @Table(name = "order_history")
 public class OrderHistory {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	private String id;
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
