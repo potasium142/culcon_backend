@@ -7,6 +7,7 @@ import com.culcon.backend.models.Account;
 import com.culcon.backend.repositories.AccountRepo;
 import com.culcon.backend.services.authenticate.JwtService;
 import com.culcon.backend.services.authenticate.implement.AuthImplement;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,10 +21,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import jakarta.servlet.http.HttpServletRequest;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 import java.util.Optional;
-
-import static org.mockito.Mockito.when;
+import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthServiceTest {
@@ -79,33 +81,29 @@ public class AuthServiceTest {
 			.build();
 		Assertions.assertEquals(token, responseRequest);
 	}
-//	@Test
-//	void authService_Register_Fail() {
-//
-//		var registerRequest = CustomerRegisterRequest.builder()
-//				.username("user01")
-//				.password("admin")
-//				.email("user01@gmail.com")
-//				.phone("0123456789")
-//				.build();
-//
-//		var account = Account.builder()
-//				.username("user01")
-//				.password("admin")
-//				.email("user01@gmail.com")
-//				.phone("0123456789")
-//				.build();
-//
-//		when(passwordEncoder.encode("admin"))
-//				.thenReturn("admin");
-//		when(accountRepo.save(account))
-//				.thenThrow(new DataIntegrityViolationException("Unique constraint violation"));
-//		authService.registerCustomer(registerRequest);
-//
-//		Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
-//			authService.registerCustomer(registerRequest);
-//		});
-//	}
+
+	@Test
+	void authService_Register_Fail_AlreadyExisted() {
+
+		var registerRequest = CustomerRegisterRequest.builder()
+				.username("user01")
+				.password("admin")
+				.email("user01@gmail.com")
+				.phone("0123456789")
+				.build();
+		when(passwordEncoder.encode("admin"))
+				.thenReturn("admin");
+
+		doThrow(new DataIntegrityViolationException("Unique constraint violation"))
+				.when(accountRepo)
+				.save(any(Account.class));
+
+		Assertions.assertThrows(DataIntegrityViolationException.class, () -> {
+			authService.registerCustomer(registerRequest);
+		});
+
+		verify(accountRepo, times(1)).save(any(Account.class));
+	}
 
 	@Test
 	void authService_authenticate_Success() {
@@ -142,6 +140,20 @@ public class AuthServiceTest {
 	}
 
 	@Test
+	void authService_authenticate_Fail() {
+		var loginRequest = AuthenticationRequest.builder()
+				.username("user01")
+				.password("admin")
+				.build();
+
+
+		Assertions.assertThrows(java.util.NoSuchElementException.class, () -> {
+			authService.authenticate(loginRequest);
+		});
+	}
+
+
+	@Test
 	void authService_getUserInformation_Success() {
 
 		var account = Account.builder()
@@ -170,5 +182,13 @@ public class AuthServiceTest {
 
 		var responseRequest = account;
 		Assertions.assertEquals(accountResult, responseRequest);
+	}
+
+	@Test
+	void authService_getUserInformation_Fail() {
+
+		Assertions.assertThrows(org.springframework.security.authentication.AccountExpiredException.class, () -> {
+			authService.getUserInformation(request);
+		});
 	}
 }
