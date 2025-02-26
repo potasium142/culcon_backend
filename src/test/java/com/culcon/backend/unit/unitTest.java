@@ -1,23 +1,25 @@
 package com.culcon.backend.unit;
+import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.models.*;
 import com.culcon.backend.repositories.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AccountRepoTest {
+class RepoTest {
 
     @Mock
     private AccountRepo accountRepo;
@@ -41,8 +43,14 @@ class AccountRepoTest {
     private Account account;
     private AccountOTP accountOTP;
     private OrderHistory orderHistory;
+    private OrderHistory orderHistoryReceived;
     private List<OrderHistory> orderHistories;
-    private PostComment postComment;
+    private PostComment postComment1;
+    private PostComment postComment2;
+    private PostComment replyComment;
+    private PostComment replyComment1;
+    private PaymentTransaction paymentTransaction;
+    private PaymentTransactionRepo paymentTransactionRepo;
 
     @BeforeEach
     void setUp() {
@@ -91,12 +99,62 @@ class AccountRepoTest {
                 .price(100.0F)
                 .salePercent(10.0F)
                 .build();
+        postComment1 = PostComment.builder()
+                .id("testBlog1")
+                .commentType(CommentType.POST)
+                .postId("001")
+                .comment("This is the first comment")
+                .accountId("testUser")
+                .build();
+        postComment2 = PostComment.builder()
+                .id("testBlog2")
+                .commentType(CommentType.POST)
+                .postId("002")
+                .comment("This is the second comment")
+                .accountId("testaccount2")
+                .build();
+        replyComment = PostComment.builder()
+                .id("testBlog1reply")
+                .commentType(CommentType.REPLY)
+                .postId("001")
+                .comment("This is the first reply comment")
+                .accountId("testaccount2")
+                .parentComment(postComment1)
+                .build();
+        replyComment1 = PostComment.builder()
+                .id("testBlog1reply1")
+                .commentType(CommentType.REPLY)
+                .postId("001")
+                .comment("This is the second reply comment")
+                .accountId("testaccount3")
+                .parentComment(postComment1)
+                .build();
+        paymentTransaction = PaymentTransaction.builder()
+                .id(orderHistory.getId())
+                .order(orderHistory)
+                .status(PaymentStatus.CREATED)
+                .paymentId("pay_123")
+                .refundId("ref_123")
+                .transactionId("txn_123")
+                .amount(100.0F)
+                .url("http://example.com/payment")
+                .createTime(Timestamp.valueOf(LocalDateTime.now()))
+                .build();
+
+
+    }
+    @Test
+    void testPaymentTransactionInitialization() {
+        Assertions.assertNotNull(paymentTransaction, "PaymentTransaction không được null");
+        Assertions.assertEquals(orderHistory.getId(), paymentTransaction.getId(), "ID không khớp");
+        Assertions.assertEquals(PaymentStatus.CREATED, paymentTransaction.getStatus(), "Trạng thái thanh toán không đúng");
+        Assertions.assertEquals(100.0F, paymentTransaction.getAmount(), "Số tiền không đúng");
+        Assertions.assertTrue(paymentTransaction.getUrl().startsWith("http://"), "URL phải bắt đầu bằng 'http://'");
     }
 
 
-
     @Test
-    void testFindByUsername() {
+    void AccountRepo_FindByUsername() {
         when(accountRepo.findByUsername("testUser")).thenReturn(Optional.of(account));
 
         Optional<Account> foundAccount = accountRepo.findByUsername("testUser");
@@ -108,7 +166,7 @@ class AccountRepoTest {
     }
 
     @Test
-    void testFindAccountById() {
+    void AccountRepo_FindAccountById() {
         when(accountRepo.findAccountById("94511231-59ce-45cb-9edc-196c378064a1")).thenReturn(Optional.of(account));
 
         Optional<Account> foundAccount = accountRepo.findAccountById("94511231-59ce-45cb-9edc-196c378064a1");
@@ -120,7 +178,7 @@ class AccountRepoTest {
     }
 
     @Test
-    void testFindAccountByEmail() {
+    void AccountRepo_FindAccountByEmail() {
         when(accountRepo.findAccountByEmail("test@example.com")).thenReturn(Optional.of(account));
 
         Optional<Account> foundAccount = accountRepo.findAccountByEmail("test@example.com");
@@ -132,7 +190,7 @@ class AccountRepoTest {
     }
 
     @Test
-    void testFindByToken() {
+    void AccountRepo_FindByToken() {
         when(accountRepo.findByToken("Rgy8YTrwELqlh1")).thenReturn(Optional.of(account));
 
         Optional<Account> foundAccount = accountRepo.findByToken("Rgy8YTrwELqlh1");
@@ -144,7 +202,7 @@ class AccountRepoTest {
     }
 
     @Test
-    void testExistsByUsername() {
+    void AccountRepo_ExistsByUsername() {
         when(accountRepo.existsByUsername("testUser")).thenReturn(true);
 
         Boolean exists = accountRepo.existsByUsername("testUser");
@@ -154,7 +212,7 @@ class AccountRepoTest {
         verify(accountRepo, times(1)).existsByUsername("testUser");
     }
     @Test
-    void findByOtpAndAccountId(){
+    void AccountOTPRepo_findByOtpAndAccountId(){
         when(accountOTPRepo.findByOtpAndAccountId("Rgy8YTrwELqlh1","94511231-59ce-45cb-9edc-196c378064a1")).thenReturn(Optional.of(accountOTP));
         Optional<AccountOTP> foundAccountOTP = accountOTPRepo.findByOtpAndAccountId("Rgy8YTrwELqlh1","94511231-59ce-45cb-9edc-196c378064a1");
 
@@ -166,7 +224,7 @@ class AccountRepoTest {
 
     }
     @Test
-    void findByAccount() {
+    void AccountOTPRepo_findByAccount() {
         when(accountOTPRepo.findByAccount(account)).thenReturn(Optional.of(accountOTP));
 
         Optional<AccountOTP> foundOTP = accountOTPRepo.findByAccount(account);
@@ -177,7 +235,7 @@ class AccountRepoTest {
         verify(accountOTPRepo, times(1)).findByAccount(account);
     }
     @Test
-    void testFindByUser() {
+    void orderHistoryRepo_FindByUser() {
         when(orderHistoryRepo.findByUser(account)).thenReturn(orderHistories);
 
         List<OrderHistory> foundOrders = orderHistoryRepo.findByUser(account);
@@ -188,9 +246,9 @@ class AccountRepoTest {
         verify(orderHistoryRepo, times(1)).findByUser(account);
     }
     @Test
-    void testFindByUserAndOrderStatus() {
+    void orderHistoryRepo_testFindByUserAndOrderStatus() {
         when(orderHistoryRepo.findByUserAndOrderStatus(account, OrderStatus.ON_PROCESSING))
-                .thenReturn(List.of(orderHistory));
+                .thenReturn(List.of(orderHistory)); 
 
         List<OrderHistory> foundOrders = orderHistoryRepo.findByUserAndOrderStatus(account, OrderStatus.ON_PROCESSING);
 
@@ -200,7 +258,7 @@ class AccountRepoTest {
         verify(orderHistoryRepo, times(1)).findByUserAndOrderStatus(account, OrderStatus.ON_PROCESSING);
     }
     @Test
-    void testFindByIdAndUser() {
+    void orderHistoryRepo_FindByIdAndUser() {
         when(orderHistoryRepo.findByIdAndUser(1L, account)).thenReturn(Optional.of(orderHistory));
 
         Optional<OrderHistory> foundOrder = orderHistoryRepo.findByIdAndUser(1L, account);
@@ -211,7 +269,7 @@ class AccountRepoTest {
         verify(orderHistoryRepo, times(1)).findByIdAndUser(1L, account);
     }
     @Test
-    void testFindAllByProductStatus() {
+    void productRepo_FindAllByProductStatus() {
         when(productRepo.findAllByProductStatus(ProductStatus.IN_STOCK)).thenReturn(Arrays.asList(product1, product2));
 
         List<Product> products = productRepo.findAllByProductStatus(ProductStatus.IN_STOCK);
@@ -223,7 +281,7 @@ class AccountRepoTest {
         verify(productRepo, times(1)).findAllByProductStatus(ProductStatus.IN_STOCK);
     }
     @Test
-    void testFindAllByProductNameContainingIgnoreCaseAndProductTypes() {
+    void productRepo_testFindAllByProductNameContainingIgnoreCaseAndProductTypes() {
         when(productRepo.findAllByProductNameContainingIgnoreCaseAndProductTypes("Pork Ribs", ProductType.MEAT))
                 .thenReturn(List.of(product1));
 
@@ -235,7 +293,7 @@ class AccountRepoTest {
         verify(productRepo, times(1)).findAllByProductNameContainingIgnoreCaseAndProductTypes("Pork Ribs", ProductType.MEAT);
     }
     @Test
-    void testFindAllByProductNameContainingIgnoreCase() {
+    void productRepo_testFindAllByProductNameContainingIgnoreCase() {
         when(productRepo.findAllByProductNameContainingIgnoreCase("Pork Ribs"))
                 .thenReturn(List.of(product1));
 
@@ -247,10 +305,9 @@ class AccountRepoTest {
         verify(productRepo, times(1)).findAllByProductNameContainingIgnoreCase("Pork Ribs");
     }
     @Test
-    void testFindAllByProductTypes() {
+    void productRepo_testFindAllByProductTypes() {
         when(productRepo.findAllByProductTypes(ProductType.MEAT))
                 .thenAnswer(invocation -> {
-                    // Lọc danh sách sản phẩm với ProductType.MEAT
                     return Arrays.asList(product1, product2, product3)
                             .stream()
                             .filter(product -> product.getProductTypes() == ProductType.MEAT)
@@ -266,7 +323,7 @@ class AccountRepoTest {
         verify(productRepo, times(1)).findAllByProductTypes(ProductType.MEAT);
     }
     @Test
-    void testfindFirstById_ProductIdOrderById_DateDesc() {
+    void productPriceRepo_findFirstById_ProductIdOrderById_DateDesc() {
         when(productPriceRepo.findFirstById_ProductIdOrderById_DateDesc("P001"))
                 .thenReturn(Optional.of(productPriceHistory));
         Optional<ProductPriceHistory> foundProductPriceHistory = productPriceRepo.findFirstById_ProductIdOrderById_DateDesc("P001");
@@ -275,18 +332,89 @@ class AccountRepoTest {
         verify(productPriceRepo, times(1)).findFirstById_ProductIdOrderById_DateDesc("P001");
     }
     @Test
-    void testFindFirstById_ProductOrderById_DateDesc() {
+    void productPriceRepo_FindFirstById_ProductOrderById_DateDesc() {
         when(productPriceRepo.findFirstById_ProductOrderById_DateDesc(product)).thenReturn(Optional.of(productPriceHistory));
         Optional<ProductPriceHistory> foundProductPriceHistory = productPriceRepo.findFirstById_ProductOrderById_DateDesc(product);
-
         assertThat(foundProductPriceHistory).isPresent();
         assertThat(foundProductPriceHistory.get()).isEqualTo(productPriceHistory);
 
         verify(productPriceRepo, times(1)).findFirstById_ProductOrderById_DateDesc(product);
     }
     @Test
-    void findAllByPostIdAndCommentType() {
-        when(postCommentRepo.findAllByPostIdAndCommentType())
+    void PostCommentRepo_findAllByPostIdAndCommentType() {
+    when(postCommentRepo.findAllByPostIdAndCommentType("001", CommentType.POST))
+            .thenReturn(List.of(postComment1, postComment2));
+    List<PostComment> result = postCommentRepo.findAllByPostIdAndCommentType("001", CommentType.POST);
+        Assertions.assertEquals(2,result.size());
+        Assertions.assertEquals("This is the first comment", result.get(0).getComment());
+        Assertions.assertEquals(CommentType.POST, result.get(0).getCommentType());
+        Assertions.assertEquals("001", result.get(0).getPostId());
+
+        Assertions.assertEquals("This is the second comment", result.get(1).getComment());
+        Assertions.assertEquals(CommentType.POST, result.get(1).getCommentType());
+        Assertions.assertEquals("002", result.get(1).getPostId());
+        verify(postCommentRepo, times(1)).findAllByPostIdAndCommentType("001", CommentType.POST);
     }
+    @Test
+    void PostCommentRepo_findAllByPostIdAndParentComment_Id() {
+        when(postCommentRepo.findAllByPostIdAndParentComment_Id("001", "testBlog1"))
+                .thenReturn(List.of(replyComment, replyComment1));
+        List<PostComment> result = postCommentRepo.findAllByPostIdAndParentComment_Id("001", "testBlog1");
+
+        Assertions.assertEquals(2, result.size());
+        Assertions.assertEquals("This is the first reply comment", result.get(0).getComment());
+        Assertions.assertEquals("This is the second reply comment", result.get(1).getComment());
+
+        verify(postCommentRepo, times(1))
+                .findAllByPostIdAndParentComment_Id("001", "testBlog1");
+    }
+    @Test
+    void PostCommentRepo_findAllByAccount() {
+        when(postCommentRepo.findAllByAccount(account))
+                .thenReturn(List.of(postComment1));
+
+        List<PostComment> result = postCommentRepo.findAllByAccount(account);
+
+        Assertions.assertEquals(1, result.size());
+        Assertions.assertEquals("This is the first comment", result.get(0).getComment());
+        Assertions.assertEquals("testUser", result.get(0).getAccountId());
+
+        verify(postCommentRepo, times(1)).findAllByAccount(account);
+    }
+    @Test
+    void PostCommentRepo_findByIdAndAccount_Success() {
+        when(postCommentRepo.findByIdAndAccount("testBlog1", account))
+                .thenReturn(Optional.of(postComment1));
+
+        Optional<PostComment> result = postCommentRepo.findByIdAndAccount("testBlog1", account);
+
+        Assertions.assertTrue(result.isPresent());
+        Assertions.assertEquals("This is the first comment", result.get().getComment());
+
+        verify(postCommentRepo, times(1)).findByIdAndAccount("testBlog1", account);
+    }
+    @Test
+    void PostCommentRepo_findByIdAndAccount_Fail() {
+        when(postCommentRepo.findByIdAndAccount("invalid_id", account))
+                .thenReturn(Optional.empty());
+
+        Optional<PostComment> result = postCommentRepo.findByIdAndAccount("invalid_id", account);
+
+        Assertions.assertTrue(result.isEmpty());
+
+        verify(postCommentRepo, times(1)).findByIdAndAccount("invalid_id", account);
+    }
+    @Test
+    void findByTransactionId_Success() {
+        when(paymentTransactionRepo.findByTransactionId("txn_123"))
+                .thenReturn(Optional.ofNullable(paymentTransaction));
+
+        Optional<PaymentTransaction> result = paymentTransactionRepo.findByTransactionId("txn_123");
+
+        Assertions.assertTrue(result.isPresent());
+        Assertions.assertEquals("txn_123", result.get().getTransactionId());
+        verify(paymentTransactionRepo, times(1)).findByTransactionId("txn_123");
+    }
+
 }
 
