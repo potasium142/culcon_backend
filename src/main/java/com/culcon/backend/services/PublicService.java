@@ -34,4 +34,6 @@ public interface PublicService {
 	Coupon fetchCoupon(String id);
 
 	List<Coupon> fetchAllValidCoupon();
+
+	List<Coupon> fetchAllCouponForPrice(Float price);
 }

@@ -1,5 +1,3 @@
-create extension if not exists vector;
-
 create sequence order_history_seq
     increment by 50;
 
@@ -13,13 +11,13 @@ create type accountstatus as enum ('ACTIVE', 'DISABLE');
 
 create type useraccountstatus as enum ('NON_ACTIVE', 'NORMAL', 'BANNED', 'DEACTIVATE');
 
+create type commenttype as enum ('POST', 'REPLY');
+
 create type paymentmethod as enum ('PAYPAL','VNPAY', 'COD');
 
 create type paymentstatus as enum ('PENDING', 'RECEIVED', 'REFUNDED', 'REFUNDING', 'CREATED', 'CHANGED');
 
 create type orderstatus as enum ('ON_CONFIRM', 'ON_PROCESSING', 'ON_SHIPPING', 'SHIPPED', 'CANCELLED');
-
-create type commenttype as enum ('POST', 'REPLY');
 
 create table product
 (
@@ -77,12 +75,13 @@ create table user_account
 
 create table coupon
 (
-    id           varchar not null
+    id            varchar not null
         primary key,
-    expire_time  date    not null,
-    sale_percent real    not null,
-    usage_amount integer not null,
-    usage_left   integer not null
+    expire_time   date    not null,
+    sale_percent  real    not null,
+    usage_amount  integer not null,
+    usage_left    integer not null,
+    minimum_price real    not null
 );
 
 create table product_price_history
@@ -96,14 +95,23 @@ create table product_price_history
         primary key (date, product_id)
 );
 
+create table mealkit_ingredients
+(
+    mealkit_id varchar(255) not null
+        references product,
+    ingredient varchar(255) not null
+        references product,
+    primary key (mealkit_id, ingredient)
+);
+
 create table product_embedding
 (
-    id                varchar(255)  not null
+    id                varchar(255) not null
         primary key
         references product,
-    images_embed_yolo vector(512)[] not null,
-    images_embed_clip vector(768)[] not null,
-    description_embed vector(768)   not null
+    images_embed_yolo vector(512)  not null,
+    images_embed_clip vector(768)  not null,
+    description_embed vector(768)  not null
 );
 
 create table employee_info
@@ -152,13 +160,13 @@ create table post_comment
     timestamp      timestamp    not null,
     post_id        varchar(255) not null
         references blog,
-    account_id     varchar(255) not null
+    account_id     varchar(255)
         references user_account,
     parent_comment varchar(255)
         references post_comment,
     comment        varchar(255) not null,
-    comment_type   commenttype  not null,
-    deleted        boolean      not null
+    deleted        boolean      not null,
+    comment_type   commenttype  not null
 );
 
 create table account_otp
@@ -216,5 +224,12 @@ create table payment_transaction
     transaction_id varchar(255),
     status         paymentstatus not null,
     amount         real          not null
+);
+
+create table chat_history
+(
+    id      varchar(255) not null
+        primary key,
+    chatlog jsonb        not null
 );
 
