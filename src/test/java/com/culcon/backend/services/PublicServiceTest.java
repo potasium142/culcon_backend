@@ -67,21 +67,31 @@ public class PublicServiceTest {
 
     @Test
     void productService_fetchProduct_Success() {
+        // Tạo mock cho các đối tượng cần thiết
         Product productInfo = Mockito.mock(Product.class);
         ProductDoc productDocs = Mockito.mock(ProductDoc.class);
         ProductDTO expectedProductDTO = Mockito.mock(ProductDTO.class);
 
+        // Cài đặt hành vi cho các repository
         when(productRepo.findById("product123")).thenReturn(Optional.of(productInfo));
         when(productDocRepo.findById("product123")).thenReturn(Optional.of(productDocs));
 
-        try (MockedStatic<ProductDTO> mockedStatic = Mockito.mockStatic(ProductDTO.class)) {
-            mockedStatic.when(() -> ProductDTO.from(productInfo, productDocs)).thenReturn(expectedProductDTO);
+        // Tạo danh sách Product giả định (tham số thứ 3)
+        List<Product> productList = List.of(productInfo);
 
+        // Mock phương thức tĩnh ProductDTO.from với 3 tham số
+        try (MockedStatic<ProductDTO> mockedStatic = Mockito.mockStatic(ProductDTO.class)) {
+            mockedStatic.when(() -> ProductDTO.from(productInfo, productDocs, productList))
+                    .thenReturn(expectedProductDTO);
+
+            // Gọi phương thức fetchProduct để kiểm tra kết quả
             ProductDTO result = publicService.fetchProduct("product123");
 
+            // Xác minh các phương thức của repository được gọi đúng
             verify(productRepo).findById("product123");
             verify(productDocRepo).findById("product123");
 
+            // So sánh kết quả trả về với mong đợi
             Assertions.assertEquals(expectedProductDTO, result);
         }
     }
