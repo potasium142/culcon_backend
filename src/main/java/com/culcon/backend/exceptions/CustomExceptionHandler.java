@@ -46,7 +46,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, headers, status);
 	}
-
+	
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<?> dataIntegrityViolation(DataIntegrityViolationException ex) {
 		var violation = (org.hibernate.exception.ConstraintViolationException) ex.getCause();

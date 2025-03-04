@@ -103,6 +103,8 @@ insert into PUBLIC.CART (ACCOUNT_ID, AMOUNT, PRODUCT_ID)
 values ('c75265e6-f5cc-419b-b183-7b43dbb9f27b', 2, 'MK_01');
 insert into PUBLIC.COUPON (ID, EXPIRE_TIME, SALE_PERCENT, USAGE_AMOUNT, USAGE_LEFT)
 values ('cou132', '2025-12-30', 20, 20, 18);
+insert into public.coupon (id, expire_time, sale_percent, usage_amount, usage_left, minimum_price)
+values  ('TEST', '2026-03-02', 1, 10, 10, 100);
 insert into PUBLIC.ORDER_HISTORY (ID, ORDER_DATE, DELIVERY_ADDRESS, NOTE, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS,
                                   PHONENUMBER, RECEIVER, TOTAL_PRICE, COUPON, USER_ID, updated_coupon, updated_payment)
 values (102, '2024-12-12 21:47:26.237815', '69, Sussy town', '',

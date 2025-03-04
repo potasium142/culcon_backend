@@ -11,7 +11,7 @@
       "status": "NORMAL"
     }
   },
-  "register_success": {
+  "register": {
     "input": {
       "username": "user01",
       "password": "user01",
@@ -56,15 +56,6 @@
     },
     "output": {}
   },
-  "login_google_no_permission": {
-  "input": {
-    "googleToken": "invalid-google-token"
-  }
-},"login_google_success": {
-  "input": {
-    "googleToken": "valid-google-token"
-  }
-},
   "register_blank_email": {
     "input": {
       "username": "user01",
