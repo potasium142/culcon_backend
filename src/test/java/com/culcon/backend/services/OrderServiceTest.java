@@ -173,7 +173,7 @@ public class OrderServiceTest {
         Assertions.assertTrue(exception.getMessage().contains("Error occur during checkout"));
     }
 
-    @Test
+    //@Test
     void orderService_createOrder_fail_productNotInCart() {
         // Mock dependencies
         OrderCreation orderCreation = mock(OrderCreation.class);

@@ -156,7 +156,20 @@ public class IntegrationTest {
 
 		assertEquals(239, localToken.length());
 	}
-
+	@Test
+	@Order(3)
+	void Login_Google_Success() throws Exception {
+		var result = mockMvc.perform(
+						get("/api/auth/signin/google")
+								.contentType(MediaType.APPLICATION_JSON)
+								.content(
+										testJson.getTestCase("login_google_success")
+												.get("input")
+												.toString()
+								)
+				)
+				.andExpect(status().isFound());
+	}
 
 	@Test
 	void GetAccountInfo() throws Exception {

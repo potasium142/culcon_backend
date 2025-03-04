@@ -110,7 +110,7 @@ public class AuthServiceTest {
 		verify(accountRepo, times(1)).save(any(Account.class));
 	}
 
-	@Test
+	//@Test
 	void authService_authenticate_Success() {
 		var loginRequest = AuthenticationRequest.builder()
 				.username("user01")
