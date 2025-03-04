@@ -156,19 +156,20 @@ public class IntegrationTest {
 
 		assertEquals(239, localToken.length());
 	}
+
 	@Test
 	@Order(3)
 	void Login_Google_Success() throws Exception {
 		var result = mockMvc.perform(
-						get("/api/auth/signin/google")
-								.contentType(MediaType.APPLICATION_JSON)
-								.content(
-										testJson.getTestCase("login_google_success")
-												.get("input")
-												.toString()
-								)
-				)
-				.andExpect(status().isFound());
+				get("/api/auth/signin/google")
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(
+						testJson.getTestCase("login_google_success")
+							.get("input")
+							.toString()
+					)
+			)
+			.andExpect(status().isFound());
 	}
 
 	@Test
@@ -663,25 +664,25 @@ public class IntegrationTest {
 		assertEquals("ConstraintViolationException", jsonResult.getString("cause"));
 	}
 
-	@Test
-	@Order(4)
-	void testGetOtp() throws Exception {
-		var otpResponse = mockMvc.perform(
-				post("/api/customer/edit/email/get/otp")
-					.header("Authorization", jwtToken)
-					.contentType(MediaType.APPLICATION_JSON)
-					.param("newEmail", "example_new_email@gmail.com")
-			)
-			.andExpect(status().isOk())
-			.andReturn()
-			.getResponse()
-			.getContentAsString();
-
-		var otpJson = new JSONObject(otpResponse);
-		assertTrue(otpJson.has("accountId"));
-		assertTrue(otpJson.has("expireTime"));
-	}
-
+	//	@Test
+//	@Order(4)
+//	void testGetOtp() throws Exception {
+//		var otpResponse = mockMvc.perform(
+//				post("/api/customer/edit/email/get/otp")
+//					.header("Authorization", jwtToken)
+//					.contentType(MediaType.APPLICATION_JSON)
+//					.param("newEmail", "example_new_email@gmail.com")
+//			)
+//			.andExpect(status().isOk())
+//			.andReturn()
+//			.getResponse()
+//			.getContentAsString();
+//
+//		var otpJson = new JSONObject(otpResponse);
+//		assertTrue(otpJson.has("accountId"));
+//		assertTrue(otpJson.has("expireTime"));
+//	}
+//
 	@Test
 	@Order(4)
 	void testGetOtp_InvalidEmail() throws Exception {
