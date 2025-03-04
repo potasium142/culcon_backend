@@ -672,12 +672,11 @@ public class IntegrationTest {
 					.contentType(MediaType.APPLICATION_JSON)
 					.param("newEmail", "example_new_email@gmail.com")
 			)
-			.andExpect(status().isOk()) // Đảm bảo phản hồi OK
+			.andExpect(status().isOk())
 			.andReturn()
 			.getResponse()
 			.getContentAsString();
 
-		// Kiểm tra phản hồi từ API /get/otp
 		var otpJson = new JSONObject(otpResponse);
 		assertTrue(otpJson.has("accountId"));
 		assertTrue(otpJson.has("expireTime"));
@@ -1116,7 +1115,7 @@ public class IntegrationTest {
 				get("/api/public/fetch/coupon")
 					.header("Authorization", jwtToken)
 					.contentType(MediaType.APPLICATION_JSON)
-					.param("couponId", "cou132")
+					.param("couponId", "TEST")
 			)
 			.andExpect(status().isOk())
 			.andReturn()
