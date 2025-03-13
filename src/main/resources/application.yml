@@ -1,15 +1,8 @@
 spring:
   datasource:
-    #    url: ${DB_URL_USER}
+    url: ${DB_URL_USER}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
-  cloud:
-    gcp:
-      sql:
-        instance-connection-name: ${INSTANCE_CONNECTION_NAME}
-        database-name: ${DB_NAME}
-  #      credentials:
-  #        location: file:culcon_postgresql_certificate.json
 
   config:
     import: optional:file:.env[.properties]

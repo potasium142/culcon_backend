@@ -1,4 +1,4 @@
-FROM docker.io/alpine/java:21-jre
+FROM docker.io/alpine/java:21-jdk
 
 WORKDIR /workdir
 

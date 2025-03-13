@@ -42,7 +42,6 @@ dependencies {
     implementation("com.cloudinary:cloudinary-http44:1.39.0")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("com.paypal.sdk:paypal-server-sdk:0.6.1")
-    implementation("com.google.cloud:spring-cloud-gcp-starter")
     implementation("com.google.cloud.sql:postgres-socket-factory")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
