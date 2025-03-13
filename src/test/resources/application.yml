@@ -25,6 +25,8 @@ spring:
         enabled: false
       pubsub:
         enabled: false
+      sql:
+        enabled: false
 
   servlet:
     multipart:
@@ -34,9 +36,6 @@ spring:
       mode: always
       data-locations: classpath:data.sql
       continue-on-error: true
-  h2:
-    console:
-      enabled: true
 
   mail:
     host: smtp.gmail.com

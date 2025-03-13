@@ -44,7 +44,7 @@ dependencies {
     implementation("com.paypal.sdk:paypal-server-sdk:0.6.1")
 
     implementation("com.google.cloud:spring-cloud-gcp-starter")
-//    runtimeOnly("com.google.cloud:spring-cloud-gcp-starter-sql-postgresql")
+    implementation("com.google.cloud:spring-cloud-gcp-starter-sql-postgresql")
 
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
