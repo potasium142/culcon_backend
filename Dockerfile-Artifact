@@ -1,5 +1,5 @@
 # Build stage
-FROM docker.io/gradle:8-jdk21 AS build
+FROM docker.io/openjdk:21-jdk-slim AS build
 WORKDIR /app
 COPY . .
 RUN ./gradlew clean build -x test --parallel

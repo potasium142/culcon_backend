@@ -5,6 +5,8 @@
       <env name="DB_URL_RECORD" value="jdbc:postgresql://localhost:5432/culcon" />
       <env name="DB_URL_USER" value="jdbc:postgresql://localhost:5432/culcon" />
       <env name="DB_USERNAME" value="postgres" />
+      <env name="INSTANCE_CONNECTION_NAME" value="culinary-connect-443514:asia-east1:culcon" />
+      <env name="DB_NAME" value="postgres" />
     </envs>
     <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
     <module name="backend.main" />
