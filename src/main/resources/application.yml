@@ -1,10 +1,22 @@
 spring:
-  config:
-    import: optional:file:.env[.properties]
   datasource:
-    url: ${DB_URL_USER}
+    #    url: ${DB_URL_USER}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+  cloud:
+    gcp:
+      sql:
+        instance-connection-name: culinary-connect-443514:asia-east1:culcon
+        database-name: postgres
+      credentials:
+        location: file:culcon_postgresql_certificate.json
+
+  config:
+    import: optional:file:.env[.properties]
+  #    datasource:
+  #      #    url: ${DB_URL_USER}
+  #      username: ${DB_USERNAME}
+  #      password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate
@@ -12,20 +24,9 @@ spring:
     jpa:
       repositories:
         bootstrap-mode: default
-
   servlet:
     multipart:
       max-file-size: 10MB
-  sql:
-    init:
-      mode: always
-      continue-on-error: true
-      platform: ${DB}
-  h2:
-    console:
-      enabled: true
-      settings:
-        web-allow-others: true
 
   mail:
     host: smtp.gmail.com

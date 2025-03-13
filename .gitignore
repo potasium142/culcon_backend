@@ -44,3 +44,6 @@ eclipse-formatter.xml
 
 #Appmap
 /tmp
+
+cloud-sql-proxy
+culcon_postgresql_certificate.json

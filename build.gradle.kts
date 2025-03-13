@@ -25,6 +25,9 @@ repositories {
 
 val mockitoAgent = configurations.create("mockitoAgent")
 
+extra["springCloudGcpVersion"] = "6.0.1"
+extra["springCloudVersion"] = "2024.0.0"
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
@@ -39,13 +42,15 @@ dependencies {
     implementation("com.cloudinary:cloudinary-http44:1.39.0")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
     implementation("com.paypal.sdk:paypal-server-sdk:0.6.1")
+    implementation("com.google.cloud:spring-cloud-gcp-starter")
+    implementation("com.google.cloud:spring-cloud-gcp-starter-sql-postgresql")
+
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.6")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.6")
     runtimeOnly("org.postgresql:postgresql")
 
     compileOnly("org.projectlombok:lombok")
 
-    runtimeOnly("com.h2database:h2")
     annotationProcessor("org.projectlombok:lombok")
 
 //    ===============================
@@ -63,9 +68,17 @@ dependencies {
     mockitoAgent("org.mockito:mockito-core:5.14.2") { isTransitive = false }
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testRuntimeOnly("com.h2database:h2")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 
+dependencyManagement {
+    imports {
+        mavenBom("com.google.cloud:spring-cloud-gcp-dependencies:${property("springCloudGcpVersion")}")
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
+    }
+}
 tasks.withType<Test> {
     jvmArgs("-javaagent:${mockitoAgent.asPath}")
     useJUnitPlatform()
