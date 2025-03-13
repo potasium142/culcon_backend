@@ -13,10 +13,18 @@ spring:
       repositories:
         bootstrap-mode: default
 
-
-    mongodb:
-      uri: ${MONGODB_URL}
-      database: ${MONGODB_NAME}
+  cloud:
+    gcp:
+      secretmanager:
+        enabled: false
+      logging:
+        enabled: false
+      trace:
+        enabled: false
+      core:
+        enabled: false
+      pubsub:
+        enabled: false
 
   servlet:
     multipart:
