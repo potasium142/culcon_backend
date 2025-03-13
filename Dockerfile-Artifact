@@ -2,7 +2,7 @@
 FROM docker.io/gradle:8-jdk21 AS build
 WORKDIR /app
 COPY . .
-RUN gradle build --no-daemon --parallel
+RUN ./gradlew clean build -x test --parallel
 
 # Runtime stage
 FROM docker.io/alpine/java:21-jre
