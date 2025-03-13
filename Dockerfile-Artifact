@@ -1,0 +1,12 @@
+# Build stage
+FROM docker.io/gradle:8-jdk21 AS build
+WORKDIR /app
+COPY . .
+RUN gradle build --no-daemon --parallel
+
+# Runtime stage
+FROM docker.io/alpine/java:21-jre
+WORKDIR /workdir
+COPY --from=build /app/build/libs/backend-0.0.1-SNAPSHOT.jar /workdir/app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/workdir/app.jar"]
