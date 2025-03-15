@@ -137,6 +137,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 			.allowedOrigins("/**")
 			.allowedOrigins("**")
 			.allowedOrigins("/oauth2/**")
+			.allowedOrigins("http://localhost:8000")
+			.allowedOrigins("https://culcon-fe-cus-30883260979.asia-east1.run.app")
 			.allowedOrigins(env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3000"))
 			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 			.allowedHeaders("*")
