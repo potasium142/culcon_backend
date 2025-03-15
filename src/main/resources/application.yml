@@ -1,22 +1,15 @@
 spring:
   datasource:
-    url: ${DB_URL_USER}
+    url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
 
   config:
     import: optional:file:.env[.properties]
-  #    datasource:
-  #      #    url: ${DB_URL_USER}
-  #      username: ${DB_USERNAME}
-  #      password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: validate
-    generate-ddl: true
-    jpa:
-      repositories:
-        bootstrap-mode: default
+
   servlet:
     multipart:
       max-file-size: 10MB
@@ -43,7 +36,7 @@ spring:
           google:
             client-id: 212155081312-he5p1bdtliddgjgr2ltokvcdmece9at7.apps.googleusercontent.com
             client-secret: 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
-            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+            redirect-uri: ${GOOGLE_AUTH_REDIRECT_URI}
             scope: profile, email
         provider:
           google:
@@ -51,7 +44,6 @@ spring:
             token-uri: https://oauth2.googleapis.com/token
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
             user-name-attribute: sub
-
 
 
 jwt:

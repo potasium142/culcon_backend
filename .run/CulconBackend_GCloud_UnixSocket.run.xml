@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CulconBackend_GCloud_UnixSocket" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <envs>
+      <env name="DB_NAME" value="postgres" />
+      <env name="DB_PASSWORD" value="postgres" />
+      <env name="DB_URL" value="jdbc:postgresql:///postgres?cloudSqlInstance=culinary-connect-1402:asia-east1:culcon-db&amp;socketFactory=com.google.cloud.sql.postgres.SocketFactory" />
+      <env name="DB_USERNAME" value="postgres" />
+    </envs>
+    <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
+    <module name="backend.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.culcon.backend.CulconBackendApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>

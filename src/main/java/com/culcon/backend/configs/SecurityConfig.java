@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -50,6 +51,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 	private final ObjectMapper objectMapper;
 	private final LogoutHandler logoutHandler;
 	private final UserHelper userHelper;
+	private final Environment env;
 
 	@Bean
 	public static PasswordEncoder passwordEncoder() {
@@ -135,7 +137,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 			.allowedOrigins("/**")
 			.allowedOrigins("**")
 			.allowedOrigins("/oauth2/**")
-			.allowedOrigins("http://localhost:8080")
+			.allowedOrigins(env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3000"))
 			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 			.allowedHeaders("*")
 			.allowedHeaders("/oauth2/**")
@@ -166,6 +168,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 	@Bean
 	public AuthenticationSuccessHandler authenticationSuccessHandler() {
+		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3000");
 		return (request, response, authentication) -> {
 			if (authentication instanceof OAuth2AuthenticationToken oauth2Token) {
 				String email = oauth2Token.getPrincipal().getAttribute("email");
@@ -173,33 +176,14 @@ public class SecurityConfig implements WebMvcConfigurer {
 				try {
 					var token = userHelper.loginByEmail(email.trim());
 
-//					response.setCharacterEncoding("UTF-8");
-//					response.setContentType("application/json");
-//
-//					PrintWriter out = response.getWriter();
-//					out.print(objectMapper.writeValueAsString(
-//						Map.of("token", token)
-//					));
-//
-//					out.flush();
-
 					System.out.println(token);
-					String redirectUrl = "http://localhost:3000/token?value=" + token;
-
+//					String redirectUrl = "http://localhost:3000/token?value=" + token;
+					String redirectUrl = fe_endpoint + "/token?value=" + token;
 
 					response.sendRedirect(redirectUrl);
 
 				} catch (AccountNotFoundException e) {
-//					response.setCharacterEncoding("UTF-8");
-//
-//					response.setContentType("application/json");
-//
-//					PrintWriter out = response.getWriter();
-//					out.print("{\"message\": \"There's no account linked to the service, please create an account with the email\"," +
-//						" \"email\": \"" + email + "\"" + "}");
-//					out.flush();
-
-					String redirectUrl = "http://localhost:3000/token";
+					String redirectUrl = fe_endpoint + "/token";
 
 					response.sendRedirect(redirectUrl);
 				}

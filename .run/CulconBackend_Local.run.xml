@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="CulconBackend_Local" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+    <envs>
+      <env name="DB_PASSWORD" value="postgres" />
+      <env name="DB_URL" value="jdbc:postgresql://localhost:5432/postgres" />
+      <env name="DB_USERNAME" value="postgres" />
+      <env name="GOOGLE_AUTH_REDIRECT_URI" value="http://localhost:8080/login/oauth2/code/google " />
+    </envs>
+    <module name="backend.main" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.culcon.backend.CulconBackendApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
