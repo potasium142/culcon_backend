@@ -6,6 +6,8 @@ import com.culcon.backend.services.helper.UserHelper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -52,6 +54,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 	private final LogoutHandler logoutHandler;
 	private final UserHelper userHelper;
 	private final Environment env;
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Bean
 	public static PasswordEncoder passwordEncoder() {
@@ -129,17 +132,20 @@ public class SecurityConfig implements WebMvcConfigurer {
 	}
 
 	@Override
-	public void addCorsMappings(@NonNull
-	                            CorsRegistry registry) {
+	public void addCorsMappings(@NonNull CorsRegistry registry) {
+		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3000") + "/**";
+		String be_endpoint = env.getProperty("DEPLOY_URL", "http://localhost:8080") + "/**";
+		logger.info("Backend Endpoint: {}", be_endpoint);
+		logger.info("Frontend Endpoint: {}", fe_endpoint);
 		registry
 			.addMapping("/api/**")
 			.allowedOrigins("*")
 			.allowedOrigins("/**")
 			.allowedOrigins("**")
 			.allowedOrigins("/oauth2/**")
-			.allowedOrigins("http://localhost:8000")
-			.allowedOrigins("https://culcon-fe-cus-30883260979.asia-east1.run.app")
-			.allowedOrigins(env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3000"))
+			.allowedOrigins("http://localhost:8000/**")
+			.allowedOrigins(be_endpoint)
+			.allowedOrigins(fe_endpoint)
 			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 			.allowedHeaders("*")
 			.allowedHeaders("/oauth2/**")
@@ -153,13 +159,20 @@ public class SecurityConfig implements WebMvcConfigurer {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 
-		configuration.setAllowedOrigins(List.of("*"));
+		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3000") + "/**";
+		String be_endpoint = env.getProperty("DEPLOY_URL", "http://localhost:8080") + "/**";
+		configuration.setAllowedOrigins(List.of(
+			"*",
+			fe_endpoint, be_endpoint
+		));
 		configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
 		configuration.setAllowedHeaders(Arrays.asList("authorization", "content-type", "x-auth-token"));
 		configuration.setExposedHeaders(List.of("x-auth-token"));
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 
+		source.registerCorsConfiguration(fe_endpoint, configuration);
+		source.registerCorsConfiguration(be_endpoint, configuration);
 		source.registerCorsConfiguration("/**", configuration);
 		source.registerCorsConfiguration("*", configuration);
 		source.registerCorsConfiguration("/api/**", configuration);
