@@ -45,6 +45,12 @@ spring:
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
             user-name-attribute: sub
 
+server:
+  forward-headers-strategy: framework
+
+springdoc:
+  swagger-ui:
+    path: /docs
 
 jwt:
   secret-key: 482087CE4EEB98990B21E80477B6F8F7973770A5C836FF23BAA85ADCD786139B50C11D935B6C1512F36E8DA99A70788992E0EBD70F2BD5E7817CFA0D141C9270
