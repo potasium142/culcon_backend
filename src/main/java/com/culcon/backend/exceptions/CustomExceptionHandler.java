@@ -124,6 +124,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		);
 	}
 
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<?> illegalArgsExr(IllegalArgumentException ex) {
+		return new ResponseEntity<>(
+			ExceptionMessage.map(ex),
+			HttpStatus.LOCKED
+		);
+	}
+
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> genericException(Exception ex) {
 		ex.printStackTrace();

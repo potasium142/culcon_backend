@@ -27,5 +27,7 @@ public interface OrderService {
 
 	OrderSummary cancelOrder(HttpServletRequest req, String orderId);
 
+	OrderSummary receiveOrder(HttpServletRequest req, String orderId);
+
 
 }

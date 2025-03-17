@@ -59,6 +59,15 @@ public class OrderController {
 		return ResponseEntity.ok(orderService.getOrderDetail(req, id));
 	}
 
+	@Operation(tags = "Order")
+	@PostMapping("/receive")
+	public ResponseEntity<Object> receiveOrder(
+		HttpServletRequest req,
+		@RequestParam String id
+	) {
+		return ResponseEntity.ok(orderService.receiveOrder(req, id));
+	}
+
 
 	@Operation(tags = "Order")
 	@DeleteMapping("/cancel")
@@ -80,6 +89,7 @@ public class OrderController {
 		return ResponseEntity.ok(orderService.updateOrder(req, id, orderCreation));
 	}
 
+	@Deprecated
 	@Operation(tags = "Order")
 	@PatchMapping("/update/payment")
 	public ResponseEntity<Object> updatePayment(
@@ -90,6 +100,7 @@ public class OrderController {
 		return ResponseEntity.ok(orderService.changePayment(req, id, paymentMethod));
 	}
 
+	@Deprecated
 	@Operation(tags = "Order")
 	@PatchMapping("/update/coupon")
 	public ResponseEntity<Object> updateCoupon(

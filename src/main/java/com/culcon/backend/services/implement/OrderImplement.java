@@ -347,4 +347,22 @@ public class OrderImplement implements OrderService {
 
 		return OrderSummary.from(order);
 	}
+
+	@Override
+	public OrderSummary receiveOrder(HttpServletRequest req, String orderId) {
+		var account = authService.getUserInformation(req);
+
+		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
+			.orElseThrow(() -> new NoSuchElementException("Order not found"));
+
+
+		if (order.getOrderStatus() != OrderStatus.SHIPPED) {
+			throw new IllegalArgumentException("Only delivered orders can be received");
+		}
+
+		order.setOrderStatus(OrderStatus.DELIVERED);
+		order = orderHistoryRepo.save(order);
+
+		return OrderSummary.from(order);
+	}
 }

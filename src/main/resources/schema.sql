@@ -1,14 +1,10 @@
-create type accounttype as enum ('MANAGER', 'STAFF');
-
 create type useraccountstatus as enum ('NON_ACTIVE', 'NORMAL', 'BANNED', 'DEACTIVATE');
-
-create type accountstatus as enum ('BANNED', 'DEACTIVATE', 'NON_ACTIVE', 'NORMAL');
 
 create type orderstatus as enum ('CANCELLED', 'ON_CONFIRM', 'ON_PROCESSING', 'ON_SHIPPING', 'SHIPPED');
 
 create type paymentmethod as enum ('COD', 'PAYPAL', 'VNPAY');
 
-create type paymentstatus as enum ('CHANGED', 'CREATED', 'PENDING', 'RECEIVED', 'REFUNDED', 'REFUNDING');
+create type paymentstatus as enum ('CHANGED', 'CREATED', 'PENDING', 'RECEIVED', 'REFUNDED', 'REFUNDING', 'DELIVERED' );
 
 create type commenttype as enum ('POST', 'REPLY');
 
