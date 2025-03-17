@@ -11,7 +11,7 @@ import java.util.List;
 
 @Builder
 public record OrderInList(
-	Long id,
+	String id,
 	LocalDateTime date,
 	OrderStatus status,
 	Float totalPrice,

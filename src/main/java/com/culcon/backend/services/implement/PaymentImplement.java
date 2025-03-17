@@ -113,7 +113,7 @@ public class PaymentImplement implements PaymentService {
 	}
 
 	@Override
-	public String getPayment(Long orderId, HttpServletRequest request) throws IOException, ApiException {
+	public String getPayment(String orderId, HttpServletRequest request) throws IOException, ApiException {
 		var account = authService.getUserInformation(request);
 		var pt = paymentTransactionRepo.findByIdAndOrder_User(orderId, account)
 			.orElseThrow(() -> new NoSuchElementException("Transaction of this order is not found"));
@@ -284,10 +284,10 @@ public class PaymentImplement implements PaymentService {
 
 
 		var paymentTransaction = PaymentTransaction.builder()
-				.order(order)
-				.amount(order.getTotalPrice())
-				.url(paymentUrl)
-				.build();
+			.order(order)
+			.amount(order.getTotalPrice())
+			.url(paymentUrl)
+			.build();
 
 		paymentTransactionRepo.save(paymentTransaction);
 
@@ -295,10 +295,10 @@ public class PaymentImplement implements PaymentService {
 	}
 
 	@Override
-	public String getPaymentVNPay(Long orderId, HttpServletRequest request) throws IOException, ApiException {
+	public String getPaymentVNPay(String orderId, HttpServletRequest request) throws IOException, ApiException {
 		var account = authService.getUserInformation(request);
 		var pt = paymentTransactionRepo.findByIdAndOrder_User(orderId, account)
-				.orElseThrow(() -> new NoSuchElementException("Transaction of this order is not found"));
+			.orElseThrow(() -> new NoSuchElementException("Transaction of this order is not found"));
 
 
 		return pt.getUrl();

@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.TransactionSystemException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -46,7 +47,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, headers, status);
 	}
-	
+
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	public ResponseEntity<?> dataIntegrityViolation(DataIntegrityViolationException ex) {
 		var violation = (org.hibernate.exception.ConstraintViolationException) ex.getCause();
@@ -112,6 +113,22 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(
 			ExceptionMessage.map(ex),
 			HttpStatus.NOT_ACCEPTABLE
+		);
+	}
+
+	@ExceptionHandler(LockedException.class)
+	public ResponseEntity<?> lockedException(LockedException ex) {
+		return new ResponseEntity<>(
+			ExceptionMessage.map(ex),
+			HttpStatus.LOCKED
+		);
+	}
+
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<?> illegalArgsExr(IllegalArgumentException ex) {
+		return new ResponseEntity<>(
+			ExceptionMessage.map(ex),
+			HttpStatus.LOCKED
 		);
 	}
 

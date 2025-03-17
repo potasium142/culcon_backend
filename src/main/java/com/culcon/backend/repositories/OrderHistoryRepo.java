@@ -8,10 +8,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface OrderHistoryRepo extends JpaRepository<OrderHistory, Long> {
+public interface OrderHistoryRepo extends JpaRepository<OrderHistory, String> {
 	List<OrderHistory> findByUser(Account user);
 
 	List<OrderHistory> findByUserAndOrderStatus(Account user, OrderStatus orderStatus);
 
-	Optional<OrderHistory> findByIdAndUser(Long id, Account user);
+	Optional<OrderHistory> findByIdAndUser(String id, Account user);
 }

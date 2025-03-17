@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 @Builder
 public record PaymentDTO(
-	Long id,
+	String id,
 	PaymentStatus status,
 	String transactionId,
 	Float amount,

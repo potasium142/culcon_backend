@@ -3,7 +3,13 @@
     <ExternalSystemSettings>
       <option name="env">
         <map>
+          <entry key="DB_PASSWORD" value="postgres" />
+          <entry key="DB_URL" value="jdbc:postgresql://localhost:5432/postgres" />
+          <entry key="DB_USERNAME" value="postgres" />
+          <entry key="DEPLOY_URL" value="http://localhost:8080" />
           <entry key="DOCKER_HOST" value="unix:///run/user/1000/podman/podman.sock" />
+          <entry key="FRONTEND_ENDPOINT" value="http://localhost:3001" />
+          <entry key="GOOGLE_AUTH_REDIRECT_URI" value="http://localhost:8080/login/oauth2/code/google " />
           <entry key="TESTCONTAINERS_RYUK_DISABLED" value="true" />
         </map>
       </option>

@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class PaymentTransaction {
 	@Id
 	@Column(name = "order_id")
-	private Long id;
+	private String id;
 
 	@MapsId
 	@JoinColumn(name = "order_id")

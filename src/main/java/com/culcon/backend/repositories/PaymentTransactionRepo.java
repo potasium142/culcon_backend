@@ -15,7 +15,7 @@ public interface PaymentTransactionRepo extends JpaRepository<PaymentTransaction
 
 	Optional<PaymentTransaction> findByOrder(OrderHistory order);
 
-	Optional<PaymentTransaction> findByIdAndOrder_User(Long id, Account orderUser);
+	Optional<PaymentTransaction> findByIdAndOrder_User(String id, Account orderUser);
 
 	Boolean existsByOrderAndStatus(OrderHistory order, PaymentStatus status);
 
