@@ -16,7 +16,7 @@ public interface PaymentService {
 	PaymentDTO capturePayment(String transactionId, HttpServletRequest request)
 		throws IOException, ApiException;
 
-	String getPayment(Long orderId, HttpServletRequest request) throws IOException, ApiException;
+	String getPayment(String orderId, HttpServletRequest request) throws IOException, ApiException;
 
 	void refund(OrderHistory order)
 		throws IOException, ApiException;
@@ -24,8 +24,8 @@ public interface PaymentService {
 	void updatePrice(OrderHistory order, Float price) throws IOException, ApiException;
 
 	void createPaymentVNPay(OrderHistory order, String bank, HttpServletRequest request)
-			throws IOException, ApiException;
+		throws IOException, ApiException;
 
-	String getPaymentVNPay(Long orderId, HttpServletRequest request) throws IOException, ApiException;
+	String getPaymentVNPay(String orderId, HttpServletRequest request) throws IOException, ApiException;
 
 }

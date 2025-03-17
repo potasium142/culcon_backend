@@ -178,7 +178,7 @@ public class OrderImplement implements OrderService {
 		return OrderSummary.from(order);
 	}
 
-	private OrderHistory getOrderForUpdate(Long orderId, HttpServletRequest req) {
+	private OrderHistory getOrderForUpdate(String orderId, HttpServletRequest req) {
 		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
@@ -208,7 +208,7 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public OrderDetail getOrderDetail(HttpServletRequest req, Long orderId) {
+	public OrderDetail getOrderDetail(HttpServletRequest req, String orderId) {
 		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
@@ -221,7 +221,7 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public CouponDTO updateOrderCoupon(HttpServletRequest req, Long orderId, String couponId) throws IOException, ApiException {
+	public CouponDTO updateOrderCoupon(HttpServletRequest req, String orderId, String couponId) throws IOException, ApiException {
 		var order = getOrderForUpdate(orderId, req);
 
 		if (order.getUpdatedCoupon()) {
@@ -265,7 +265,7 @@ public class OrderImplement implements OrderService {
 
 	@Override
 	public OrderSummary changePayment(HttpServletRequest req,
-	                                  Long orderId, PaymentMethod paymentMethod)
+	                                  String orderId, PaymentMethod paymentMethod)
 		throws IOException, ApiException {
 		var order = getOrderForUpdate(orderId, req);
 
@@ -300,7 +300,7 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public OrderSummary updateOrder(HttpServletRequest req, Long orderId, OrderUpdate orderCreation) {
+	public OrderSummary updateOrder(HttpServletRequest req, String orderId, OrderUpdate orderCreation) {
 		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
@@ -320,7 +320,7 @@ public class OrderImplement implements OrderService {
 	}
 
 	@Override
-	public OrderSummary cancelOrder(HttpServletRequest req, Long orderId) {
+	public OrderSummary cancelOrder(HttpServletRequest req, String orderId) {
 		var account = authService.getUserInformation(req);
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)

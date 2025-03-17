@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Builder
 public record OrderSummary(
-	Long id,
+	String id,
 	LocalDateTime date,
 	OrderStatus status,
 	Float totalPrice,

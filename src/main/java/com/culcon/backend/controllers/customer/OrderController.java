@@ -54,7 +54,7 @@ public class OrderController {
 	@GetMapping("/fetch/detail")
 	public ResponseEntity<Object> getOrderDetails(
 		HttpServletRequest req,
-		@RequestParam Long id
+		@RequestParam String id
 	) {
 		return ResponseEntity.ok(orderService.getOrderDetail(req, id));
 	}
@@ -64,7 +64,7 @@ public class OrderController {
 	@DeleteMapping("/cancel")
 	public ResponseEntity<Object> cancelOrder(
 		HttpServletRequest req,
-		@RequestParam Long id
+		@RequestParam String id
 	) {
 		return ResponseEntity.ok(orderService.cancelOrder(req, id));
 	}
@@ -74,7 +74,7 @@ public class OrderController {
 	@PatchMapping("/update/info")
 	public ResponseEntity<Object> updateOrder(
 		HttpServletRequest req,
-		@RequestParam Long id,
+		@RequestParam String id,
 		@Valid @RequestBody OrderUpdate orderCreation
 	) {
 		return ResponseEntity.ok(orderService.updateOrder(req, id, orderCreation));
@@ -84,7 +84,7 @@ public class OrderController {
 	@PatchMapping("/update/payment")
 	public ResponseEntity<Object> updatePayment(
 		HttpServletRequest req,
-		@RequestParam Long id,
+		@RequestParam String id,
 		@RequestParam PaymentMethod paymentMethod
 	) throws IOException, ApiException {
 		return ResponseEntity.ok(orderService.changePayment(req, id, paymentMethod));
@@ -94,7 +94,7 @@ public class OrderController {
 	@PatchMapping("/update/coupon")
 	public ResponseEntity<Object> updateCoupon(
 		HttpServletRequest req,
-		@RequestParam Long id,
+		@RequestParam String id,
 		@RequestParam String couponId
 	) throws IOException, ApiException {
 		return ResponseEntity.ok(orderService.updateOrderCoupon(req, id, couponId));

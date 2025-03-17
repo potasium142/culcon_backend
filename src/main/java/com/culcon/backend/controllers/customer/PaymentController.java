@@ -4,7 +4,6 @@ package com.culcon.backend.controllers.customer;
 import com.culcon.backend.services.PaymentService;
 import com.paypal.sdk.exceptions.ApiException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,7 @@ public class PaymentController {
 
 	@GetMapping("/get")
 	public ResponseEntity<?> createOrder(
-		@RequestParam Long orderId,
+		@RequestParam String orderId,
 		HttpServletRequest request
 	) throws IOException, ApiException {
 		var payment = paymentService.getPayment(orderId, request);
@@ -42,27 +41,27 @@ public class PaymentController {
 
 	@GetMapping("/vnpay/get")
 	public ResponseEntity<?> createOrderVNPay(
-			@RequestParam Long orderId,
-			HttpServletRequest request
+		@RequestParam String orderId,
+		HttpServletRequest request
 	) throws IOException, ApiException {
 		return ResponseEntity.status(HttpStatus.OK).body(paymentService.getPaymentVNPay(orderId, request));
 
 	}
 
 
-// what result url look like =>	http://localhost:8080/vnpay_jsp/vnpay_return.jsp?vnp_Amount=1000000&vnp_BankCode=NCB&vnp_BankTranNo=VNP14778261&vnp_CardType=ATM&vnp_OrderInfo=Thanh+toan+don+hang%3A59049609&vnp_PayDate=20250102201754&vnp_ResponseCode=00&vnp_TmnCode=PCB8RZTL&vnp_TransactionNo=14778261&vnp_TransactionStatus=00&vnp_TxnRef=59049609&vnp_SecureHash=638f986d2e3e75c1b8bbb81db30a566a4de5cadb13adda9f4c2efd3b43c3af08e8ca3a4d17696361610f33d53693d967a7e8334f00e7169116a00c16874f40dd
+	// what result url look like =>	http://localhost:8080/vnpay_jsp/vnpay_return.jsp?vnp_Amount=1000000&vnp_BankCode=NCB&vnp_BankTranNo=VNP14778261&vnp_CardType=ATM&vnp_OrderInfo=Thanh+toan+don+hang%3A59049609&vnp_PayDate=20250102201754&vnp_ResponseCode=00&vnp_TmnCode=PCB8RZTL&vnp_TransactionNo=14778261&vnp_TransactionStatus=00&vnp_TxnRef=59049609&vnp_SecureHash=638f986d2e3e75c1b8bbb81db30a566a4de5cadb13adda9f4c2efd3b43c3af08e8ca3a4d17696361610f33d53693d967a7e8334f00e7169116a00c16874f40dd
 	@PostMapping("/vnpay/capture")
 	public ResponseEntity<?> captureOrderVNPay(
-			@RequestParam String vnp_ResponseCode,
+		@RequestParam String vnp_ResponseCode,
 
-			@RequestParam String vnp_Amount,
-			@RequestParam String vnp_BankTranNo,
-			@RequestParam String vnp_BankCode,
-			@RequestParam String vnp_OrderInfo,
-			@RequestParam String vnp_TransactionNo,
+		@RequestParam String vnp_Amount,
+		@RequestParam String vnp_BankTranNo,
+		@RequestParam String vnp_BankCode,
+		@RequestParam String vnp_OrderInfo,
+		@RequestParam String vnp_TransactionNo,
 
 //			HttpServletResponse response,
-			HttpServletRequest request
+		HttpServletRequest request
 	) throws IOException, ApiException {
 
 //		if ("00".equals(vnp_ResponseCode)) {
