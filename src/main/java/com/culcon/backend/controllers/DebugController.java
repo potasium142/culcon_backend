@@ -58,7 +58,7 @@ public class DebugController {
 
 	@PostMapping("/order/update/status")
 	public OrderHistory updateOrderStatus(
-		@RequestParam Long orderId,
+		@RequestParam String orderId,
 		@RequestParam OrderStatus status,
 		@RequestParam PaymentStatus paymentStatus,
 		@RequestParam PaymentMethod paymentMethod

@@ -17,15 +17,17 @@ public interface OrderService {
 
 	List<OrderInList> getListOfAllOrder(HttpServletRequest req);
 
-	OrderDetail getOrderDetail(HttpServletRequest req, Long orderId);
+	OrderDetail getOrderDetail(HttpServletRequest req, String orderId);
 
-	CouponDTO updateOrderCoupon(HttpServletRequest req, Long orderId, String couponId) throws IOException, ApiException;
+	CouponDTO updateOrderCoupon(HttpServletRequest req, String orderId, String couponId) throws IOException, ApiException;
 
-	OrderSummary changePayment(HttpServletRequest req, Long orderId, PaymentMethod paymentMethod) throws IOException, ApiException;
+	OrderSummary changePayment(HttpServletRequest req, String orderId, PaymentMethod paymentMethod) throws IOException, ApiException;
 
-	OrderSummary updateOrder(HttpServletRequest req, Long orderId, OrderUpdate orderCreation);
+	OrderSummary updateOrder(HttpServletRequest req, String orderId, OrderUpdate orderCreation);
 
-	OrderSummary cancelOrder(HttpServletRequest req, Long orderId);
+	OrderSummary cancelOrder(HttpServletRequest req, String orderId);
+
+	OrderSummary receiveOrder(HttpServletRequest req, String orderId);
 
 
 }

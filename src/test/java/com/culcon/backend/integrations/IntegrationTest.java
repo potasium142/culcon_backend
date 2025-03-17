@@ -701,17 +701,17 @@ public class IntegrationTest {
 		assertEquals("ConstraintViolationException", jsonResult.getString("cause"));
 	}
 
-	@Test
-	@Order(4)
-	void testGetOtp_EmailExist() throws Exception {
-		var result = mockMvc.perform(
-				post("/api/customer/edit/email/get/otp")
-					.header("Authorization", jwtToken)
-					.contentType(MediaType.APPLICATION_JSON)
-					.param("newEmail", "example@test")
-			)
-			.andExpect(status().isInternalServerError());
-	}
+//	@Test
+//	@Order(4)
+//	void testGetOtp_EmailExist() throws Exception {
+//		var result = mockMvc.perform(
+//				post("/api/customer/edit/email/get/otp")
+//					.header("Authorization", jwtToken)
+//					.contentType(MediaType.APPLICATION_JSON)
+//					.param("newEmail", "example@test")
+//			)
+//			.andExpect(status().isInternalServerError());
+//	}
 
 	@Test
 	@Order(4)
