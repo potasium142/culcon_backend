@@ -1215,23 +1215,23 @@ public class IntegrationTest {
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
 
-//	@Test
-//	@Rollback(true)
-//	void Order_CancelSuccess() throws Exception {
-//		var result = mockMvc
-//			.perform(
-//				delete("/api/customer/order/cancel")
-//					.header("Authorization", jwtToken)
-//					.contentType(MediaType.APPLICATION_JSON)
-//					.param("id", "102")
-//			)
-//			.andExpect(status().isOk())
-//			.andReturn()
-//			.getResponse()
-//			.getContentAsString();
-//		var jsonResult = new JSONObject(result);
-//		assertEquals("CANCELLED", jsonResult.getString("status"));
-//	}
+	@Test
+	@Rollback(true)
+	void Order_CancelSuccess() throws Exception {
+		var result = mockMvc
+			.perform(
+				delete("/api/customer/order/cancel")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("id", "102")
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("CANCELLED", jsonResult.getString("status"));
+	}
 
 	@Test
 	@Order(6)
