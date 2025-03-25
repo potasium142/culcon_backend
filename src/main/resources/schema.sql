@@ -52,6 +52,7 @@ create table user_account
     profile_pic_uri     varchar           not null,
     profile_description varchar           not null,
     token               varchar           not null,
+    profile_name        varchar           not null,
     bookmarked_posts    varchar(255)[]    not null
 );
 

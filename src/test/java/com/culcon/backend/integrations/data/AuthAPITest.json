@@ -8,6 +8,7 @@
       "profilePictureUri": "defaultProfile",
       "email": "example@test",
       "username": "test_account",
+      "profileName": "test_account",
       "status": "NORMAL"
     }
   },
@@ -15,6 +16,7 @@
     "input": {
       "username": "user01",
       "password": "user01",
+      "profileName": "user01",
       "address": "",
       "description": "",
       "email": "example@email.com",
@@ -57,14 +59,15 @@
     "output": {}
   },
   "login_google_no_permission": {
-  "input": {
-    "googleToken": "invalid-google-token"
-  }
-},"login_google_success": {
-  "input": {
-    "googleToken": "valid-google-token"
-  }
-},
+    "input": {
+      "googleToken": "invalid-google-token"
+    }
+  },
+  "login_google_success": {
+    "input": {
+      "googleToken": "valid-google-token"
+    }
+  },
   "register_blank_email": {
     "input": {
       "username": "user01",
@@ -162,10 +165,12 @@
       "username": "user01",
       "phone": "0123456780",
       "address": "lavander town",
-      "description": "lavander sus"
+      "description": "lavander sus",
+      "profileName": "sussywussy"
     },
     "output": {
       "email": "example@test",
+      "profileName": "sussywussy",
       "username": "user01",
       "status": "NORMAL",
       "address": "lavander town",

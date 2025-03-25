@@ -2,7 +2,6 @@ package com.culcon.backend.dtos.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.media.Schema.RequiredMode;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
@@ -21,6 +20,9 @@ public record CustomerInfoUpdateRequest(
 	@Pattern(regexp = "0[1-9]{2}[0-9]{7}")
 	String phone,
 
+	@Schema(example = "lussymussy",
+		requiredMode = RequiredMode.AUTO)
+	String profileName,
 
 	@Schema(example = "69, Sussy town",
 		requiredMode = RequiredMode.AUTO)

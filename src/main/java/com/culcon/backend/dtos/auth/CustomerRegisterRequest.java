@@ -33,6 +33,10 @@ public record CustomerRegisterRequest(
 		requiredMode = RequiredMode.REQUIRED)
 	String password,
 
+	@Schema(example = "lussywussy",
+		requiredMode = RequiredMode.REQUIRED)
+	String profileName,
+
 	@Schema(example = "69, Sussy town",
 		requiredMode = RequiredMode.AUTO)
 	String address,

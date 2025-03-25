@@ -99,6 +99,7 @@ public class AuthImplement implements AuthService {
 			.password(passwordEncoder.encode(request.password()))
 			.address(request.address())
 			.phone(request.phone())
+			.profileName(request.profileName())
 			.profileDescription(request.description())
 			.build();
 		var savedUser = userRepo.save(user);
