@@ -47,7 +47,8 @@ create table user_account
     password            varchar           not null,
     status              useraccountstatus not null,
     address             varchar           not null,
-    phone               varchar           not null,
+    phone               varchar           not null
+        unique,
     profile_pic_uri     varchar           not null,
     profile_description varchar           not null,
     token               varchar           not null,
@@ -151,8 +152,6 @@ create table order_history
     phonenumber      varchar(255)  not null,
     coupon           varchar
         references coupon,
-    updated_coupon   boolean       not null,
-    updated_payment  boolean       not null,
     payment_method   paymentmethod not null,
     payment_status   paymentstatus not null,
     order_status     orderstatus   not null
@@ -160,12 +159,12 @@ create table order_history
 
 create table order_history_items
 (
-    order_history_id      varchar(255)
+    order_history_id varchar(255)
         references order_history,
-    product_id_product_id varchar(255),
-    product_id_date       timestamp,
-    quantity              integer,
-    foreign key (product_id_date, product_id_product_id) references product_price_history
+    product_id       varchar(255),
+    date             timestamp,
+    quantity         integer,
+    foreign key (date, product_id) references product_price_history
 );
 
 create table payment_transaction

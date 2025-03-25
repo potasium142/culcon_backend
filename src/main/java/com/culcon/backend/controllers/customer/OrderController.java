@@ -3,7 +3,6 @@ package com.culcon.backend.controllers.customer;
 import com.culcon.backend.dtos.order.OrderCreation;
 import com.culcon.backend.dtos.order.OrderUpdate;
 import com.culcon.backend.models.OrderStatus;
-import com.culcon.backend.models.PaymentMethod;
 import com.culcon.backend.services.OrderService;
 import com.paypal.sdk.exceptions.ApiException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -89,25 +88,25 @@ public class OrderController {
 		return ResponseEntity.ok(orderService.updateOrder(req, id, orderCreation));
 	}
 
-	@Deprecated
-	@Operation(tags = "Order")
-	@PatchMapping("/update/payment")
-	public ResponseEntity<Object> updatePayment(
-		HttpServletRequest req,
-		@RequestParam String id,
-		@RequestParam PaymentMethod paymentMethod
-	) throws IOException, ApiException {
-		return ResponseEntity.ok(orderService.changePayment(req, id, paymentMethod));
-	}
-
-	@Deprecated
-	@Operation(tags = "Order")
-	@PatchMapping("/update/coupon")
-	public ResponseEntity<Object> updateCoupon(
-		HttpServletRequest req,
-		@RequestParam String id,
-		@RequestParam String couponId
-	) throws IOException, ApiException {
-		return ResponseEntity.ok(orderService.updateOrderCoupon(req, id, couponId));
-	}
+//	@Deprecated
+//	@Operation(tags = "Order")
+//	@PatchMapping("/update/payment")
+//	public ResponseEntity<Object> updatePayment(
+//		HttpServletRequest req,
+//		@RequestParam String id,
+//		@RequestParam PaymentMethod paymentMethod
+//	) throws IOException, ApiException {
+//		return ResponseEntity.ok(orderService.changePayment(req, id, paymentMethod));
+//	}
+//
+//	@Deprecated
+//	@Operation(tags = "Order")
+//	@PatchMapping("/update/coupon")
+//	public ResponseEntity<Object> updateCoupon(
+//		HttpServletRequest req,
+//		@RequestParam String id,
+//		@RequestParam String couponId
+//	) throws IOException, ApiException {
+//		return ResponseEntity.ok(orderService.updateOrderCoupon(req, id, couponId));
+//	}
 }
