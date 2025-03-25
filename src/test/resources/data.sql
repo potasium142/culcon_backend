@@ -106,20 +106,20 @@ values ('cou132', '2025-12-30', 20, 20, 18, 0);
 insert into public.coupon (id, expire_time, sale_percent, usage_amount, usage_left, minimum_price)
 values ('TEST', '2026-03-02', 1, 10, 10, 100);
 insert into PUBLIC.ORDER_HISTORY (ID, ORDER_DATE, DELIVERY_ADDRESS, NOTE, ORDER_STATUS, PAYMENT_METHOD, PAYMENT_STATUS,
-                                  PHONENUMBER, RECEIVER, TOTAL_PRICE, COUPON, USER_ID, updated_coupon, updated_payment)
+                                  PHONENUMBER, RECEIVER, TOTAL_PRICE, COUPON, USER_ID)
 values ('102', '2024-12-12 21:47:26.237815', '69, Sussy town', '',
         'ON_CONFIRM', 'COD', 'PENDING',
         '0123456789', 'test3', 22.5, null,
-        '996d4a65-9561-47d3-8fc2-31a5868dad52', false, false),
+        '996d4a65-9561-47d3-8fc2-31a5868dad52'),
        ('152', '2024-12-13 01:24:37.705815', '69, Sussy town', '',
         'ON_CONFIRM', 'COD', 'PENDING',
         '0123456789', 'test3', 11.25, null,
-        '94511231-59ce-45cb-9edc-196c378064a1', false, false),
+        '94511231-59ce-45cb-9edc-196c378064a1'),
        ('153', '2024-12-13 01:25:22.196430', '69, Sussy town', '',
         'ON_CONFIRM', 'COD', 'PENDING',
         '0123456789', 'test3', 11.25, null,
-        '94511231-59ce-45cb-9edc-196c378064a1', false, false),
+        '94511231-59ce-45cb-9edc-196c378064a1'),
        ('202', '2024-12-13 01:30:12.698704', '69, Sussy town', '',
         'ON_CONFIRM', 'COD', 'PENDING',
         '123456789', 'test3', 22.5, null,
-        '94511231-59ce-45cb-9edc-196c378064a1', false, false);
+        '94511231-59ce-45cb-9edc-196c378064a1');

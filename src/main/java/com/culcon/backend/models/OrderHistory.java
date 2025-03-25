@@ -35,7 +35,14 @@ public class OrderHistory {
 
 	@Column(name = "order_items")
 	@ElementCollection(fetch = FetchType.LAZY)
-	@JdbcTypeCode(SqlTypes.ARRAY)
+//	@AttributeOverrides({
+//		@AttributeOverride(
+//			name = "productId.id.product", column = @Column(name = "product_id")
+//		),
+//		@AttributeOverride(
+//			name = "productId.id.date", column = @Column(name = "date")
+//		)
+//	})
 	private List<OrderHistoryItem> items;
 
 	@Column(name = "order_status")
@@ -62,14 +69,6 @@ public class OrderHistory {
 
 	@Column(name = "phonenumber", length = 12)
 	private String phonenumber;
-
-	@Column(name = "updated_coupon")
-	@Builder.Default
-	private Boolean updatedCoupon = false;
-
-	@Column(name = "updated_payment")
-	@Builder.Default
-	private Boolean updatedPayment = false;
 
 	@Column(name = "payment_method")
 	@Enumerated(EnumType.ORDINAL)

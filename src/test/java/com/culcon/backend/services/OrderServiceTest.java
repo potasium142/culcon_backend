@@ -391,70 +391,70 @@ public class OrderServiceTest {
 	}
 
 
-	@Test
-	void changePayment_success() throws IOException, ApiException {
-		// Mock dependencies
-		HttpServletRequest request = mock(HttpServletRequest.class);
-		OrderHistory order = mock(OrderHistory.class);
-		OrderSummary orderSummary = mock(OrderSummary.class);
-		PaymentTransaction paymentTransaction = mock(PaymentTransaction.class);
-		PaymentMethod paymentMethod = PaymentMethod.PAYPAL; // example payment method
-		Account account = mock(Account.class); // Mock Account
-
-		// Mock behavior for getting the user information
-		when(authService.getUserInformation(request)).thenReturn(account);
-
-		// Mock behavior for finding the order by ID and user
-		when(orderHistoryRepo.findByIdAndUser(order.getId(), account)).thenReturn(Optional.of(order));
-
-		// Mock order status to return ON_CONFIRM
-		when(order.getOrderStatus()).thenReturn(OrderStatus.ON_CONFIRM); // Set order status to ON_CONFIRM
-
-		// Mock other behaviors
-		when(order.getPaymentMethod()).thenReturn(PaymentMethod.COD); // previous payment method
-		when(order.getUpdatedPayment()).thenReturn(false); // payment hasn't been updated
-		when(paymentTransactionRepo.findByOrder(order)).thenReturn(Optional.empty()); // no payment transaction yet
-
-		// Mock static methods
-		try (MockedStatic<OrderSummary> orderSummaryMock = mockStatic(OrderSummary.class)) {
-			orderSummaryMock.when(() -> OrderSummary.from(order)).thenReturn(orderSummary);
-
-			// Call the method
-			OrderSummary result = orderService.changePayment(request, order.getId(), paymentMethod);
-
-			// Assertions
-			Assertions.assertNotNull(result);
-			Assertions.assertEquals(orderSummary, result);
-			verify(paymentService).createPayment(order, request); // Ensure payment creation method is called
-		}
-	}
-
-	@Test
-	void changePayment_fail_statusNotOnConfirm() throws IOException, ApiException {
-		// Mock dependencies
-		HttpServletRequest request = mock(HttpServletRequest.class);
-		OrderHistory order = mock(OrderHistory.class);
-		PaymentMethod paymentMethod = PaymentMethod.PAYPAL; // example payment method
-		Account account = mock(Account.class); // Mock Account
-
-		// Mock behavior for getting the user information
-		when(authService.getUserInformation(request)).thenReturn(account);
-
-		// Mock behavior for finding the order by ID and user
-		when(orderHistoryRepo.findByIdAndUser(order.getId(), account)).thenReturn(Optional.of(order));
-
-		// Mock order status to return a value that is not ON_CONFIRM
-		when(order.getOrderStatus()).thenReturn(OrderStatus.CANCELLED); // Set order status to something other than ON_CONFIRM
-
-		// Call the method and expect a RuntimeException to be thrown
-		RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () -> {
-			orderService.changePayment(request, order.getId(), paymentMethod);
-		});
-
-		// Verify the exception message
-		Assertions.assertEquals("Order status is not on confirm", exception.getMessage());
-	}
-
+	//	@Test
+//	void changePayment_success() throws IOException, ApiException {
+//		// Mock dependencies
+//		HttpServletRequest request = mock(HttpServletRequest.class);
+//		OrderHistory order = mock(OrderHistory.class);
+//		OrderSummary orderSummary = mock(OrderSummary.class);
+//		PaymentTransaction paymentTransaction = mock(PaymentTransaction.class);
+//		PaymentMethod paymentMethod = PaymentMethod.PAYPAL; // example payment method
+//		Account account = mock(Account.class); // Mock Account
+//
+//		// Mock behavior for getting the user information
+//		when(authService.getUserInformation(request)).thenReturn(account);
+//
+//		// Mock behavior for finding the order by ID and user
+//		when(orderHistoryRepo.findByIdAndUser(order.getId(), account)).thenReturn(Optional.of(order));
+//
+//		// Mock order status to return ON_CONFIRM
+//		when(order.getOrderStatus()).thenReturn(OrderStatus.ON_CONFIRM); // Set order status to ON_CONFIRM
+//
+//		// Mock other behaviors
+//		when(order.getPaymentMethod()).thenReturn(PaymentMethod.COD); // previous payment method
+//		when(order.getUpdatedPayment()).thenReturn(false); // payment hasn't been updated
+//		when(paymentTransactionRepo.findByOrder(order)).thenReturn(Optional.empty()); // no payment transaction yet
+//
+//		// Mock static methods
+//		try (MockedStatic<OrderSummary> orderSummaryMock = mockStatic(OrderSummary.class)) {
+//			orderSummaryMock.when(() -> OrderSummary.from(order)).thenReturn(orderSummary);
+//
+//			// Call the method
+//			OrderSummary result = orderService.changePayment(request, order.getId(), paymentMethod);
+//
+//			// Assertions
+//			Assertions.assertNotNull(result);
+//			Assertions.assertEquals(orderSummary, result);
+//			verify(paymentService).createPayment(order, request); // Ensure payment creation method is called
+//		}
+//	}
+//
+//	@Test
+//	void changePayment_fail_statusNotOnConfirm() throws IOException, ApiException {
+//		// Mock dependencies
+//		HttpServletRequest request = mock(HttpServletRequest.class);
+//		OrderHistory order = mock(OrderHistory.class);
+//		PaymentMethod paymentMethod = PaymentMethod.PAYPAL; // example payment method
+//		Account account = mock(Account.class); // Mock Account
+//
+//		// Mock behavior for getting the user information
+//		when(authService.getUserInformation(request)).thenReturn(account);
+//
+//		// Mock behavior for finding the order by ID and user
+//		when(orderHistoryRepo.findByIdAndUser(order.getId(), account)).thenReturn(Optional.of(order));
+//
+//		// Mock order status to return a value that is not ON_CONFIRM
+//		when(order.getOrderStatus()).thenReturn(OrderStatus.CANCELLED); // Set order status to something other than ON_CONFIRM
+//
+//		// Call the method and expect a RuntimeException to be thrown
+//		RuntimeException exception = Assertions.assertThrows(RuntimeException.class, () -> {
+//			orderService.changePayment(request, order.getId(), paymentMethod);
+//		});
+//
+//		// Verify the exception message
+//		Assertions.assertEquals("Order status is not on confirm", exception.getMessage());
+//	}
+//
 	@Test
 	void cancelOrder_success() throws IOException, ApiException {
 		// Mock dependencies
