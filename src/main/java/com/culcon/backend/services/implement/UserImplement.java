@@ -67,6 +67,7 @@ public class UserImplement implements UserService {
 		HttpServletRequest request) {
 		var user = authService.getUserInformation(request);
 
+		user.setProfileName(newUserData.profileName());
 		user.setUsername(newUserData.username());
 		user.setAddress(newUserData.address());
 		user.setPhone(newUserData.phone());
