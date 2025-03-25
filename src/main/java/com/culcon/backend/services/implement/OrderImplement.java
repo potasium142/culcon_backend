@@ -1,9 +1,11 @@
 package com.culcon.backend.services.implement;
 
-import com.culcon.backend.dtos.CouponDTO;
 import com.culcon.backend.dtos.order.*;
 import com.culcon.backend.exceptions.custom.RuntimeExceptionPlusPlus;
-import com.culcon.backend.models.*;
+import com.culcon.backend.models.Coupon;
+import com.culcon.backend.models.OrderHistory;
+import com.culcon.backend.models.OrderHistoryItem;
+import com.culcon.backend.models.OrderStatus;
 import com.culcon.backend.repositories.*;
 import com.culcon.backend.services.OrderService;
 import com.culcon.backend.services.PaymentService;
@@ -220,85 +222,87 @@ public class OrderImplement implements OrderService {
 
 	}
 
-	@Override
-	public CouponDTO updateOrderCoupon(HttpServletRequest req, String orderId, String couponId) throws IOException, ApiException {
-		var order = getOrderForUpdate(orderId, req);
-
-		if (order.getUpdatedCoupon()) {
-			throw new RuntimeException("Order can only update once");
-		}
-
-		var oldCoupon = order.getCoupon();
-
-		var newCoupon = getCoupon(couponId);
-
-		if (oldCoupon == newCoupon) {
-			throw new RuntimeException("No coupon was change");
-		}
-
-		var price = order.getTotalPrice();
-
-		if (oldCoupon == null) {
-			price = order.getTotalPrice() * (1.0f - newCoupon.getSalePercent() / 100.0f);
-		} else {
-			price = order.getTotalPrice() / (1.0f - oldCoupon.getSalePercent() / 100.0f);
-
-			// stinky ass code cuz im sick as hell
-			if (newCoupon == null) {
-				order.setTotalPrice(price);
-			} else if (newCoupon.getMinimumPrice() > price) {
-				order.setTotalPrice(price);
-			} else {
-				price = price * (1.0f - newCoupon.getSalePercent() / 100.0f);
-				order.setTotalPrice(price);
-			}
-		}
-
-		order.setTotalPrice(price);
-		order.setCoupon(newCoupon);
-		order.setUpdatedCoupon(true);
-
-		paymentService.updatePrice(order, price);
-
-		return CouponDTO.from(order.getCoupon());
-	}
-
-	@Override
-	public OrderSummary changePayment(HttpServletRequest req,
-	                                  String orderId, PaymentMethod paymentMethod)
-		throws IOException, ApiException {
-		var order = getOrderForUpdate(orderId, req);
-
-		if (order.getPaymentMethod() == paymentMethod) {
-			throw new RuntimeException("Payment method was not changed");
-		}
-
-		if (order.getUpdatedPayment()) {
-			throw new RuntimeException("Payment method can only update once");
-		}
-
-		var pt = paymentTransactionRepo.findByOrder(order);
-
-		if (pt.isPresent()) {
-			if (pt.get().getStatus() != PaymentStatus.CREATED) {
-				throw new RuntimeException("Payment method can only be changed before order was paid");
-			}
-		}
-
-		switch (paymentMethod) {
-			case PAYPAL -> paymentService.createPayment(order, req);
-			case VNPAY -> paymentService.createPaymentVNPay(order, "TPB", req);
-			case COD -> pt.ifPresent(paymentTransactionRepo::delete);
-		}
-
-		order.setPaymentMethod(paymentMethod);
-		order.setUpdatedPayment(true);
-
-		orderHistoryRepo.save(order);
-
-		return OrderSummary.from(order);
-	}
-
+	//
+//	@Override
+//	public CouponDTO updateOrderCoupon(HttpServletRequest req, String orderId, String couponId) throws IOException, ApiException {
+//		var order = getOrderForUpdate(orderId, req);
+//
+//		if (order.getUpdatedCoupon()) {
+//			throw new RuntimeException("Order can only update once");
+//		}
+//
+//		var oldCoupon = order.getCoupon();
+//
+//		var newCoupon = getCoupon(couponId);
+//
+//		if (oldCoupon == newCoupon) {
+//			throw new RuntimeException("No coupon was change");
+//		}
+//
+//		var price = order.getTotalPrice();
+//
+//		if (oldCoupon == null) {
+//			price = order.getTotalPrice() * (1.0f - newCoupon.getSalePercent() / 100.0f);
+//		} else {
+//			price = order.getTotalPrice() / (1.0f - oldCoupon.getSalePercent() / 100.0f);
+//
+//			// stinky ass code cuz im sick as hell
+//			if (newCoupon == null) {
+//				order.setTotalPrice(price);
+//			} else if (newCoupon.getMinimumPrice() > price) {
+//				order.setTotalPrice(price);
+//			} else {
+//				price = price * (1.0f - newCoupon.getSalePercent() / 100.0f);
+//				order.setTotalPrice(price);
+//			}
+//		}
+//
+//		order.setTotalPrice(price);
+//		order.setCoupon(newCoupon);
+//		order.setUpdatedCoupon(true);
+//
+//		paymentService.updatePrice(order, price);
+//
+//		return CouponDTO.from(order.getCoupon());
+//	}
+//
+	//
+//	@Override
+//	public OrderSummary changePayment(HttpServletRequest req,
+//	                                  String orderId, PaymentMethod paymentMethod)
+//		throws IOException, ApiException {
+//		var order = getOrderForUpdate(orderId, req);
+//
+//		if (order.getPaymentMethod() == paymentMethod) {
+//			throw new RuntimeException("Payment method was not changed");
+//		}
+//
+//		if (order.getUpdatedPayment()) {
+//			throw new RuntimeException("Payment method can only update once");
+//		}
+//
+//		var pt = paymentTransactionRepo.findByOrder(order);
+//
+//		if (pt.isPresent()) {
+//			if (pt.get().getStatus() != PaymentStatus.CREATED) {
+//				throw new RuntimeException("Payment method can only be changed before order was paid");
+//			}
+//		}
+//
+//		switch (paymentMethod) {
+//			case PAYPAL -> paymentService.createPayment(order, req);
+//			case VNPAY -> paymentService.createPaymentVNPay(order, "TPB", req);
+//			case COD -> pt.ifPresent(paymentTransactionRepo::delete);
+//		}
+//
+//		order.setPaymentMethod(paymentMethod);
+//		order.setUpdatedPayment(true);
+//
+//		orderHistoryRepo.save(order);
+//
+//		return OrderSummary.from(order);
+//	}
+//
 	@Override
 	public OrderSummary updateOrder(HttpServletRequest req, String orderId, OrderUpdate orderCreation) {
 		var account = authService.getUserInformation(req);
