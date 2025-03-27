@@ -73,8 +73,12 @@ public class PublicController {
 		tags = {"Blog", "Public"}
 	)
 	@GetMapping("/fetch/blog/all")
-	public ResponseEntity<?> fetchAllBlogs() {
-		return ResponseEntity.ok(publicService.fetchListOfBlog());
+	public ResponseEntity<?> fetchAllBlogs(
+		@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+		@RequestParam(value = "pageSize", defaultValue = "7", required = false) int pageSize
+	) {
+		var pageable = PageRequest.of(pageNo, pageSize);
+		return ResponseEntity.ok(publicService.fetchListOfBlog(pageable));
 	}
 
 	@Operation(

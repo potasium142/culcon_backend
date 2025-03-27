@@ -19,6 +19,8 @@ import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.time.LocalDate;
 import java.util.*;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -186,28 +189,47 @@ public class PublicServiceTest {
 
 	@Test
 	void publicService_fetchListOfBlog_Success() {
+		// Arrange
+		// Create mock blog objects
 		Blog blog1 = Mockito.mock(Blog.class);
 		Blog blog2 = Mockito.mock(Blog.class);
-		BlogItemInList blogItem1 = Mockito.mock(BlogItemInList.class);
-		BlogItemInList blogItem2 = Mockito.mock(BlogItemInList.class);
-
 		List<Blog> blogList = List.of(blog1, blog2);
 
-		when(blogDocRepo.findAll()).thenReturn(blogList);
+		// Create mapped BlogItemInList objects
+		BlogItemInList blogItem1 = Mockito.mock(BlogItemInList.class);
+		BlogItemInList blogItem2 = Mockito.mock(BlogItemInList.class);
+		List<BlogItemInList> mappedBlogs = List.of(blogItem1, blogItem2);
 
-		try (MockedStatic<BlogItemInList> mockedStatic = Mockito.mockStatic(BlogItemInList.class)) {
-			mockedStatic.when(() -> BlogItemInList.from(blog1)).thenReturn(blogItem1);
-			mockedStatic.when(() -> BlogItemInList.from(blog2)).thenReturn(blogItem2);
+		// Create a Page of blogs that will be returned by the repository
+		Page<Blog> blogPage = new PageImpl<>(blogList);
 
-			List<BlogItemInList> result = publicService.fetchListOfBlog();
+		// Create mock PageDTO that will be returned by PageDTO.of()
+		PageDTO<?> expectedPageDTO = Mockito.mock(PageDTO.class);
 
-			verify(blogDocRepo).findAll();
-			Assertions.assertEquals(2, result.size());
-			Assertions.assertTrue(result.contains(blogItem1));
-			Assertions.assertTrue(result.contains(blogItem2));
+		// Configure mocks
+		when(blogDocRepo.findAll(pageable)).thenReturn(blogPage);
 
-			mockedStatic.verify(() -> BlogItemInList.from(blog1), times(1));
-			mockedStatic.verify(() -> BlogItemInList.from(blog2), times(1));
+		// Mock static method for BlogItemInList.from
+		try (MockedStatic<BlogItemInList> mockedBlogItemStatic = Mockito.mockStatic(BlogItemInList.class)) {
+			// Set up BlogItemInList.from to return our mock items
+			for (int i = 0; i < blogList.size(); i++) {
+				BlogItemInList item = (i == 0) ? blogItem1 : blogItem2;
+				Blog blog = blogList.get(i);
+				mockedBlogItemStatic.when(() -> BlogItemInList.from(blog)).thenReturn(item);
+			}
+
+			// Mock static method PageDTO.of
+			try (MockedStatic<PageDTO> mockedPageDTOStatic = Mockito.mockStatic(PageDTO.class)) {
+				mockedPageDTOStatic.when(() -> PageDTO.of(mappedBlogs, blogPage)).thenReturn(expectedPageDTO);
+
+				// Act
+				PageDTO<?> result = publicService.fetchListOfBlog(pageable);
+
+				// Assert
+				verify(blogDocRepo).findAll(pageable);
+				mockedPageDTOStatic.verify(() -> PageDTO.of(mappedBlogs, blogPage), times(1));
+				Assertions.assertEquals(expectedPageDTO, result);
+			}
 		}
 	}
 

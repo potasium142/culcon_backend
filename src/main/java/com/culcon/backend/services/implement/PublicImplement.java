@@ -70,8 +70,12 @@ public class PublicImplement implements PublicService {
 	}
 
 	@Override
-	public List<BlogItemInList> fetchListOfBlog() {
-		return blogDocRepo.findAll().stream().map(BlogItemInList::from).toList();
+	public PageDTO<?> fetchListOfBlog(Pageable pageable) {
+		var pageContent = blogDocRepo.findAll(pageable);
+
+		var content = pageContent.map(BlogItemInList::from).toList();
+
+		return PageDTO.of(content, pageContent);
 	}
 
 	@Override

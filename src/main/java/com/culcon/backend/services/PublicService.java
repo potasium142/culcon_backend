@@ -17,13 +17,14 @@ import java.util.List;
 public interface PublicService {
 	ProductDTO fetchProduct(String id);
 
-	PageDTO fetchListOfProducts(Pageable pageable);
+	PageDTO<?> fetchListOfProducts(Pageable pageable);
 
-	PageDTO fetchListOfProductsByCategory(ProductType category, Pageable pageable);
+	PageDTO<?> fetchListOfProductsByCategory(ProductType category, Pageable pageable);
 
 	List<Product> searchProduct(String keyword, ProductType type);
 
-	List<BlogItemInList> fetchListOfBlog();
+
+	PageDTO<?> fetchListOfBlog(Pageable pageable);
 
 	List<BlogItemInList> searchBlogByTitle(String title, HashSet<String> tags);
 
