@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Nullable;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +30,12 @@ public class PublicController {
 		tags = {"Product", "Public"}
 	)
 	@GetMapping("/fetch/product/all")
-	public ResponseEntity<?> fetchAllProducts() {
-		return new ResponseEntity<>(publicService.fetchListOfProducts(), HttpStatus.OK);
+	public ResponseEntity<?> fetchAllProducts(
+		@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+		@RequestParam(value = "pageSize", defaultValue = "7", required = false) int pageSize
+	) {
+		var pageable = PageRequest.of(pageNo, pageSize);
+		return new ResponseEntity<>(publicService.fetchListOfProducts(pageable), HttpStatus.OK);
 	}
 
 	@Operation(
@@ -45,8 +50,13 @@ public class PublicController {
 		tags = {"Product", "Public"}
 	)
 	@GetMapping("/fetch/product/category/{category}")
-	public ResponseEntity<?> fetchProduct(@PathVariable ProductType category) {
-		return new ResponseEntity<>(publicService.fetchListOfProductsByCategory(category), HttpStatus.OK);
+	public ResponseEntity<?> fetchProduct(
+		@PathVariable ProductType category,
+		@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+		@RequestParam(value = "pageSize", defaultValue = "7", required = false) int pageSize
+	) {
+		var pageRequest = PageRequest.of(pageNo, pageSize);
+		return new ResponseEntity<>(publicService.fetchListOfProductsByCategory(category, pageRequest), HttpStatus.OK);
 	}
 
 	@Operation(

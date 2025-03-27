@@ -1,5 +1,6 @@
 package com.culcon.backend.services.implement;
 
+import com.culcon.backend.dtos.PageDTO;
 import com.culcon.backend.dtos.ProductDTO;
 import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.dtos.blog.BlogDetail;
@@ -10,6 +11,7 @@ import com.culcon.backend.services.PublicService;
 import com.culcon.backend.services.authenticate.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -48,13 +50,15 @@ public class PublicImplement implements PublicService {
 	}
 
 	@Override
-	public List<Product> fetchListOfProducts() {
-		return productRepo.findAll();
+	public PageDTO<?> fetchListOfProducts(Pageable pageable) {
+		var content = productRepo.findAll(pageable);
+		return PageDTO.of(content);
 	}
 
 	@Override
-	public List<Product> fetchListOfProductsByCategory(ProductType category) {
-		return productRepo.findAllByProductTypes(category);
+	public PageDTO fetchListOfProductsByCategory(ProductType category, Pageable pageable) {
+		var content = productRepo.findAllByProductTypes(category, pageable);
+		return PageDTO.of(content);
 	}
 
 	@Override

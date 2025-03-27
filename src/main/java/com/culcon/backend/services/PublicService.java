@@ -1,5 +1,6 @@
 package com.culcon.backend.services;
 
+import com.culcon.backend.dtos.PageDTO;
 import com.culcon.backend.dtos.ProductDTO;
 import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.dtos.blog.BlogDetail;
@@ -8,6 +9,7 @@ import com.culcon.backend.models.Coupon;
 import com.culcon.backend.models.Product;
 import com.culcon.backend.models.ProductType;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -15,9 +17,9 @@ import java.util.List;
 public interface PublicService {
 	ProductDTO fetchProduct(String id);
 
-	List<Product> fetchListOfProducts();
+	PageDTO fetchListOfProducts(Pageable pageable);
 
-	List<Product> fetchListOfProductsByCategory(ProductType category);
+	PageDTO fetchListOfProductsByCategory(ProductType category, Pageable pageable);
 
 	List<Product> searchProduct(String keyword, ProductType type);
 
