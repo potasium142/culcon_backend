@@ -171,7 +171,7 @@ public class OrderImplement implements OrderService {
 
 		switch (orderCreation.paymentMethod()) {
 			case PAYPAL -> paymentService.createPayment(order, req);
-			case VNPAY -> paymentService.createPaymentVNPay(order, "TPB", req);
+			case VNPAY -> paymentService.createPaymentVNPay(order, "NCB", req);
 			case COD -> {
 			}
 		}
@@ -291,7 +291,7 @@ public class OrderImplement implements OrderService {
 //
 //		switch (paymentMethod) {
 //			case PAYPAL -> paymentService.createPayment(order, req);
-//			case VNPAY -> paymentService.createPaymentVNPay(order, "TPB", req);
+//			case VNPAY -> paymentService.createPaymentVNPay(order, "NCB", req);
 //			case COD -> pt.ifPresent(paymentTransactionRepo::delete);
 //		}
 //
