@@ -1,5 +1,6 @@
 package com.culcon.backend.dtos.blog;
 
+import com.culcon.backend.models.CommentStatus;
 import com.culcon.backend.models.PostComment;
 import lombok.Builder;
 
@@ -11,18 +12,16 @@ public record BlogComment(
 	String accountName,
 	String profilePicture,
 	Timestamp timestamp,
-	String comment,
-	Boolean deleted
+	String comment
 ) {
 	public static BlogComment from(PostComment comment) {
-		if (comment.isDeleted()) {
+		if (comment.getStatus() == CommentStatus.DELETED) {
 			return BlogComment.builder()
 				.id(comment.getId())
 				.comment(null)
 				.accountName(null)
 				.profilePicture(null)
 				.timestamp(comment.getTimestamp())
-				.deleted(comment.isDeleted())
 				.build();
 		}
 		return BlogComment.builder()
@@ -31,7 +30,6 @@ public record BlogComment(
 			.accountName(comment.getAccount().getUsername())
 			.profilePicture(comment.getAccount().getProfilePictureUri())
 			.timestamp(comment.getTimestamp())
-			.deleted(comment.isDeleted())
 			.build();
 	}
 }

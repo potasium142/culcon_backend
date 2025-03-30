@@ -12,6 +12,8 @@ create type productstatus as enum ('IN_STOCK', 'NO_LONGER_IN_SALE', 'OUT_OF_STOC
 
 create type producttype as enum ('MEALKIT', 'MEAT', 'SEASON', 'VEGETABLE');
 
+create type commentstatus as enum ('NORMAL', 'REPORTED', 'DELETED');
+
 create table product
 (
     id                 varchar(255)  not null
@@ -84,6 +86,7 @@ create table mealkit_ingredients
         references product,
     ingredient varchar(255) not null
         references product,
+    amount     integer      not null,
     primary key (mealkit_id, ingredient)
 );
 
@@ -113,18 +116,18 @@ create table cart
 
 create table post_comment
 (
-    id             varchar(255) not null
+    id             varchar(255)  not null
         primary key,
-    timestamp      timestamp    not null,
-    post_id        varchar(255) not null
+    timestamp      timestamp     not null,
+    post_id        varchar(255)  not null
         references blog,
     account_id     varchar(255)
         references user_account,
     parent_comment varchar(255)
         references post_comment,
-    comment        varchar(255) not null,
-    deleted        boolean      not null,
-    comment_type   commenttype  not null
+    comment        varchar(255)  not null,
+    status         commentstatus not null,
+    comment_type   commenttype   not null
 );
 
 create table account_otp
