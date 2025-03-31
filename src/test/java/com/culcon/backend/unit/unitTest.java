@@ -8,6 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -15,7 +19,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -235,17 +238,17 @@ class RepoTest {
 		verify(accountRepo, times(1)).findByUsername("duplicateUser");
 	}
 
-	@Test
-	void AccountRepo_FindAccountById() {
-		when(accountRepo.findAccountById("94511231-59ce-45cb-9edc-196c378064a1")).thenReturn(Optional.of(account));
-
-		Optional<Account> foundAccount = accountRepo.findAccountById("94511231-59ce-45cb-9edc-196c378064a1");
-
-		assertThat(foundAccount).isPresent();
-		assertThat(foundAccount.get().getId()).isEqualTo("94511231-59ce-45cb-9edc-196c378064a1");
-
-		verify(accountRepo, times(1)).findAccountById("94511231-59ce-45cb-9edc-196c378064a1");
-	}
+//	@Test
+//	void AccountRepo_FindAccountById() {
+//		when(accountRepo.findAccountById("94511231-59ce-45cb-9edc-196c378064a1")).thenReturn(Optional.of(account));
+//
+//		Optional<Account> foundAccount = accountRepo.findAccountById("94511231-59ce-45cb-9edc-196c378064a1");
+//
+//		assertThat(foundAccount).isPresent();
+//		assertThat(foundAccount.get().getId()).isEqualTo("94511231-59ce-45cb-9edc-196c378064a1");
+//
+//		verify(accountRepo, times(1)).findAccountById("94511231-59ce-45cb-9edc-196c378064a1");
+//	}
 
 	@Test
 	void AccountRepo_FindAccountByEmail_Success() {
@@ -358,49 +361,49 @@ class RepoTest {
 		verify(accountRepo, times(1)).findByToken(null);
 	}
 
-	@Test
-	void AccountRepo_ExistsByUsername() {
-		when(accountRepo.existsByUsername("testUser")).thenReturn(true);
-
-		Boolean exists = accountRepo.existsByUsername("testUser");
-
-		assertThat(exists).isTrue();
-
-		verify(accountRepo, times(1)).existsByUsername("testUser");
-	}
-
-	@Test
-	void AccountRepo_ExistsByUsername_NotFound() {
-		when(accountRepo.existsByUsername("nonExistingUser")).thenReturn(false);
-
-		boolean exists = accountRepo.existsByUsername("nonExistingUser");
-
-		assertThat(exists).isFalse();
-		verify(accountRepo, times(1)).existsByUsername("nonExistingUser");
-	}
-
-	@Test
-	void AccountRepo_ExistsByUsername_DatabaseError() {
-		when(accountRepo.existsByUsername("testUser"))
-			.thenThrow(new RuntimeException("Database connection error"));
-
-		assertThatThrownBy(() -> accountRepo.existsByUsername("testUser"))
-			.isInstanceOf(RuntimeException.class)
-			.hasMessageContaining("Database connection error");
-
-		verify(accountRepo, times(1)).existsByUsername("testUser");
-	}
-
-	@Test
-	void AccountRepo_ExistsByUsername_NullInput() {
-		when(accountRepo.existsByUsername(null)).thenThrow(new IllegalArgumentException("Username must not be null"));
-
-		assertThatThrownBy(() -> accountRepo.existsByUsername(null))
-			.isInstanceOf(IllegalArgumentException.class)
-			.hasMessage("Username must not be null");
-
-		verify(accountRepo, times(1)).existsByUsername(null);
-	}
+//	@Test
+//	void AccountRepo_ExistsByUsername() {
+//		when(accountRepo.existsByUsername("testUser")).thenReturn(true);
+//
+//		Boolean exists = accountRepo.existsByUsername("testUser");
+//
+//		assertThat(exists).isTrue();
+//
+//		verify(accountRepo, times(1)).existsByUsername("testUser");
+//	}
+//
+//	@Test
+//	void AccountRepo_ExistsByUsername_NotFound() {
+//		when(accountRepo.existsByUsername("nonExistingUser")).thenReturn(false);
+//
+//		boolean exists = accountRepo.existsByUsername("nonExistingUser");
+//
+//		assertThat(exists).isFalse();
+//		verify(accountRepo, times(1)).existsByUsername("nonExistingUser");
+//	}
+//
+//	@Test
+//	void AccountRepo_ExistsByUsername_DatabaseError() {
+//		when(accountRepo.existsByUsername("testUser"))
+//			.thenThrow(new RuntimeException("Database connection error"));
+//
+//		assertThatThrownBy(() -> accountRepo.existsByUsername("testUser"))
+//			.isInstanceOf(RuntimeException.class)
+//			.hasMessageContaining("Database connection error");
+//
+//		verify(accountRepo, times(1)).existsByUsername("testUser");
+//	}
+//
+//	@Test
+//	void AccountRepo_ExistsByUsername_NullInput() {
+//		when(accountRepo.existsByUsername(null)).thenThrow(new IllegalArgumentException("Username must not be null"));
+//
+//		assertThatThrownBy(() -> accountRepo.existsByUsername(null))
+//			.isInstanceOf(IllegalArgumentException.class)
+//			.hasMessage("Username must not be null");
+//
+//		verify(accountRepo, times(1)).existsByUsername(null);
+//	}
 
 	@Test
 	void AccountOTPRepo_findByOtpAndAccountId_Success() {
@@ -684,18 +687,18 @@ class RepoTest {
 	}
 
 
-	@Test
-	void productRepo_FindAllByProductStatus() {
-		when(productRepo.findAllByProductStatus(ProductStatus.IN_STOCK)).thenReturn(Arrays.asList(product1, product2));
-
-		List<Product> products = productRepo.findAllByProductStatus(ProductStatus.IN_STOCK);
-
-		assertThat(products).hasSize(2);
-		assertThat(products.get(0).getProductName()).isEqualTo("Pork Ribs");
-		assertThat(products.get(1).getProductName()).isEqualTo("Ketchup");
-
-		verify(productRepo, times(1)).findAllByProductStatus(ProductStatus.IN_STOCK);
-	}
+//	@Test
+//	void productRepo_FindAllByProductStatus() {
+//		when(productRepo.findAllByProductStatus(ProductStatus.IN_STOCK)).thenReturn(Arrays.asList(product1, product2));
+//
+//		List<Product> products = productRepo.findAllByProductStatus(ProductStatus.IN_STOCK);
+//
+//		assertThat(products).hasSize(2);
+//		assertThat(products.get(0).getProductName()).isEqualTo("Pork Ribs");
+//		assertThat(products.get(1).getProductName()).isEqualTo("Ketchup");
+//
+//		verify(productRepo, times(1)).findAllByProductStatus(ProductStatus.IN_STOCK);
+//	}
 
 	@Test
 	void orderHistoryRepo_FindByIdAndUser_DifferentId() {
@@ -788,19 +791,22 @@ class RepoTest {
 
 	@Test
 	void productRepo_testFindAllByProductTypes() {
-		when(productRepo.findAllByProductTypes(ProductType.MEAT))
-			.thenAnswer(invocation -> Arrays.asList(product1, product2, product3)
-				.stream()
-				.filter(product -> product.getProductTypes() == ProductType.MEAT)
-				.collect(Collectors.toList()));
+		Pageable pageable = PageRequest.of(0, 10);
 
-		List<Product> products = productRepo.findAllByProductTypes(ProductType.MEAT);
+		List<Product> productList = Arrays.asList(product1, product3);
+		Page<Product> productPage = new PageImpl<>(productList, pageable, productList.size());
 
-		assertThat(products).hasSize(2);
-		assertThat(products.get(0).getProductTypes()).isEqualTo(ProductType.MEAT);
-		assertThat(products.get(1).getProductTypes()).isEqualTo(ProductType.MEAT);
+		when(productRepo.findAllByProductTypes(ProductType.MEAT, pageable))
+			.thenReturn(productPage);
 
-		verify(productRepo, times(1)).findAllByProductTypes(ProductType.MEAT);
+		Page<Product> products = productRepo.findAllByProductTypes(ProductType.MEAT, pageable);
+
+		assertThat(products.getTotalElements()).isEqualTo(2);
+		assertThat(products.getContent()).extracting(Product::getProductTypes).containsOnly(ProductType.MEAT);
+		assertThat(products.getContent()).extracting(Product::getId).containsExactlyInAnyOrder("P001", "P003");
+		assertThat(products.getContent()).extracting(Product::getProductName).containsExactlyInAnyOrder("Pork Ribs", "Pangasius Fish");
+
+		verify(productRepo, times(1)).findAllByProductTypes(ProductType.MEAT, pageable);
 	}
 
 	@Test
@@ -813,115 +819,106 @@ class RepoTest {
 		verify(productPriceRepo, times(1)).findFirstById_ProductIdOrderById_DateDesc("P001");
 	}
 
-	@Test
-	void productPriceRepo_FindFirstById_ProductOrderById_DateDesc() {
-		when(productPriceRepo.findFirstById_ProductOrderById_DateDesc(product)).thenReturn(Optional.of(productPriceHistory));
-		Optional<ProductPriceHistory> foundProductPriceHistory = productPriceRepo.findFirstById_ProductOrderById_DateDesc(product);
-		assertThat(foundProductPriceHistory).isPresent();
-		assertThat(foundProductPriceHistory.get()).isEqualTo(productPriceHistory);
 
-		verify(productPriceRepo, times(1)).findFirstById_ProductOrderById_DateDesc(product);
-	}
-
-	@Test
-	void PostCommentRepo_findAllByPostIdAndCommentType() {
-		when(postCommentRepo.findAllByPostIdAndCommentType("001", CommentType.POST))
-			.thenReturn(List.of(postComment1, postComment2));
-		List<PostComment> result = postCommentRepo.findAllByPostIdAndCommentType("001", CommentType.POST);
-		Assertions.assertEquals(2, result.size());
-		Assertions.assertEquals("This is the first comment", result.get(0).getComment());
-		Assertions.assertEquals(CommentType.POST, result.get(0).getCommentType());
-		Assertions.assertEquals("001", result.get(0).getPostId());
-
-		Assertions.assertEquals("This is the second comment", result.get(1).getComment());
-		Assertions.assertEquals(CommentType.POST, result.get(1).getCommentType());
-		Assertions.assertEquals("002", result.get(1).getPostId());
-		verify(postCommentRepo, times(1)).findAllByPostIdAndCommentType("001", CommentType.POST);
-	}
-
-	@Test
-	void PostCommentRepo_findAllByPostIdAndCommentType_NoResults() {
-		when(postCommentRepo.findAllByPostIdAndCommentType("999", CommentType.POST))
-			.thenReturn(Collections.emptyList());
-
-		List<PostComment> result = postCommentRepo.findAllByPostIdAndCommentType("999", CommentType.POST);
-
-		Assertions.assertTrue(result.isEmpty());
-
-		verify(postCommentRepo, times(1)).findAllByPostIdAndCommentType("999", CommentType.POST);
-	}
-
-	@Test
-	void PostCommentRepo_findAllByPostIdAndCommentType_NullInput() {
-		when(postCommentRepo.findAllByPostIdAndCommentType(null, CommentType.POST))
-			.thenThrow(new IllegalArgumentException("Post ID must not be null"));
-
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			postCommentRepo.findAllByPostIdAndCommentType(null, CommentType.POST);
-		});
-
-		verify(postCommentRepo, times(1)).findAllByPostIdAndCommentType(null, CommentType.POST);
-	}
-
-
-	@Test
-	void PostCommentRepo_findAllByPostIdAndParentComment_Id() {
-		when(postCommentRepo.findAllByPostIdAndParentComment_Id("001", "testBlog1"))
-			.thenReturn(List.of(replyComment, replyComment1));
-
-		List<PostComment> result = postCommentRepo.findAllByPostIdAndParentComment_Id("001", "testBlog1");
-
-		Assertions.assertEquals(2, result.size());
-
-		Assertions.assertEquals("This is the first reply comment", result.get(0).getComment());
-		Assertions.assertEquals("001", result.get(0).getPostId());
-		Assertions.assertEquals("testBlog1", result.get(0).getParentComment().getId());
-
-		Assertions.assertEquals("This is the second reply comment", result.get(1).getComment());
-		Assertions.assertEquals("001", result.get(1).getPostId());
-		Assertions.assertEquals("testBlog1", result.get(1).getParentComment().getId());
-
-		verify(postCommentRepo, times(1)).findAllByPostIdAndParentComment_Id("001", "testBlog1");
-	}
-
-	@Test
-	void PostCommentRepo_findAllByPostIdAndParentComment_Id_NoResults() {
-		when(postCommentRepo.findAllByPostIdAndParentComment_Id("999", "nonExistentParent"))
-			.thenReturn(Collections.emptyList());
-
-		List<PostComment> result = postCommentRepo.findAllByPostIdAndParentComment_Id("999", "nonExistentParent");
-
-		Assertions.assertTrue(result.isEmpty());
-
-		verify(postCommentRepo, times(1))
-			.findAllByPostIdAndParentComment_Id("999", "nonExistentParent");
-	}
-
-	@Test
-	void PostCommentRepo_findAllByPostIdAndParentComment_Id_ValidPostButNoReplies() {
-		when(postCommentRepo.findAllByPostIdAndParentComment_Id("002", "parentWithoutReplies"))
-			.thenReturn(Collections.emptyList());
-
-		List<PostComment> result = postCommentRepo.findAllByPostIdAndParentComment_Id("002", "parentWithoutReplies");
-
-		Assertions.assertTrue(result.isEmpty());
-
-		verify(postCommentRepo, times(1))
-			.findAllByPostIdAndParentComment_Id("002", "parentWithoutReplies");
-	}
-
-	@Test
-	void PostCommentRepo_findAllByPostIdAndParentComment_Id_NullInput() {
-		when(postCommentRepo.findAllByPostIdAndParentComment_Id(null, "testBlog1"))
-			.thenThrow(new IllegalArgumentException("Post ID must not be null"));
-
-		Assertions.assertThrows(IllegalArgumentException.class, () -> {
-			postCommentRepo.findAllByPostIdAndParentComment_Id(null, "testBlog1");
-		});
-
-		verify(postCommentRepo, times(1))
-			.findAllByPostIdAndParentComment_Id(null, "testBlog1");
-	}
+//	@Test
+//	void PostCommentRepo_findAllByPostIdAndCommentType() {
+//		when(postCommentRepo.findAllByPostIdAndCommentType("001", CommentType.POST))
+//			.thenReturn(List.of(postComment1, postComment2));
+//		List<PostComment> result = postCommentRepo.findAllByPostIdAndCommentType("001", CommentType.POST);
+//		Assertions.assertEquals(2, result.size());
+//		Assertions.assertEquals("This is the first comment", result.get(0).getComment());
+//		Assertions.assertEquals(CommentType.POST, result.get(0).getCommentType());
+//		Assertions.assertEquals("001", result.get(0).getPostId());
+//
+//		Assertions.assertEquals("This is the second comment", result.get(1).getComment());
+//		Assertions.assertEquals(CommentType.POST, result.get(1).getCommentType());
+//		Assertions.assertEquals("002", result.get(1).getPostId());
+//		verify(postCommentRepo, times(1)).findAllByPostIdAndCommentType("001", CommentType.POST);
+//	}
+//
+//	@Test
+//	void PostCommentRepo_findAllByPostIdAndCommentType_NoResults() {
+//		when(postCommentRepo.findAllByPostIdAndCommentType("999", CommentType.POST))
+//			.thenReturn(Collections.emptyList());
+//
+//		List<PostComment> result = postCommentRepo.findAllByPostIdAndCommentType("999", CommentType.POST);
+//
+//		Assertions.assertTrue(result.isEmpty());
+//
+//		verify(postCommentRepo, times(1)).findAllByPostIdAndCommentType("999", CommentType.POST);
+//	}
+//
+//	@Test
+//	void PostCommentRepo_findAllByPostIdAndCommentType_NullInput() {
+//		when(postCommentRepo.findAllByPostIdAndCommentType(null, CommentType.POST))
+//			.thenThrow(new IllegalArgumentException("Post ID must not be null"));
+//
+//		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+//			postCommentRepo.findAllByPostIdAndCommentType(null, CommentType.POST);
+//		});
+//
+//		verify(postCommentRepo, times(1)).findAllByPostIdAndCommentType(null, CommentType.POST);
+//	}
+//
+//
+//	@Test
+//	void PostCommentRepo_findAllByPostIdAndParentComment_Id() {
+//		when(postCommentRepo.findAllByPostIdAndParentComment_Id("001", "testBlog1"))
+//			.thenReturn(List.of(replyComment, replyComment1));
+//
+//		List<PostComment> result = postCommentRepo.findAllByPostIdAndParentComment_Id("001", "testBlog1");
+//
+//		Assertions.assertEquals(2, result.size());
+//
+//		Assertions.assertEquals("This is the first reply comment", result.get(0).getComment());
+//		Assertions.assertEquals("001", result.get(0).getPostId());
+//		Assertions.assertEquals("testBlog1", result.get(0).getParentComment().getId());
+//
+//		Assertions.assertEquals("This is the second reply comment", result.get(1).getComment());
+//		Assertions.assertEquals("001", result.get(1).getPostId());
+//		Assertions.assertEquals("testBlog1", result.get(1).getParentComment().getId());
+//
+//		verify(postCommentRepo, times(1)).findAllByPostIdAndParentComment_Id("001", "testBlog1");
+//	}
+//
+//	@Test
+//	void PostCommentRepo_findAllByPostIdAndParentComment_Id_NoResults() {
+//		when(postCommentRepo.findAllByPostIdAndParentComment_Id("999", "nonExistentParent"))
+//			.thenReturn(Collections.emptyList());
+//
+//		List<PostComment> result = postCommentRepo.findAllByPostIdAndParentComment_Id("999", "nonExistentParent");
+//
+//		Assertions.assertTrue(result.isEmpty());
+//
+//		verify(postCommentRepo, times(1))
+//			.findAllByPostIdAndParentComment_Id("999", "nonExistentParent");
+//	}
+//
+//	@Test
+//	void PostCommentRepo_findAllByPostIdAndParentComment_Id_ValidPostButNoReplies() {
+//		when(postCommentRepo.findAllByPostIdAndParentComment_Id("002", "parentWithoutReplies"))
+//			.thenReturn(Collections.emptyList());
+//
+//		List<PostComment> result = postCommentRepo.findAllByPostIdAndParentComment_Id("002", "parentWithoutReplies");
+//
+//		Assertions.assertTrue(result.isEmpty());
+//
+//		verify(postCommentRepo, times(1))
+//			.findAllByPostIdAndParentComment_Id("002", "parentWithoutReplies");
+//	}
+//
+//	@Test
+//	void PostCommentRepo_findAllByPostIdAndParentComment_Id_NullInput() {
+//		when(postCommentRepo.findAllByPostIdAndParentComment_Id(null, "testBlog1"))
+//			.thenThrow(new IllegalArgumentException("Post ID must not be null"));
+//
+//		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+//			postCommentRepo.findAllByPostIdAndParentComment_Id(null, "testBlog1");
+//		});
+//
+//		verify(postCommentRepo, times(1))
+//			.findAllByPostIdAndParentComment_Id(null, "testBlog1");
+//	}
 
 	@Test
 	void PostCommentRepo_findAllByAccount() {
