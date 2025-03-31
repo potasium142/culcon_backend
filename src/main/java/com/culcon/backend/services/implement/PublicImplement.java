@@ -2,7 +2,7 @@ package com.culcon.backend.services.implement;
 
 import com.culcon.backend.dtos.PageDTO;
 import com.culcon.backend.dtos.ProductDTO;
-import com.culcon.backend.dtos.blog.BlogComment;
+import com.culcon.backend.dtos.blog.BlogCommentWithReply;
 import com.culcon.backend.dtos.blog.BlogDetail;
 import com.culcon.backend.dtos.blog.BlogItemInList;
 import com.culcon.backend.models.*;
@@ -15,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -42,7 +43,6 @@ public class PublicImplement implements PublicService {
 
 		var ingredients = mealkitIngredientsRepo
 			.findAllById_Mealkit_Id(id).stream()
-			.map(mk -> mk.getId().getIngredient())
 			.toList();
 
 
@@ -56,7 +56,7 @@ public class PublicImplement implements PublicService {
 	}
 
 	@Override
-	public PageDTO fetchListOfProductsByCategory(ProductType category, Pageable pageable) {
+	public PageDTO<?> fetchListOfProductsByCategory(ProductType category, Pageable pageable) {
 		var content = productRepo.findAllByProductTypes(category, pageable);
 		return PageDTO.of(content);
 	}
@@ -87,17 +87,41 @@ public class PublicImplement implements PublicService {
 	}
 
 	@Override
-	public List<BlogComment> fetchBlogComment(String id) {
-		return postCommentRepo
-			.findAllByPostIdAndCommentType(id, CommentType.POST).stream()
-			.map(BlogComment::from).toList();
+	public PageDTO<?> fetchBlogComment(String id, Pageable pageable) {
+		var blogComment = new ArrayList<BlogCommentWithReply>();
+
+		var listComment = postCommentRepo
+			.findAllByPostIdAndParentComment_IdOrderByTimestampDesc(id, null, pageable);
+
+		for (var comment : listComment) {
+			var replyCount = postCommentRepo.countByParentComment_IdAndPostId(comment.getId(), id);
+			var firstReplyComment = postCommentRepo
+				.findFirstByPostIdAndParentComment_IdOrderByTimestampDesc(id, comment.getId());
+			var cmt = BlogCommentWithReply.of(comment, replyCount, firstReplyComment);
+			blogComment.add(cmt);
+		}
+
+		return PageDTO.of(blogComment, listComment);
+
 	}
 
 	@Override
-	public List<BlogComment> fetchReply(String blogId, String commentId) {
-		return postCommentRepo
-			.findAllByPostIdAndParentComment_Id(blogId, commentId).stream()
-			.map(BlogComment::from).toList();
+	public PageDTO<?> fetchReply(String blogId, String commentId, Pageable pageable) {
+		var blogComment = new ArrayList<BlogCommentWithReply>();
+
+		var listComment = postCommentRepo
+			.findAllByPostIdAndParentComment_IdOrderByTimestampDesc(blogId, commentId, pageable);
+
+		for (var comment : listComment) {
+			var replyCount = postCommentRepo.countByParentComment_IdAndPostId(comment.getId(), blogId);
+			var firstReplyComment = postCommentRepo
+				.findFirstByPostIdAndParentComment_IdOrderByTimestampDesc(blogId, comment.getId());
+			var cmt = BlogCommentWithReply.of(comment, replyCount, firstReplyComment);
+			blogComment.add(cmt);
+		}
+
+		return PageDTO.of(blogComment, listComment);
+
 	}
 
 

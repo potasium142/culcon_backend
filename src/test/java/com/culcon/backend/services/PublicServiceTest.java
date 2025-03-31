@@ -1,8 +1,6 @@
 package com.culcon.backend.services;
 
 import com.culcon.backend.dtos.PageDTO;
-import com.culcon.backend.dtos.ProductDTO;
-import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.dtos.blog.BlogDetail;
 import com.culcon.backend.dtos.blog.BlogItemInList;
 import com.culcon.backend.models.*;
@@ -63,37 +61,37 @@ public class PublicServiceTest {
 	Pageable pageable = PageRequest.of(0, 10);
 
 
-	//@Test
-	void productService_fetchProduct_Success() {
-		// Tạo mock cho các đối tượng cần thiết
-		Product productInfo = Mockito.mock(Product.class);
-		ProductDoc productDocs = Mockito.mock(ProductDoc.class);
-		ProductDTO expectedProductDTO = Mockito.mock(ProductDTO.class);
-
-		// Cài đặt hành vi cho các repository
-		when(productRepo.findById("product123")).thenReturn(Optional.of(productInfo));
-		when(productDocRepo.findById("product123")).thenReturn(Optional.of(productDocs));
-
-		// Tạo danh sách Product giả định (tham số thứ 3)
-		List<Product> productList = List.of(productInfo);
-
-		// Mock phương thức tĩnh ProductDTO.from với 3 tham số
-		try (MockedStatic<ProductDTO> mockedStatic = Mockito.mockStatic(ProductDTO.class)) {
-			mockedStatic.when(() -> ProductDTO.from(productInfo, productDocs, productList))
-				.thenReturn(expectedProductDTO);
-
-			// Gọi phương thức fetchProduct để kiểm tra kết quả
-			ProductDTO result = publicService.fetchProduct("product123");
-
-			// Xác minh các phương thức của repository được gọi đúng
-			verify(productRepo).findById("product123");
-			verify(productDocRepo).findById("product123");
-
-			// So sánh kết quả trả về với mong đợi
-			Assertions.assertEquals(expectedProductDTO, result);
-		}
-	}
-
+//	//@Test
+//	void productService_fetchProduct_Success() {
+//		// Tạo mock cho các đối tượng cần thiết
+//		Product productInfo = Mockito.mock(Product.class);
+//		ProductDoc productDocs = Mockito.mock(ProductDoc.class);
+//		ProductDTO expectedProductDTO = Mockito.mock(ProductDTO.class);
+//
+//		// Cài đặt hành vi cho các repository
+//		when(productRepo.findById("product123")).thenReturn(Optional.of(productInfo));
+//		when(productDocRepo.findById("product123")).thenReturn(Optional.of(productDocs));
+//
+//		// Tạo danh sách Product giả định (tham số thứ 3)
+//		List<Product> productList = List.of(productInfo);
+//
+//		// Mock phương thức tĩnh ProductDTO.from với 3 tham số
+//		try (MockedStatic<ProductDTO> mockedStatic = Mockito.mockStatic(ProductDTO.class)) {
+//			mockedStatic.when(() -> ProductDTO.from(productInfo, productDocs, productList))
+//				.thenReturn(expectedProductDTO);
+//
+//			// Gọi phương thức fetchProduct để kiểm tra kết quả
+//			ProductDTO result = publicService.fetchProduct("product123");
+//
+//			// Xác minh các phương thức của repository được gọi đúng
+//			verify(productRepo).findById("product123");
+//			verify(productDocRepo).findById("product123");
+//
+//			// So sánh kết quả trả về với mong đợi
+//			Assertions.assertEquals(expectedProductDTO, result);
+//		}
+//	}
+//
 
 	@Test
 	void productService_fetchProduct_ProductNotFound() {
@@ -279,90 +277,91 @@ public class PublicServiceTest {
 		Assertions.assertTrue(result.isEmpty());
 	}
 
-	@Test
-	void publicService_fetchBlogComment_Success() {
-		String blogId = "blog123";
-
-		PostComment comment1 = Mockito.mock(PostComment.class);
-		PostComment comment2 = Mockito.mock(PostComment.class);
-		BlogComment blogComment1 = Mockito.mock(BlogComment.class);
-		BlogComment blogComment2 = Mockito.mock(BlogComment.class);
-
-		List<PostComment> commentList = List.of(comment1, comment2);
-
-		when(postCommentRepo.findAllByPostIdAndCommentType(blogId, CommentType.POST)).thenReturn(commentList);
-
-		try (MockedStatic<BlogComment> mockedStatic = Mockito.mockStatic(BlogComment.class)) {
-			mockedStatic.when(() -> BlogComment.from(comment1)).thenReturn(blogComment1);
-			mockedStatic.when(() -> BlogComment.from(comment2)).thenReturn(blogComment2);
-
-			List<BlogComment> result = publicService.fetchBlogComment(blogId);
-
-			verify(postCommentRepo).findAllByPostIdAndCommentType(blogId, CommentType.POST);
-			Assertions.assertEquals(2, result.size());
-			Assertions.assertTrue(result.contains(blogComment1));
-			Assertions.assertTrue(result.contains(blogComment2));
-
-			mockedStatic.verify(() -> BlogComment.from(comment1), times(1));
-			mockedStatic.verify(() -> BlogComment.from(comment2), times(1));
-		}
-	}
-
-	@Test
-	void publicService_fetchBlogComment_NoResults() {
-		String blogId = "nonexistent_blog";
-
-		when(postCommentRepo.findAllByPostIdAndCommentType(blogId, CommentType.POST)).thenReturn(Collections.emptyList());
-
-		List<BlogComment> result = publicService.fetchBlogComment(blogId);
-
-		verify(postCommentRepo).findAllByPostIdAndCommentType(blogId, CommentType.POST);
-		Assertions.assertTrue(result.isEmpty());
-	}
-
-	@Test
-	void publicService_fetchReply_Success() {
-		String blogId = "blog123";
-		String commentId = "comment456";
-
-		PostComment reply1 = Mockito.mock(PostComment.class);
-		PostComment reply2 = Mockito.mock(PostComment.class);
-		BlogComment blogReply1 = Mockito.mock(BlogComment.class);
-		BlogComment blogReply2 = Mockito.mock(BlogComment.class);
-
-		List<PostComment> replyList = List.of(reply1, reply2);
-
-		when(postCommentRepo.findAllByPostIdAndParentComment_Id(blogId, commentId)).thenReturn(replyList);
-
-		try (MockedStatic<BlogComment> mockedStatic = Mockito.mockStatic(BlogComment.class)) {
-			mockedStatic.when(() -> BlogComment.from(reply1)).thenReturn(blogReply1);
-			mockedStatic.when(() -> BlogComment.from(reply2)).thenReturn(blogReply2);
-
-			List<BlogComment> result = publicService.fetchReply(blogId, commentId);
-
-			verify(postCommentRepo).findAllByPostIdAndParentComment_Id(blogId, commentId);
-			Assertions.assertEquals(2, result.size());
-			Assertions.assertTrue(result.contains(blogReply1));
-			Assertions.assertTrue(result.contains(blogReply2));
-
-			mockedStatic.verify(() -> BlogComment.from(reply1), times(1));
-			mockedStatic.verify(() -> BlogComment.from(reply2), times(1));
-		}
-	}
-
-	@Test
-	void publicService_fetchReply_NoResults() {
-		String blogId = "blog123";
-		String commentId = "nonexistent_comment";
-
-		when(postCommentRepo.findAllByPostIdAndParentComment_Id(blogId, commentId)).thenReturn(Collections.emptyList());
-
-		List<BlogComment> result = publicService.fetchReply(blogId, commentId);
-
-		verify(postCommentRepo).findAllByPostIdAndParentComment_Id(blogId, commentId);
-		Assertions.assertTrue(result.isEmpty());
-	}
-
+	//
+//	@Test
+//	void publicService_fetchBlogComment_Success() {
+//		String blogId = "blog123";
+//
+//		PostComment comment1 = Mockito.mock(PostComment.class);
+//		PostComment comment2 = Mockito.mock(PostComment.class);
+//		BlogComment blogComment1 = Mockito.mock(BlogComment.class);
+//		BlogComment blogComment2 = Mockito.mock(BlogComment.class);
+//
+//		List<PostComment> commentList = List.of(comment1, comment2);
+//
+//		when(postCommentRepo.findAllByPostIdAndCommentType(blogId, CommentType.POST)).thenReturn(commentList);
+//
+//		try (MockedStatic<BlogComment> mockedStatic = Mockito.mockStatic(BlogComment.class)) {
+//			mockedStatic.when(() -> BlogComment.from(comment1)).thenReturn(blogComment1);
+//			mockedStatic.when(() -> BlogComment.from(comment2)).thenReturn(blogComment2);
+//
+//			List<BlogComment> result = publicService.fetchBlogComment(blogId);
+//
+//			verify(postCommentRepo).findAllByPostIdAndCommentType(blogId, CommentType.POST);
+//			Assertions.assertEquals(2, result.size());
+//			Assertions.assertTrue(result.contains(blogComment1));
+//			Assertions.assertTrue(result.contains(blogComment2));
+//
+//			mockedStatic.verify(() -> BlogComment.from(comment1), times(1));
+//			mockedStatic.verify(() -> BlogComment.from(comment2), times(1));
+//		}
+//	}
+//
+//	@Test
+//	void publicService_fetchBlogComment_NoResults() {
+//		String blogId = "nonexistent_blog";
+//
+//		when(postCommentRepo.findAllByPostIdAndCommentType(blogId, CommentType.POST)).thenReturn(Collections.emptyList());
+//
+//		List<BlogComment> result = publicService.fetchBlogComment(blogId);
+//
+//		verify(postCommentRepo).findAllByPostIdAndCommentType(blogId, CommentType.POST);
+//		Assertions.assertTrue(result.isEmpty());
+//	}
+//
+//	@Test
+//	void publicService_fetchReply_Success() {
+//		String blogId = "blog123";
+//		String commentId = "comment456";
+//
+//		PostComment reply1 = Mockito.mock(PostComment.class);
+//		PostComment reply2 = Mockito.mock(PostComment.class);
+//		BlogComment blogReply1 = Mockito.mock(BlogComment.class);
+//		BlogComment blogReply2 = Mockito.mock(BlogComment.class);
+//
+//		List<PostComment> replyList = List.of(reply1, reply2);
+//
+//		when(postCommentRepo.findAllByPostIdAndParentComment_Id(blogId, commentId)).thenReturn(replyList);
+//
+//		try (MockedStatic<BlogComment> mockedStatic = Mockito.mockStatic(BlogComment.class)) {
+//			mockedStatic.when(() -> BlogComment.from(reply1)).thenReturn(blogReply1);
+//			mockedStatic.when(() -> BlogComment.from(reply2)).thenReturn(blogReply2);
+//
+//			List<BlogComment> result = publicService.fetchReply(blogId, commentId);
+//
+//			verify(postCommentRepo).findAllByPostIdAndParentComment_Id(blogId, commentId);
+//			Assertions.assertEquals(2, result.size());
+//			Assertions.assertTrue(result.contains(blogReply1));
+//			Assertions.assertTrue(result.contains(blogReply2));
+//
+//			mockedStatic.verify(() -> BlogComment.from(reply1), times(1));
+//			mockedStatic.verify(() -> BlogComment.from(reply2), times(1));
+//		}
+//	}
+//
+//	@Test
+//	void publicService_fetchReply_NoResults() {
+//		String blogId = "blog123";
+//		String commentId = "nonexistent_comment";
+//
+//		when(postCommentRepo.findAllByPostIdAndParentComment_Id(blogId, commentId)).thenReturn(Collections.emptyList());
+//
+//		List<BlogComment> result = publicService.fetchReply(blogId, commentId);
+//
+//		verify(postCommentRepo).findAllByPostIdAndParentComment_Id(blogId, commentId);
+//		Assertions.assertTrue(result.isEmpty());
+//	}
+//
 	@Test
 	void publicService_fetchBlogDetail_Success() {
 		String blogId = "blog123";

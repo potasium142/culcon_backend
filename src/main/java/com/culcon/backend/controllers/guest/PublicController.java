@@ -95,16 +95,26 @@ public class PublicController {
 		tags = {"Blog", "Public", "Comment"}
 	)
 	@GetMapping("/fetch/blog/comment")
-	public ResponseEntity<?> fetchBlogComment(@RequestParam String id) {
-		return ResponseEntity.ok(publicService.fetchBlogComment(id));
+	public ResponseEntity<?> fetchBlogComment(
+		@RequestParam String id,
+		@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+		@RequestParam(value = "pageSize", defaultValue = "7", required = false) int pageSize
+	) {
+		var pageable = PageRequest.of(pageNo, pageSize);
+		return ResponseEntity.ok(publicService.fetchBlogComment(id, pageable));
 	}
 
 	@Operation(
 		tags = {"Blog", "Public", "Comment"}
 	)
 	@GetMapping("/fetch/blog/reply")
-	public ResponseEntity<?> fetchCommentReply(String blogId, String commentId) {
-		return ResponseEntity.ok(publicService.fetchReply(blogId, commentId));
+	public ResponseEntity<?> fetchCommentReply(
+		String blogId, String commentId,
+		@RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
+		@RequestParam(value = "pageSize", defaultValue = "7", required = false) int pageSize
+	) {
+		var pageable = PageRequest.of(pageNo, pageSize);
+		return ResponseEntity.ok(publicService.fetchReply(blogId, commentId, pageable));
 	}
 
 	@Operation(

@@ -2,7 +2,6 @@ package com.culcon.backend.services;
 
 import com.culcon.backend.dtos.PageDTO;
 import com.culcon.backend.dtos.ProductDTO;
-import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.dtos.blog.BlogDetail;
 import com.culcon.backend.dtos.blog.BlogItemInList;
 import com.culcon.backend.models.Coupon;
@@ -28,9 +27,9 @@ public interface PublicService {
 
 	List<BlogItemInList> searchBlogByTitle(String title, HashSet<String> tags);
 
-	List<BlogComment> fetchBlogComment(String id);
+	PageDTO<?> fetchBlogComment(String id, Pageable pageable);
 
-	List<BlogComment> fetchReply(String blogId, String commentId);
+	PageDTO<?> fetchReply(String blogId, String commentId, Pageable pageable);
 
 	BlogDetail fetchBlogDetail(String id, HttpServletRequest req);
 
