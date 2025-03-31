@@ -34,8 +34,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 212155081312-he5p1bdtliddgjgr2ltokvcdmece9at7.apps.googleusercontent.com
-            client-secret: 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
+            client-id: 212155081312-ionc8ltnopsine01f13lpr9s0hegj2d7.apps.googleusercontent.com
+            client-secret: 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
             redirect-uri: ${GOOGLE_AUTH_REDIRECT_URI}
             scope: profile, email
         provider:

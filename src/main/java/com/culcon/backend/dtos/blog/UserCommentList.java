@@ -12,8 +12,7 @@ public record UserCommentList(
 	String postId,
 	Timestamp timestamp,
 	String comment,
-	CommentType commentType,
-	Boolean deleted
+	CommentType commentType
 ) {
 	public static UserCommentList from(PostComment postComment) {
 		return UserCommentList.builder()
@@ -22,7 +21,6 @@ public record UserCommentList(
 			.timestamp(postComment.getTimestamp())
 			.comment(postComment.getComment())
 			.commentType(postComment.getCommentType())
-			.deleted(postComment.isDeleted())
 			.build();
 	}
 }

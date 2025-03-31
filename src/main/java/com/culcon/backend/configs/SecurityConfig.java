@@ -134,7 +134,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addCorsMappings(@NonNull CorsRegistry registry) {
-		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3000") + "/**";
+		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3001") + "/**";
 		String be_endpoint = env.getProperty("DEPLOY_URL", "http://localhost:8080") + "/**";
 		logger.info("Backend Endpoint: {}", be_endpoint);
 		logger.info("Frontend Endpoint: {}", fe_endpoint);
@@ -160,8 +160,10 @@ public class SecurityConfig implements WebMvcConfigurer {
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
 
-		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3000") + "/**";
+		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3001") + "/**";
 		String be_endpoint = env.getProperty("DEPLOY_URL", "http://localhost:8080") + "/**";
+		String fe_endpoint_deploy = env.getProperty("FRONTEND_ENDPOINT", "https://culcon-user-fe-30883260979.asia-east2.run.app") + "/**";
+		String be_endpoint_deploy = env.getProperty("DEPLOY_URL", "https://culcon-user-be-30883260979.asia-east2.run.app") + "/**";
 		configuration.setAllowedOrigins(List.of(
 			"*",
 			fe_endpoint, be_endpoint
@@ -174,6 +176,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 		source.registerCorsConfiguration(fe_endpoint, configuration);
 		source.registerCorsConfiguration(be_endpoint, configuration);
+		source.registerCorsConfiguration(fe_endpoint_deploy, configuration);
+		source.registerCorsConfiguration(be_endpoint_deploy, configuration);
 		source.registerCorsConfiguration("/**", configuration);
 		source.registerCorsConfiguration("*", configuration);
 		source.registerCorsConfiguration("/api/**", configuration);
@@ -184,7 +188,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 	@Bean
 	public AuthenticationSuccessHandler authenticationSuccessHandler() {
-		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3000");
+//		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3001");
+		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "https://culcon-user-fe-30883260979.asia-east2.run.app");
 		return (request, response, authentication) -> {
 			if (authentication instanceof OAuth2AuthenticationToken oauth2Token) {
 				String email = oauth2Token.getPrincipal().getAttribute("email");
@@ -193,7 +198,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 					var token = userHelper.loginByEmail(email.trim());
 
 					System.out.println(token);
-//					String redirectUrl = "http://localhost:3000/token?value=" + token;
+//					String redirectUrl = "http://localhost:3001/token?value=" + token;
 					String redirectUrl = fe_endpoint + "/token?value=" + token;
 
 					response.sendRedirect(redirectUrl);
