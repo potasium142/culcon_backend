@@ -10,10 +10,7 @@ import com.culcon.backend.dtos.blog.BlogComment;
 import com.culcon.backend.dtos.blog.BlogItemInList;
 import com.culcon.backend.dtos.blog.UserCommentList;
 import com.culcon.backend.exceptions.custom.OTPException;
-import com.culcon.backend.models.Account;
-import com.culcon.backend.models.Blog;
-import com.culcon.backend.models.CommentType;
-import com.culcon.backend.models.PostComment;
+import com.culcon.backend.models.*;
 import com.culcon.backend.repositories.*;
 import com.culcon.backend.services.CloudinaryService;
 import com.culcon.backend.services.UserService;
@@ -327,11 +324,22 @@ public class UserImplement implements UserService {
 		var account = authService.getUserInformation(request);
 		var comment = postCommentRepo.findByIdAndAccount(commentId, account)
 			.orElseThrow(() -> new NoSuchElementException("Comment not found"));
-		if (comment.isDeleted()) {
+		if (comment.getStatus() == CommentStatus.DELETED) {
 			throw new IllegalArgumentException("Comment is deleted");
 		}
-		comment.setDeleted(true);
+		comment.setStatus(CommentStatus.DELETED);
 		comment = postCommentRepo.save(comment);
-		return comment.isDeleted();
+		return comment.getStatus() == CommentStatus.DELETED;
+	}
+
+	@Override
+	public Boolean reportComment(String commentId, HttpServletRequest request) {
+		var account = authService.getUserInformation(request);
+		var comment = postCommentRepo.findByIdAndAccount(commentId, account)
+			.orElseThrow(() -> new NoSuchElementException("Comment not found"));
+
+		comment.setStatus(CommentStatus.REPORTED);
+		comment = postCommentRepo.save(comment);
+		return comment.getStatus() == CommentStatus.REPORTED;
 	}
 }

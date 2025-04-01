@@ -1,6 +1,7 @@
 package com.culcon.backend.models;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -17,4 +18,7 @@ import lombok.*;
 public class MealkitIngredients {
 	@EmbeddedId
 	private MealkitIngredientsId id;
+
+	@Column(name = "amount")
+	private Integer amount;
 }

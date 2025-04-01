@@ -53,8 +53,10 @@ public class PostComment {
 	@Column(name = "comment")
 	private String comment;
 
-	@Column(name = "deleted")
-	private boolean deleted;
+	@Column(name = "status")
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
+	@Builder.Default
+	private CommentStatus status = CommentStatus.NORMAL;
 
 	@Column(name = "timestamp")
 	@Builder.Default

@@ -1,14 +1,11 @@
 package com.culcon.backend.dtos;
 
-import com.culcon.backend.models.Product;
-import com.culcon.backend.models.ProductDoc;
-import com.culcon.backend.models.ProductStatus;
-import com.culcon.backend.models.ProductType;
+import com.culcon.backend.models.*;
 import lombok.Builder;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 
 @Builder
 public record ProductDTO(
@@ -27,8 +24,6 @@ public record ProductDTO(
 
 	HashMap<String, String> infos,
 
-	Set<String> tags,
-
 	List<String> imagesUrl,
 
 	Integer daysBeforeExpiry,
@@ -39,13 +34,21 @@ public record ProductDTO(
 
 	Float salePercent,
 
-	List<Product> ingredients
+	Map<String, Integer> ingredients,
+
+	List<String> instructions
 ) {
 	public static ProductDTO from(
 		Product product,
 		ProductDoc productDoc,
-		List<Product> ingredients
+		List<MealkitIngredients> ingredients
 	) {
+		var ingredientsMap = new HashMap<String, Integer>();
+
+		for (MealkitIngredients i : ingredients) {
+			ingredientsMap.put(i.getId().getIngredient().getId(), i.getAmount());
+		}
+
 		return ProductDTO.builder()
 			.id(product.getId())
 			.name(product.getProductName())
@@ -59,7 +62,8 @@ public record ProductDTO(
 			.articleMD(productDoc.getArticle())
 			.price(product.getPrice())
 			.salePercent(product.getSalePercent())
-			.ingredients(ingredients)
+			.ingredients(ingredientsMap)
+			.instructions(productDoc.getInstructions())
 			.build();
 	}
 }
