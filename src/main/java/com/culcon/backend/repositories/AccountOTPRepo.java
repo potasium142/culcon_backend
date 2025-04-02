@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface AccountOTPRepo extends JpaRepository<AccountOTP, String> {
 
-	Optional<AccountOTP> findByOtp(String otp);
 
 	Optional<AccountOTP> findByOtpAndAccountId(String otp, String accountId);
 
