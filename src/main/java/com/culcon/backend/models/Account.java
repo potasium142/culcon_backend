@@ -74,7 +74,7 @@ public class Account implements UserDetails {
 
 	@Column(name = "phone", unique = true, length = 12)
 	@Default
-	@Pattern(regexp = "0[1-9]{2}[0-9]{7}")
+	@Pattern(regexp = "0[1-9][0-9]{8,9}")
 	private String phone = "";
 
 	@Column(name = "profile_pic_uri")
