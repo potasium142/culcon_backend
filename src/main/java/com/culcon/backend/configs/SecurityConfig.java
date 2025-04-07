@@ -136,25 +136,40 @@ public class SecurityConfig implements WebMvcConfigurer {
 	public void addCorsMappings(@NonNull CorsRegistry registry) {
 		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3001") + "/**";
 		String be_endpoint = env.getProperty("DEPLOY_URL", "http://localhost:8080") + "/**";
+		String fe_endpoint_deploy = "https://culcon-user-fe-30883260979.asia-east2.run.app/**";
+		String be_endpoint_deploy = "https://culcon-user-be-30883260979.asia-east2.run.app/**";
 		logger.info("Backend Endpoint: {}", be_endpoint);
 		logger.info("Frontend Endpoint: {}", fe_endpoint);
 		registry
 			.addMapping("/api/**")
-			.allowedOrigins("*")
-			.allowedOrigins("/**")
-			.allowedOrigins("**")
-			.allowedOrigins("/oauth2/**")
-			.allowedOrigins("http://localhost:8000/**")
-			.allowedOrigins(be_endpoint)
-			.allowedOrigins(fe_endpoint)
-			.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+			.allowedOrigins(
+					"*",
+					"/**",
+					"**",
+					"/oauth2/**",
+					"http://localhost:8000/**",
+					be_endpoint,
+					fe_endpoint,
+					fe_endpoint_deploy,
+					be_endpoint_deploy
+				)
+
+				.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 			.allowedHeaders("*")
 			.allowedHeaders("/oauth2/**")
 			.allowedHeaders("/**")
 			.allowedHeaders("**")
 			.exposedHeaders("X-Get-Header");
 	}
-
+//			.allowedOrigins("*")
+//			.allowedOrigins("/**")
+//			.allowedOrigins("**")
+//			.allowedOrigins("/oauth2/**")
+//			.allowedOrigins("http://localhost:8000/**")
+//			.allowedOrigins(be_endpoint)
+//			.allowedOrigins(fe_endpoint)
+//			.allowedOrigins(fe_endpoint_deploy)
+//			.allowedOrigins(be_endpoint_deploy)
 
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
@@ -162,8 +177,8 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3001") + "/**";
 		String be_endpoint = env.getProperty("DEPLOY_URL", "http://localhost:8080") + "/**";
-		String fe_endpoint_deploy = env.getProperty("FRONTEND_ENDPOINT", "https://culcon-user-fe-30883260979.asia-east2.run.app") + "/**";
-		String be_endpoint_deploy = env.getProperty("DEPLOY_URL", "https://culcon-user-be-30883260979.asia-east2.run.app") + "/**";
+		String fe_endpoint_deploy = "https://culcon-user-fe-30883260979.asia-east2.run.app/**";
+		String be_endpoint_deploy = "https://culcon-user-be-30883260979.asia-east2.run.app/**";
 		configuration.setAllowedOrigins(List.of(
 			"*",
 			fe_endpoint, be_endpoint
@@ -189,7 +204,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 	@Bean
 	public AuthenticationSuccessHandler authenticationSuccessHandler() {
 //		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3001");
-		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "https://culcon-user-fe-30883260979.asia-east2.run.app");
+		String fe_endpoint_deploy = "https://culcon-user-fe-30883260979.asia-east2.run.app";
 		return (request, response, authentication) -> {
 			if (authentication instanceof OAuth2AuthenticationToken oauth2Token) {
 				String email = oauth2Token.getPrincipal().getAttribute("email");
@@ -199,12 +214,12 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 					System.out.println(token);
 //					String redirectUrl = "http://localhost:3001/token?value=" + token;
-					String redirectUrl = fe_endpoint + "/token?value=" + token;
+					String redirectUrl = fe_endpoint_deploy + "/token?value=" + token;
 
 					response.sendRedirect(redirectUrl);
 
 				} catch (AccountNotFoundException e) {
-					String redirectUrl = fe_endpoint + "/token";
+					String redirectUrl = fe_endpoint_deploy + "/token";
 
 					response.sendRedirect(redirectUrl);
 				}
