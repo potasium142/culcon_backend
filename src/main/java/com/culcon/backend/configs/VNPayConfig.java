@@ -21,10 +21,10 @@ public class VNPayConfig {
 
     public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
 //    public static String vnp_ReturnUrl = "http://localhost:8080/api/payment/vnpay/capture";
-    public static String vnp_ReturnUrl = "https://culcon-user-fe-30883260979.asia-east2.run.app/api/payment/vnpay/capture";
-    public static String vnp_TmnCode = "PCB8RZTL";
+    public static String vnp_ReturnUrl = "https://culcon-user-be-30883260979.asia-east2.run.app/api/payment/vnpay/capture";
+    public static String vnp_TmnCode = "FDUTKMD8";
 
-    public static String secretKey = "YRNH6F430674FVL0S0FMTE0KZZNUYWP0";
+    public static String secretKey = "DCH72XTPD3K7WVB18JT28EKMQQ2EZ8SV";
     public static String vnp_ApiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
 
     public static String md5(String message) {
