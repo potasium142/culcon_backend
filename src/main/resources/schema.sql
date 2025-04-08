@@ -1,10 +1,10 @@
-create type useraccountstatus as enum ('NON_ACTIVE', 'NORMAL', 'BANNED', 'DEACTIVATE');
+create type useraccountstatus as enum ( 'NORMAL', 'BANNED');
 
 create type orderstatus as enum ('CANCELLED', 'ON_CONFIRM', 'ON_PROCESSING', 'ON_SHIPPING', 'SHIPPED');
 
 create type paymentmethod as enum ('COD', 'PAYPAL', 'VNPAY');
 
-create type paymentstatus as enum ('CHANGED', 'CREATED', 'PENDING', 'RECEIVED', 'REFUNDED', 'REFUNDING', 'DELIVERED' );
+create type paymentstatus as enum ( 'PENDING', 'RECEIVED', 'REFUNDED' );
 
 create type commenttype as enum ('POST', 'REPLY');
 
@@ -13,6 +13,8 @@ create type productstatus as enum ('IN_STOCK', 'NO_LONGER_IN_SALE', 'OUT_OF_STOC
 create type producttype as enum ('MEALKIT', 'MEAT', 'SEASON', 'VEGETABLE');
 
 create type commentstatus as enum ('NORMAL', 'REPORTED', 'DELETED');
+
+create type onlinestatus as enum ('ONLINE', 'OFFLINE');
 
 create table product
 (
@@ -55,7 +57,7 @@ create table user_account
     profile_description varchar           not null,
     token               varchar           not null,
     profile_name        varchar           not null,
-    bookmarked_posts    varchar(255)[]    not null
+    online_status       onlinestatus      not null
 );
 
 create table coupon
@@ -184,3 +186,11 @@ create table payment_transaction
     status         paymentstatus not null,
     amount         real          not null
 );
+create table bookmark
+(
+    account_id varchar(255) not null,
+    blog_id    varchar(255) not null
+        references blog,
+    primary key (account_id, blog_id)
+);
+

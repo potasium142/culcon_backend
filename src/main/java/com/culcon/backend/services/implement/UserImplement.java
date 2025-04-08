@@ -45,6 +45,7 @@ public class UserImplement implements UserService {
 	private final ProductRepo productRepo;
 	private final PostCommentRepo postCommentRepo;
 	private final BlogRepo blogDocRepo;
+	private final BookmarkRepo bookmarkRepo;
 
 	@Override
 	public List<Account> getAccounts() {
@@ -296,26 +297,29 @@ public class UserImplement implements UserService {
 	public Boolean bookmarkBlog(String blogId, HttpServletRequest request, Boolean bookmark) {
 		var account = authService.getUserInformation(request);
 
-		if (!blogDocRepo.existsById(blogId)) {
-			throw new NoSuchElementException("Blog not found");
-		}
+		var blog = blogDocRepo.findById(blogId)
+			.orElseThrow(() -> new NoSuchElementException("Blog not found"));
 
+		var bookmarkId = BookmarkId.builder()
+			.account(account)
+			.blog(blog)
+			.build();
+
+		var bookmarkEntity = Bookmark.builder().id(bookmarkId).build();
 		if (bookmark) {
-			account.getBookmarkedPost().add(blogId);
-			return accountRepo.save(account).getBookmarkedPost().contains(blogId);
+			return bookmarkRepo.save(bookmarkEntity).equals(bookmarkEntity);
 		} else {
-			account.getBookmarkedPost().remove(blogId);
-			return !accountRepo.save(account).getBookmarkedPost().contains(blogId);
+			bookmarkRepo.delete(bookmarkEntity);
+			return true;
 		}
 	}
 
 	@Override
 	public List<BlogItemInList> getBookmarkedBlog(HttpServletRequest request) {
 		var account = authService.getUserInformation(request);
-		return account.getBookmarkedPost().stream()
-			.map(b ->
-				blogDocRepo.findById(b).orElse(Blog.builder().build())
-			).map(BlogItemInList::from)
+		return bookmarkRepo.findAllById_Account_Id(account.getId()).stream()
+			.map(b -> b.getId().getBlog())
+			.map(BlogItemInList::from)
 			.toList();
 	}
 
