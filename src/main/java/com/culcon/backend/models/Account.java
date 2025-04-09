@@ -87,6 +87,7 @@ public class Account implements UserDetails {
 	@Default
 	private String profileDescription = "";
 
+	@JsonIgnore
 	@Column(name = "online_status")
 	@Default
 	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
