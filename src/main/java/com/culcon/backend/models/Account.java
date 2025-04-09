@@ -14,7 +14,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Data
 @Entity
@@ -63,7 +66,6 @@ public class Account implements UserDetails {
 	private String password;
 
 	@Column(name = "status")
-	@Enumerated(EnumType.ORDINAL)
 	@Default
 	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
 	private AccountStatus status = AccountStatus.NORMAL;
@@ -86,10 +88,10 @@ public class Account implements UserDetails {
 	private String profileDescription = "";
 
 	@JsonIgnore
-	@Column(name = "bookmarked_posts")
+	@Column(name = "online_status")
 	@Default
-	@JdbcTypeCode(SqlTypes.ARRAY)
-	private Set<String> bookmarkedPost = new HashSet<>();
+	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
+	private OnlineStatus onlineStatus = OnlineStatus.OFFLINE;
 
 	@JsonIgnore
 	@Builder.Default
@@ -102,7 +104,6 @@ public class Account implements UserDetails {
 	@Column(name = "amount")
 	@MapKeyJoinColumn(name = "product_id")
 	private Map<Product, Integer> cart = new HashMap<>();
-
 
 	@JsonIgnore
 	@Override

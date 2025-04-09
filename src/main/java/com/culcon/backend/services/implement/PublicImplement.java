@@ -31,6 +31,7 @@ public class PublicImplement implements PublicService {
 	private final CouponRepo couponRepo;
 	private final ProductDocRepo productDocRepo;
 	private final MealkitIngredientsRepo mealkitIngredientsRepo;
+	private final BookmarkRepo bookmarkRepo;
 
 	@Override
 	public ProductDTO fetchProduct(String id) {
@@ -137,13 +138,9 @@ public class PublicImplement implements PublicService {
 			() -> new NoSuchElementException("Blog not found")
 		);
 
-		Boolean bookmark;
+		var bookmarkId = BookmarkId.builder().blog(blog).account(account).build();
 
-		if (account == null)
-			bookmark = null;
-		else {
-			bookmark = account.getBookmarkedPost().contains(id);
-		}
+		var bookmark = bookmarkRepo.existsById(bookmarkId);
 
 
 		return BlogDetail.builder()

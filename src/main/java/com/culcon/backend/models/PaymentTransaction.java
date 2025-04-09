@@ -30,7 +30,7 @@ public class PaymentTransaction {
 	@Column(name = "status")
 	@Builder.Default
 	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
-	private PaymentStatus status = PaymentStatus.CREATED;
+	private PaymentStatus status = PaymentStatus.PENDING;
 
 	@Column(name = "payment_id")
 	@Builder.Default

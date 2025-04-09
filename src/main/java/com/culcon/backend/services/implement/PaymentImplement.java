@@ -148,7 +148,7 @@ public class PaymentImplement implements PaymentService {
 
 		var paymentTransaction = paymentTransactionO.get();
 
-		if (paymentTransaction.getStatus() == PaymentStatus.CREATED) {
+		if (paymentTransaction.getStatus() == PaymentStatus.PENDING) {
 			paymentTransactionRepo.delete(paymentTransaction);
 			return;
 		}

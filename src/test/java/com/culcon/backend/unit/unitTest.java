@@ -152,7 +152,7 @@ class RepoTest {
 		paymentTransaction = PaymentTransaction.builder()
 			.id(orderHistory.getId())
 			.order(orderHistory)
-			.status(PaymentStatus.CREATED)
+			.status(PaymentStatus.PENDING)
 			.paymentId("pay_123")
 			.refundId("ref_123")
 			.transactionId("txn_123")
@@ -168,7 +168,7 @@ class RepoTest {
 	void testPaymentTransactionInitialization() {
 		Assertions.assertNotNull(paymentTransaction, "PaymentTransaction không được null");
 		Assertions.assertEquals(orderHistory.getId(), paymentTransaction.getId(), "ID không khớp");
-		Assertions.assertEquals(PaymentStatus.CREATED, paymentTransaction.getStatus(), "Trạng thái thanh toán không đúng");
+		Assertions.assertEquals(PaymentStatus.PENDING, paymentTransaction.getStatus(), "Trạng thái thanh toán không đúng");
 		Assertions.assertEquals(100.0F, paymentTransaction.getAmount(), "Số tiền không đúng");
 		Assertions.assertTrue(paymentTransaction.getUrl().startsWith("http://"), "URL phải bắt đầu bằng 'http://'");
 	}
