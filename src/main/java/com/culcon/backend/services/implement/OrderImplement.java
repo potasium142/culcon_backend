@@ -2,10 +2,7 @@ package com.culcon.backend.services.implement;
 
 import com.culcon.backend.dtos.order.*;
 import com.culcon.backend.exceptions.custom.RuntimeExceptionPlusPlus;
-import com.culcon.backend.models.Coupon;
-import com.culcon.backend.models.OrderHistory;
-import com.culcon.backend.models.OrderHistoryItem;
-import com.culcon.backend.models.OrderStatus;
+import com.culcon.backend.models.*;
 import com.culcon.backend.repositories.*;
 import com.culcon.backend.services.OrderService;
 import com.culcon.backend.services.PaymentService;
@@ -17,7 +14,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -362,6 +361,16 @@ public class OrderImplement implements OrderService {
 
 		if (order.getOrderStatus() != OrderStatus.SHIPPED) {
 			throw new IllegalArgumentException("Only delivered orders can be received");
+		}
+
+		if (order.getPaymentMethod() == PaymentMethod.COD) {
+			var payment = PaymentTransaction.builder()
+				.order(order)
+				.amount(order.getTotalPrice())
+				.status(PaymentStatus.RECEIVED)
+				.createTime(Timestamp.valueOf(LocalDateTime.now())).build();
+
+			paymentTransactionRepo.save(payment);
 		}
 
 		order.setOrderStatus(OrderStatus.DELIVERED);
