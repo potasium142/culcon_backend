@@ -20,7 +20,7 @@ public class PayPalConfig {
 	public PaypalServerSdkClient paypalClient() {
 		return new PaypalServerSdkClient.Builder()
 			.loggingConfig(builder -> builder
-				.level(Level.DEBUG)
+				.level(Level.ERROR)
 				.requestConfig(logConfigBuilder -> logConfigBuilder.body(true))
 				.responseConfig(logConfigBuilder -> logConfigBuilder.headers(true)))
 			.httpClientConfig(configBuilder -> configBuilder

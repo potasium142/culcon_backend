@@ -2,11 +2,10 @@ package com.culcon.backend.services.implement;
 
 import com.culcon.backend.configs.VNPayConfig;
 import com.culcon.backend.dtos.PaymentDTO;
-import com.culcon.backend.models.OrderHistory;
-import com.culcon.backend.models.PaymentStatus;
-import com.culcon.backend.models.PaymentTransaction;
+import com.culcon.backend.models.*;
 import com.culcon.backend.repositories.OrderHistoryRepo;
 import com.culcon.backend.repositories.PaymentTransactionRepo;
+import com.culcon.backend.repositories.ProductRepo;
 import com.culcon.backend.services.PaymentService;
 import com.culcon.backend.services.authenticate.AuthService;
 import com.paypal.sdk.PaypalServerSdkClient;
@@ -41,6 +40,7 @@ public class PaymentImplement implements PaymentService {
 	private final PaymentTransactionRepo paymentTransactionRepo;
 	private final OrderHistoryRepo orderHistoryRepo;
 	private final AuthService authService;
+	private final ProductRepo productRepo;
 
 
 	@Override
@@ -107,6 +107,13 @@ public class PaymentImplement implements PaymentService {
 
 		order.setPaymentStatus(PaymentStatus.RECEIVED);
 
+		for (var item : order.getItems()) {
+			Product prod = item.getProductId().getId().getProduct();
+			prod.setProductStatus(ProductStatus.OUT_OF_STOCK);
+			productRepo.save(prod);
+
+		}
+
 		orderHistoryRepo.save(order);
 
 		return PaymentDTO.from(paymentTransaction);
@@ -149,7 +156,6 @@ public class PaymentImplement implements PaymentService {
 		var paymentTransaction = paymentTransactionO.get();
 
 		if (paymentTransaction.getStatus() == PaymentStatus.PENDING) {
-			paymentTransactionRepo.delete(paymentTransaction);
 			return;
 		}
 
@@ -234,12 +240,6 @@ public class PaymentImplement implements PaymentService {
 		vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
 		vnp_Params.put("vnp_OrderType", orderType);
 
-//		String locate = req.getParameter("language");
-//		if (locate != null && !locate.isEmpty()) {
-//			vnp_Params.put("vnp_Locale", locate);
-//		} else {
-//			vnp_Params.put("vnp_Locale", "vn");
-//		}
 		vnp_Params.put("vnp_Locale", "vn");
 
 		vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_ReturnUrl);

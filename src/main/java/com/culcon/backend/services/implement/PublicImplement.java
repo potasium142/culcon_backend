@@ -52,7 +52,7 @@ public class PublicImplement implements PublicService {
 
 	@Override
 	public PageDTO<?> fetchListOfProducts(Pageable pageable) {
-		var content = productRepo.findAll(pageable);
+		var content = productRepo.findAllByProductStatusOrderByProductNameDesc(ProductStatus.IN_STOCK, pageable);
 		return PageDTO.of(content);
 	}
 

@@ -11,10 +11,16 @@ import com.paypal.sdk.exceptions.ApiException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.TaskScheduler;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,6 +40,10 @@ public class OrderImplement implements OrderService {
 	private final ProductRepo productRepo;
 	private final PaymentService paymentService;
 	private final PaymentTransactionRepo paymentTransactionRepo;
+	private final TaskScheduler taskScheduler;
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+	private final Integer orderTimeout = 15;
 
 	private Coupon getCoupon(String id) {
 
@@ -110,6 +120,12 @@ public class OrderImplement implements OrderService {
 
 			prod.setAvailableQuantity(prod.getAvailableQuantity() - entry.getValue());
 
+			if (orderCreation.paymentMethod() == PaymentMethod.COD) {
+				if (prod.getAvailableQuantity() <= 0) {
+					prod.setProductStatus(ProductStatus.OUT_OF_STOCK);
+				}
+			}
+
 			productRepo.save(prod);
 
 			totalPrice += prod.getPrice() * (1.0f - prod.getSalePercent() / 100.0f) * entry.getValue();
@@ -172,11 +188,48 @@ public class OrderImplement implements OrderService {
 			case PAYPAL -> paymentService.createPayment(order, req);
 			case VNPAY -> paymentService.createPaymentVNPay(order, "NCB", req);
 			case COD -> {
+
 			}
 		}
 
 
+		if (orderCreation.paymentMethod() != PaymentMethod.COD) {
+			schedulePaymentCheck(order, req);
+		}
+
 		return OrderSummary.from(order);
+	}
+
+	public void schedulePaymentCheck(OrderHistory order, HttpServletRequest req) {
+		Instant executionTime = Instant.now().plus(Duration.ofMinutes(15));
+
+		taskScheduler.schedule(() -> {
+			try {
+				checkOrderPaymentStatus(order.getId());
+			} catch (Exception e) {
+				// Log the exception
+				System.err.println("Error checking payment status for order " + order.getId() + ": " + e.getMessage());
+			}
+		}, executionTime);
+
+		logger.info("Scheduled payment check for order {} at {}", order.getId(), executionTime);
+	}
+
+	private void checkOrderPaymentStatus(String orderId) {
+		logger.info("Checking payment status for order {} at {}", orderId, Instant.now());
+		OrderHistory order = orderHistoryRepo.findById(orderId)
+			.orElseThrow(() -> new NoSuchElementException("Order not found"));
+
+		if (order.getOrderStatus() == OrderStatus.ON_CONFIRM) {
+			var isPaid = order.getPaymentStatus() == PaymentStatus.RECEIVED;
+			var isCod = order.getPaymentMethod() == PaymentMethod.COD;
+
+
+			if (!(isPaid || isCod)) {
+				cancelOrder(order);
+				logger.info("Order {} cancelled", orderId);
+			}
+		}
 	}
 
 	private OrderHistory getOrderForUpdate(String orderId, HttpServletRequest req) {
@@ -322,20 +375,17 @@ public class OrderImplement implements OrderService {
 		return OrderSummary.from(order);
 	}
 
-	@Override
-	public OrderSummary cancelOrder(HttpServletRequest req, String orderId) {
-		var account = authService.getUserInformation(req);
-
-		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
-			.orElseThrow(() -> new NoSuchElementException("Order not found"));
-
+	public OrderSummary cancelOrder(OrderHistory order) {
 		if (order.getOrderStatus() != OrderStatus.ON_CONFIRM) {
 			throw new IllegalArgumentException("Order can only be cancelled on confirm status");
 		}
 
+		Hibernate.initialize(order.getItems());
+
 		order.getItems().forEach(orderItem -> {
 			var product = orderItem.getProductId().getId().getProduct();
 			product.setAvailableQuantity(product.getAvailableQuantity() + orderItem.getQuantity());
+			product.setProductStatus(ProductStatus.IN_STOCK);
 			productRepo.save(product);
 		});
 
@@ -349,6 +399,16 @@ public class OrderImplement implements OrderService {
 		}
 
 		return OrderSummary.from(order);
+	}
+
+	@Override
+	public OrderSummary cancelOrder(HttpServletRequest req, String orderId) {
+		var account = authService.getUserInformation(req);
+
+		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
+			.orElseThrow(() -> new NoSuchElementException("Order not found"));
+
+		return cancelOrder(order);
 	}
 
 	@Override
