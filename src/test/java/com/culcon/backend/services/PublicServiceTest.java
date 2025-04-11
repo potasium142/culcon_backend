@@ -2,10 +2,7 @@ package com.culcon.backend.services;
 
 import com.culcon.backend.dtos.PageDTO;
 import com.culcon.backend.dtos.blog.BlogItemInList;
-import com.culcon.backend.models.Blog;
-import com.culcon.backend.models.Coupon;
-import com.culcon.backend.models.Product;
-import com.culcon.backend.models.ProductType;
+import com.culcon.backend.models.*;
 import com.culcon.backend.repositories.*;
 import com.culcon.backend.services.authenticate.AuthService;
 import com.culcon.backend.services.authenticate.JwtService;
