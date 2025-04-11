@@ -188,7 +188,6 @@ public class OrderImplement implements OrderService {
 			case PAYPAL -> paymentService.createPayment(order, req);
 			case VNPAY -> paymentService.createPaymentVNPay(order, "NCB", req);
 			case COD -> {
-
 			}
 		}
 

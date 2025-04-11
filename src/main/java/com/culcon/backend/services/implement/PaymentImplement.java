@@ -240,6 +240,12 @@ public class PaymentImplement implements PaymentService {
 		vnp_Params.put("vnp_OrderInfo", "Thanh toan don hang:" + vnp_TxnRef);
 		vnp_Params.put("vnp_OrderType", orderType);
 
+//		String locate = req.getParameter("language");
+//		if (locate != null && !locate.isEmpty()) {
+//			vnp_Params.put("vnp_Locale", locate);
+//		} else {
+//			vnp_Params.put("vnp_Locale", "vn");
+//		}
 		vnp_Params.put("vnp_Locale", "vn");
 
 		vnp_Params.put("vnp_ReturnUrl", VNPayConfig.vnp_ReturnUrl);
