@@ -66,7 +66,6 @@ public class Account implements UserDetails {
 	private String password;
 
 	@Column(name = "status")
-	@Enumerated(EnumType.ORDINAL)
 	@Default
 	@JdbcTypeCode(SqlTypes.NAMED_ENUM)
 	private AccountStatus status = AccountStatus.NORMAL;
@@ -105,7 +104,6 @@ public class Account implements UserDetails {
 	@Column(name = "amount")
 	@MapKeyJoinColumn(name = "product_id")
 	private Map<Product, Integer> cart = new HashMap<>();
-
 
 	@JsonIgnore
 	@Override
