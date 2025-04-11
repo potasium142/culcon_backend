@@ -1,5 +1,6 @@
 package com.culcon.backend.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -33,16 +34,9 @@ public class OrderHistory {
 	@Builder.Default
 	private LocalDateTime date = LocalDateTime.now();
 
+	@JsonIgnore
 	@Column(name = "order_items")
-	@ElementCollection(fetch = FetchType.LAZY)
-//	@AttributeOverrides({
-//		@AttributeOverride(
-//			name = "productId.id.product", column = @Column(name = "product_id")
-//		),
-//		@AttributeOverride(
-//			name = "productId.id.date", column = @Column(name = "date")
-//		)
-//	})
+	@ElementCollection(fetch = FetchType.EAGER)
 	private List<OrderHistoryItem> items;
 
 	@Column(name = "order_status")

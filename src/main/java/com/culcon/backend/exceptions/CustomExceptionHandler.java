@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -122,6 +123,14 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 		return new ResponseEntity<>(
 			ExceptionMessage.map(ex),
 			HttpStatus.LOCKED
+		);
+	}
+
+	@ExceptionHandler(BadCredentialsException.class)
+	public ResponseEntity<?> badCredentialsException(BadCredentialsException ex) {
+		return new ResponseEntity<>(
+			ExceptionMessage.map(ex),
+			HttpStatus.UNAUTHORIZED
 		);
 	}
 
