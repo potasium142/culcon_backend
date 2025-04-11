@@ -2,10 +2,7 @@ package com.culcon.backend.services;
 
 import com.culcon.backend.dtos.PageDTO;
 import com.culcon.backend.dtos.blog.BlogItemInList;
-import com.culcon.backend.models.Blog;
-import com.culcon.backend.models.Coupon;
-import com.culcon.backend.models.Product;
-import com.culcon.backend.models.ProductType;
+import com.culcon.backend.models.*;
 import com.culcon.backend.repositories.*;
 import com.culcon.backend.services.authenticate.AuthService;
 import com.culcon.backend.services.authenticate.JwtService;
@@ -124,7 +121,10 @@ public class PublicServiceTest {
 		List<Product> mockProducts = List.of(Mockito.mock(Product.class), Mockito.mock(Product.class));
 		PageDTO expectedPageDTO = Mockito.mock(PageDTO.class);
 
-		when(productRepo.findAll(pageable)).thenReturn(new org.springframework.data.domain.PageImpl<>(mockProducts));
+		when(productRepo.findAllByProductStatusOrderByProductNameDesc(ProductStatus.IN_STOCK, pageable))
+			.thenReturn(new org.springframework.data.domain.PageImpl<>(mockProducts));
+
+
 		try (MockedStatic<PageDTO> mockedStatic = Mockito.mockStatic(PageDTO.class)) {
 			mockedStatic.when(() -> PageDTO.of(any())).thenReturn(expectedPageDTO);
 
@@ -132,7 +132,7 @@ public class PublicServiceTest {
 			PageDTO result = publicService.fetchListOfProducts(pageable);
 
 			// Assert
-			verify(productRepo).findAll(pageable);
+			verify(productRepo).findAllByProductStatusOrderByProductNameDesc(ProductStatus.IN_STOCK, pageable);
 			Assertions.assertEquals(expectedPageDTO, result);
 			mockedStatic.verify(() -> PageDTO.of(any()), times(1));
 		}

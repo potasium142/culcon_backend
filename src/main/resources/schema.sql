@@ -181,7 +181,7 @@ create table payment_transaction
     create_time    timestamp     not null,
     payment_id     varchar(255),
     refund_id      varchar(255),
-    url            varchar(255),
+    url            varchar(4095),
     transaction_id varchar(255),
     status         paymentstatus not null,
     amount         real          not null

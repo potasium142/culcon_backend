@@ -1,6 +1,7 @@
 package com.culcon.backend.repositories;
 
 import com.culcon.backend.models.Product;
+import com.culcon.backend.models.ProductStatus;
 import com.culcon.backend.models.ProductType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +19,5 @@ public interface ProductRepo extends JpaRepository<Product, String> {
 
 	Page<Product> findAllByProductTypes(ProductType productType, Pageable pageable);
 
+	Page<Product> findAllByProductStatusOrderByProductNameDesc(ProductStatus productStatuses, Pageable pageable);
 }
