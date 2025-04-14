@@ -200,7 +200,7 @@ public class OrderImplement implements OrderService {
 	}
 
 	public void schedulePaymentCheck(OrderHistory order, HttpServletRequest req) {
-		Instant executionTime = Instant.now().plus(Duration.ofMinutes(15));
+		Instant executionTime = Instant.now().plus(Duration.ofHours(1));
 
 		taskScheduler.schedule(() -> {
 			try {
