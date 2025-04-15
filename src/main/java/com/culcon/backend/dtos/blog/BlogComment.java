@@ -18,9 +18,9 @@ public record BlogComment(
 		if (comment.getStatus() == CommentStatus.DELETED) {
 			return BlogComment.builder()
 				.id(comment.getId())
-				.comment(null)
-				.accountName(null)
-				.profilePicture(null)
+				.comment("This comment has been deleted")
+				.accountName("Anonymous")
+				.profilePicture("defaultProfile")
 				.timestamp(comment.getTimestamp())
 				.build();
 		}
