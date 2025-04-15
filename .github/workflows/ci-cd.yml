@@ -88,14 +88,12 @@ jobs:
       - name: Push to deploy branch
         run: |
           # Determine target deploy branch based on source branch
-          SOURCE_BRANCH=${GITHUB_REF#refs/heads/}
-          DEPLOY_BRANCH="deploy/${SOURCE_BRANCH}"
-          
-          echo "Pushing to deploy branch: $DEPLOY_BRANCH"
+          DEPLOY_BRANCH="deploy"
           
           # Create or update the deploy branch
-          git checkout -B $DEPLOY_BRANCH
-          git push -f origin $DEPLOY_BRANCH
+          git checkout $DEPLOY_BRANCH
+          git merge main
+          git push origin $DEPLOY_BRANCH
 
   docker:
     name: Build and Push Docker Image
