@@ -338,8 +338,7 @@ public class UserImplement implements UserService {
 
 	@Override
 	public Boolean reportComment(String commentId, HttpServletRequest request) {
-		var account = authService.getUserInformation(request);
-		var comment = postCommentRepo.findByIdAndAccount(commentId, account)
+		var comment = postCommentRepo.findById(commentId)
 			.orElseThrow(() -> new NoSuchElementException("Comment not found"));
 
 		comment.setStatus(CommentStatus.REPORTED);
