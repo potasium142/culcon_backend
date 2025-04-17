@@ -12,7 +12,8 @@ public record BlogComment(
 	String accountName,
 	String profilePicture,
 	Timestamp timestamp,
-	String comment
+	String comment,
+	CommentStatus status
 ) {
 	public static BlogComment from(PostComment comment) {
 		if (comment.getStatus() == CommentStatus.DELETED) {
@@ -22,6 +23,7 @@ public record BlogComment(
 				.accountName("Anonymous")
 				.profilePicture("defaultProfile")
 				.timestamp(comment.getTimestamp())
+				.status(comment.getStatus())
 				.build();
 		}
 		return BlogComment.builder()
@@ -30,6 +32,7 @@ public record BlogComment(
 			.accountName(comment.getAccount().getUsername())
 			.profilePicture(comment.getAccount().getProfilePictureUri())
 			.timestamp(comment.getTimestamp())
+			.status(comment.getStatus())
 			.build();
 	}
 }
