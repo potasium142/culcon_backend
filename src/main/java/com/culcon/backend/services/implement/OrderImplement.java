@@ -94,7 +94,8 @@ public class OrderImplement implements OrderService {
 				continue;
 			}
 
-			var prod = prodPrice.get().getId().getProduct();
+			var priceIndex = prodPrice.get();
+			var prod = priceIndex.getId().getProduct();
 
 			if (prod.getAvailableQuantity() < entry.getValue()) {
 				insufficientAmount.add(entry.getKey());
@@ -128,11 +129,11 @@ public class OrderImplement implements OrderService {
 
 			productRepo.save(prod);
 
-			totalPrice += prod.getPrice() * (1.0f - prod.getSalePercent() / 100.0f) * entry.getValue();
+			totalPrice += priceIndex.getPrice() * (1.0f - priceIndex.getSalePercent() / 100.0f) * entry.getValue();
 
 			productList.add(
 				OrderHistoryItem.builder()
-					.productId(prodPrice.get())
+					.productId(priceIndex)
 					.quantity(entry.getValue())
 					.build());
 
@@ -360,6 +361,10 @@ public class OrderImplement implements OrderService {
 
 		var order = orderHistoryRepo.findByIdAndUser(orderId, account)
 			.orElseThrow(() -> new NoSuchElementException("Order not found"));
+
+		if (order.getOrderStatus() != OrderStatus.ON_CONFIRM) {
+			throw new IllegalArgumentException("Order can only be update on confirm status");
+		}
 
 		order.setDeliveryAddress(orderCreation.deliveryAddress().isBlank()
 			? account.getAddress() : orderCreation.deliveryAddress());

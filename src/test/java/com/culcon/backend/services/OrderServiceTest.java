@@ -89,8 +89,8 @@ public class OrderServiceTest {
 
 		// Set up the product's properties
 		when(product.getAvailableQuantity()).thenReturn(5); // Ensure enough stock
-		when(product.getPrice()).thenReturn(10.0f);
-		when(product.getSalePercent()).thenReturn(0.0f);
+//		when(product.getPrice()).thenReturn(10.0f);
+//		when(product.getSalePercent()).thenReturn(0.0f);
 
 		// Ensure cart contains the product (avoiding "Product not in cart" error)
 		Map<Product, Integer> cart = new HashMap<>();
