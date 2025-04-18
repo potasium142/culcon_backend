@@ -56,9 +56,9 @@ spring:
       client:
         registration:
           google:
-            client-id: 212155081312-rm2njn1ej89c03u4b6ksoiec9uff2hjb.apps.googleusercontent.com
-            client-secret: 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
-            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+            client-id: ${GOOGLE_OAUTH2_CLIENT_ID}
+            client-secret: ${GOOGLE_OAUTH2_CLIENT_SECRET}
+            redirect-uri: ${GOOGLE_AUTH_REDIRECT_URI}
             scope: profile, email
         provider:
           google:
@@ -66,7 +66,6 @@ spring:
             token-uri: https://oauth2.googleapis.com/token
             user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
             user-name-attribute: sub
-
 
 junit:
   jupiter:
@@ -79,10 +78,11 @@ junit:
 constant:
   json-data: ./src/test/java/com/culcon/backend/integrations/data/
 
+
 jwt:
-  secret-key: 482087CE4EEB98990B21E80477B6F8F7973770A5C836FF23BAA85ADCD786139B50C11D935B6C1512F36E8DA99A70788992E0EBD70F2BD5E7817CFA0D141C9270
+  secret-key: ${JWT_SECRET_KEY}
   expiration:
-    access-token: 1800000
+    access-token: ${JWT_EXPIRATION}
 
 cloudinary:
   cloud-name: ${CLOUDINARY_NAME}
@@ -90,5 +90,5 @@ cloudinary:
   api-secret: ${CLOUDINARY_API_SECRET}
 
 paypal:
-  client_id: AUKXCltSWGMatyB20LDbHaPesJCD6aVB65TyjSO9C5SyieGrXO9w_buevtw5TIsOTMY-f79icDBZkhFg
-  secret: ENx4yLXDDg1xCsRBdXiXA6z6YF8m1VUoBoNAE_s4WxHeFNE0wCRTlnUdrUj_tSoSkC9jSNob5B6Bn42z
+  client_id: ${PAYPAL_CLIENT_ID}
+  secret: ${PAYPAL_CLIENT_SECRET}

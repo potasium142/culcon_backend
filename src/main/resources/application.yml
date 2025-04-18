@@ -16,8 +16,8 @@ spring:
 
   mail:
     host: smtp.gmail.com
-    username: ${EMAIL_ADDRESS}
-    password: ${EMAIL_PASSWORD}
+    username: ${SMTP_USER}
+    password: ${SMTP_PASSWORD}
     port: 587
     properties:
       mail:
@@ -34,8 +34,8 @@ spring:
       client:
         registration:
           google:
-            client-id: 212155081312-ionc8ltnopsine01f13lpr9s0hegj2d7.apps.googleusercontent.com
-            client-secret: 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
+            client-id: ${GOOGLE_OAUTH2_CLIENT_ID}
+            client-secret: ${GOOGLE_OAUTH2_CLIENT_SECRET}
             redirect-uri: ${GOOGLE_AUTH_REDIRECT_URI}
             scope: profile, email
         provider:
@@ -53,9 +53,9 @@ springdoc:
     path: /docs
 
 jwt:
-  secret-key: 482087CE4EEB98990B21E80477B6F8F7973770A5C836FF23BAA85ADCD786139B50C11D935B6C1512F36E8DA99A70788992E0EBD70F2BD5E7817CFA0D141C9270
+  secret-key: ${JWT_SECRET_KEY}
   expiration:
-    access-token: 1800000000
+    access-token: ${JWT_EXPIRATION}
 
 cloudinary:
   cloud-name: ${CLOUDINARY_NAME}
@@ -63,9 +63,5 @@ cloudinary:
   api-secret: ${CLOUDINARY_API_SECRET}
 
 paypal:
-  client_id: AUKXCltSWGMatyB20LDbHaPesJCD6aVB65TyjSO9C5SyieGrXO9w_buevtw5TIsOTMY-f79icDBZkhFg
-  secret: ENx4yLXDDg1xCsRBdXiXA6z6YF8m1VUoBoNAE_s4WxHeFNE0wCRTlnUdrUj_tSoSkC9jSNob5B6Bn42z
-
-var:
-  order_timeout: ${ORDER_TIMEOUT}
-
+  client_id: ${PAYPAL_CLIENT_ID}
+  secret: ${PAYPAL_CLIENT_SECRET}

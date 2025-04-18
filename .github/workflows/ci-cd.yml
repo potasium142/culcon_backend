@@ -2,7 +2,7 @@ name: CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main", "stable", "non_stable" ]
+    branches: [ "main", "stable" ]
   pull_request:
     branches: [ "main", "stable" ]
 
@@ -28,7 +28,7 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew clean assemble --parallel
-      
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -79,12 +79,12 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Need full history for branch operations
-      
+
       - name: Configure Git
         run: |
           git config --global user.name 'GitHub Actions'
           git config --global user.email 'actions@github.com'
-      
+
       - name: Push to deploy branch
         run: |
           # Determine target deploy branch based on source branch
@@ -97,7 +97,7 @@ jobs:
 
   docker:
     name: Build and Push Docker Image
-    needs: [build, test]
+    needs: [ build, test ]
     runs-on: ubuntu-latest
     # Only run this job for pushes, not pull requests
     if: github.event_name == 'push'
@@ -105,7 +105,7 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v4
-      
+
       - name: Download build output
         uses: actions/download-artifact@v4
         with:

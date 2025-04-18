@@ -162,8 +162,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3001") + "/**";
 		String be_endpoint = env.getProperty("DEPLOY_URL", "http://localhost:8080") + "/**";
-		String fe_endpoint_deploy = env.getProperty("FRONTEND_ENDPOINT", "https://culcon-user-fe-30883260979.asia-east2.run.app") + "/**";
-		String be_endpoint_deploy = env.getProperty("DEPLOY_URL", "https://culcon-user-be-30883260979.asia-east2.run.app") + "/**";
 		configuration.setAllowedOrigins(List.of(
 			"*",
 			fe_endpoint, be_endpoint
@@ -176,8 +174,6 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 		source.registerCorsConfiguration(fe_endpoint, configuration);
 		source.registerCorsConfiguration(be_endpoint, configuration);
-		source.registerCorsConfiguration(fe_endpoint_deploy, configuration);
-		source.registerCorsConfiguration(be_endpoint_deploy, configuration);
 		source.registerCorsConfiguration("/**", configuration);
 		source.registerCorsConfiguration("*", configuration);
 		source.registerCorsConfiguration("/api/**", configuration);
@@ -188,8 +184,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 
 	@Bean
 	public AuthenticationSuccessHandler authenticationSuccessHandler() {
-//		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3001");
-		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "https://culcon-user-fe-30883260979.asia-east2.run.app");
+		String fe_endpoint = env.getProperty("FRONTEND_ENDPOINT", "http://localhost:3001");
 		return (request, response, authentication) -> {
 			if (authentication instanceof OAuth2AuthenticationToken oauth2Token) {
 				String email = oauth2Token.getPrincipal().getAttribute("email");
@@ -197,7 +192,7 @@ public class SecurityConfig implements WebMvcConfigurer {
 				try {
 					var token = userHelper.loginByEmail(email.trim());
 
-					System.out.println(token);
+//					System.out.println(token);
 //					String redirectUrl = "http://localhost:3001/token?value=" + token;
 					String redirectUrl = fe_endpoint + "/token?value=" + token;
 

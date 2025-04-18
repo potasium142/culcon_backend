@@ -664,25 +664,25 @@ public class IntegrationTest {
 		assertEquals("ConstraintViolationException", jsonResult.getString("cause"));
 	}
 
-	//	@Test
-//	@Order(4)
-//	void testGetOtp() throws Exception {
-//		var otpResponse = mockMvc.perform(
-//				post("/api/customer/edit/email/get/otp")
-//					.header("Authorization", jwtToken)
-//					.contentType(MediaType.APPLICATION_JSON)
-//					.param("newEmail", "example_new_email@gmail.com")
-//			)
-//			.andExpect(status().isOk())
-//			.andReturn()
-//			.getResponse()
-//			.getContentAsString();
-//
-//		var otpJson = new JSONObject(otpResponse);
-//		assertTrue(otpJson.has("accountId"));
-//		assertTrue(otpJson.has("expireTime"));
-//	}
-//
+	@Test
+	@Order(4)
+	void testGetOtp() throws Exception {
+		var otpResponse = mockMvc.perform(
+				post("/api/customer/edit/email/get/otp")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("newEmail", "example_new_email@gmail.com")
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+
+		var otpJson = new JSONObject(otpResponse);
+		assertTrue(otpJson.has("accountId"));
+		assertTrue(otpJson.has("expireTime"));
+	}
+
 	@Test
 	@Order(4)
 	void testGetOtp_InvalidEmail() throws Exception {
@@ -701,17 +701,17 @@ public class IntegrationTest {
 		assertEquals("ConstraintViolationException", jsonResult.getString("cause"));
 	}
 
-//	@Test
-//	@Order(4)
-//	void testGetOtp_EmailExist() throws Exception {
-//		var result = mockMvc.perform(
-//				post("/api/customer/edit/email/get/otp")
-//					.header("Authorization", jwtToken)
-//					.contentType(MediaType.APPLICATION_JSON)
-//					.param("newEmail", "example@test")
-//			)
-//			.andExpect(status().isInternalServerError());
-//	}
+	@Test
+	@Order(4)
+	void testGetOtp_EmailExist() throws Exception {
+		var result = mockMvc.perform(
+				post("/api/customer/edit/email/get/otp")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("newEmail", "example@test")
+			)
+			.andExpect(status().isLocked());
+	}
 
 	@Test
 	@Order(4)
@@ -1215,23 +1215,23 @@ public class IntegrationTest {
 		assertEquals("MethodArgumentNotValidException", jsonResult.getString("exception"));
 	}
 
-//	@Test
-//	@Rollback(true)
-//	void Order_CancelSuccess() throws Exception {
-//		var result = mockMvc
-//			.perform(
-//				delete("/api/customer/order/cancel")
-//					.header("Authorization", jwtToken)
-//					.contentType(MediaType.APPLICATION_JSON)
-//					.param("id", "102")
-//			)
-//			.andExpect(status().isOk())
-//			.andReturn()
-//			.getResponse()
-//			.getContentAsString();
-//		var jsonResult = new JSONObject(result);
-//		assertEquals("CANCELLED", jsonResult.getString("status"));
-//	}
+	@Test
+	@Rollback(true)
+	void Order_CancelSuccess() throws Exception {
+		var result = mockMvc
+			.perform(
+				delete("/api/customer/order/cancel")
+					.header("Authorization", jwtToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.param("id", "102")
+			)
+			.andExpect(status().isOk())
+			.andReturn()
+			.getResponse()
+			.getContentAsString();
+		var jsonResult = new JSONObject(result);
+		assertEquals("CANCELLED", jsonResult.getString("status"));
+	}
 
 	@Test
 	@Order(6)
